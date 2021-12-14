@@ -20,7 +20,8 @@ func main() {
 	// Routes
 	e.GET("/", hello)
 	e.GET("/users", controller.GetUser)
-
+	e.POST("/user/login", controller.LoginUser)
+	
 	// Start server
 	e.Logger.Fatal(e.Start(":1323"))
 }
