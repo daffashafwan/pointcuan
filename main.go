@@ -1,32 +1,36 @@
 package main
 
 import (
-	"net/http"
+	// "net/http"
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
 
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
-	"github.com/daffashafwan/pointcuan/controller"
-	"github.com/daffashafwan/pointcuan/storage"
+	"github.com/labstack/echo"
+
+	// "github.com/labstack/echo/v4/middleware"
+	"github.com/daffashafwan/pointcuan/config"
+	UserHandler "github.com/daffashafwan/pointcuan/user/handler"
+	UserRepo "github.com/daffashafwan/pointcuan/user/repo"
+	UserUsecase "github.com/daffashafwan/pointcuan/user/usecase"
 )
 
 func main() {
 	// Echo instance
 	e := echo.New()
-	storage.NewDB()
-	// Middleware
-	e.Use(middleware.Logger())
-	e.Use(middleware.Recover())
 
-	// Routes
-	e.GET("/", hello)
-	e.GET("/users", controller.GetUser)
-	e.POST("/user/login", controller.LoginUser)
+	db := config.DbConnect()
+	defer db.Close()
+
+	UserRepo := UserRepo.CreateUserRepo(db)
+	UserUsecase := UserUsecase.CreateUserUsecase(UserRepo)
+	UserHandler.CreateUserHandler(e, UserUsecase)
 	
 	// Start server
+	data, err := json.MarshalIndent(e.Routes(), "", "  ")
+	if err != nil {
+		fmt.Println("err")
+	}
+	ioutil.WriteFile("routes.json", data, 0644)
 	e.Logger.Fatal(e.Start(":1323"))
-}
-
-// Handler
-func hello(c echo.Context) error {
-	return c.String(http.StatusOK, "Hello, World! this is test")
 }
