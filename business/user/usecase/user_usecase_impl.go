@@ -4,7 +4,7 @@ package usecase
 
 import (
 	"github.com/daffashafwan/pointcuan/model"
-	"github.com/daffashafwan/pointcuan/user"
+	"github.com/daffashafwan/pointcuan/business/user"
 )
 
 type UserUsecaseImpl struct {
