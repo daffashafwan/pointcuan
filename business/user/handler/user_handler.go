@@ -3,11 +3,12 @@ package handler
 import (
 	"net/http"
 	"strconv"
-
 	"github.com/daffashafwan/pointcuan/helpers/jwt"
 	"github.com/daffashafwan/pointcuan/helpers/response"
-	"github.com/daffashafwan/pointcuan/model"
+	"github.com/daffashafwan/pointcuan/helpers/randomizer"
+	"github.com/daffashafwan/pointcuan/helpers/email"
 	"github.com/daffashafwan/pointcuan/business/user"
+	"github.com/daffashafwan/pointcuan/model"
 	"github.com/daffashafwan/pointcuan/route"
 	"github.com/labstack/echo"
 	"golang.org/x/crypto/bcrypt"
@@ -65,14 +66,19 @@ func (e *UserHandler) addUser(c echo.Context) error{
 	}
 
 	if user.Name == "" || user.Email == "" {
-		return response.ErrorResponse(c, http.StatusBadRequest, "column cannot be empty")
+		return response.ErrorResponse(c, http.StatusBadRequest, "field cannot be empty")
 		
 	}
+	hashed, _ := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	user.Password = string(hashed)
+	user.Token = randomizer.Randomize()
 	newUser, err := e.UserUsecase.Create(&user)
 	if err != nil {
 		response.ErrorResponse(c, http.StatusInternalServerError, err.Error())
 		
 	}
+	email.SendEmail(c, user.Email, "Verifikasi Email Pointcuan", "<a href=`http://localhost:1323/user/verif/"+user.Token+"`>Link Verifikas</a>")
+
 	return response.SuccessResponse(c,http.StatusOK, newUser)
 }
 

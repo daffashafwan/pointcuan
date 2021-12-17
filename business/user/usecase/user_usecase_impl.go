@@ -15,8 +15,8 @@ func CreateUserUsecase(userRepo user.UserRepo) user.UserUsecase {
 	return &UserUsecaseImpl{userRepo}
 }
 
-func (e *UserUsecaseImpl) Create(person *model.User) (*model.User, error) {
-	return e.userRepo.Create(person)
+func (e *UserUsecaseImpl) Create(user *model.User) (*model.User, error) {
+	return e.userRepo.Create(user)
 }
 
 func (e *UserUsecaseImpl) ReadAll() (*[]model.User, error) {
@@ -31,8 +31,8 @@ func (e *UserUsecaseImpl) ReadByUsername(username string)(*model.User, error) {
 	return e.userRepo.ReadByUsername(username)
 }
 
-func (e *UserUsecaseImpl) Update(id int, person *model.User) (*model.User, error) {
-	return e.userRepo.Update(id, person)
+func (e *UserUsecaseImpl) Update(id int, user *model.User) (*model.User, error) {
+	return e.userRepo.Update(id, user)
 }
 
 func (e *UserUsecaseImpl) Delete(id int) error {

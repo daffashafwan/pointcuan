@@ -47,10 +47,10 @@ func (e *UserRepoImpl) ReadById(id int)(*model.User, error) {
 
 func (e *UserRepoImpl) ReadByUsername(username string)(*model.User, error) {
 	var user = model.User{}
-	err := e.DB.Table("users").Where("username = ?", username).First(&user).Error
+	err := e.DB.Table("users").Where("username = ?", username).Where("status", "1").First(&user).Error
 	if err != nil {
 		fmt.Printf("[UserRepoImpl.ReadById] error execute query %v \n", err)
-		return nil, fmt.Errorf("username is not exsis")
+		return nil, fmt.Errorf("username is not exist or is not activated")
 	}
 	return &user, nil
 }
