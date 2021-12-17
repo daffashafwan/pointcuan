@@ -3,7 +3,7 @@ package repo
 import (
 	"fmt"
 	"github.com/daffashafwan/pointcuan/model"
-	"github.com/daffashafwan/pointcuan/user"
+	"github.com/daffashafwan/pointcuan/business/user"
 
 	"github.com/jinzhu/gorm"
 )
