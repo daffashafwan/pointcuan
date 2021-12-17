@@ -1,4 +1,4 @@
-package helpers
+package response
 
 import "github.com/labstack/echo"
 

@@ -1,5 +1,20 @@
 [
   {
+    "method": "POST",
+    "path": "/user/login",
+    "name": "github.com/daffashafwan/pointcuan/user/handler.(*UserHandler).login-fm"
+  },
+  {
+    "method": "POST",
+    "path": "/user/register",
+    "name": "github.com/daffashafwan/pointcuan/user/handler.(*UserHandler).addUser-fm"
+  },
+  {
+    "method": "GET",
+    "path": "/user",
+    "name": "github.com/daffashafwan/pointcuan/user/handler.(*UserHandler).viewUsers-fm"
+  },
+  {
     "method": "GET",
     "path": "user/:id",
     "name": "github.com/daffashafwan/pointcuan/user/handler.(*UserHandler).viewUserId-fm"
@@ -13,20 +28,5 @@
     "method": "DELETE",
     "path": "/user/:id",
     "name": "github.com/daffashafwan/pointcuan/user/handler.(*UserHandler).deleteUser-fm"
-  },
-  {
-    "method": "POST",
-    "path": "/user/login",
-    "name": "github.com/daffashafwan/pointcuan/user/handler.(*UserHandler).login-fm"
-  },
-  {
-    "method": "POST",
-    "path": "/user",
-    "name": "github.com/daffashafwan/pointcuan/user/handler.(*UserHandler).addUser-fm"
-  },
-  {
-    "method": "GET",
-    "path": "/user",
-    "name": "github.com/daffashafwan/pointcuan/user/handler.(*UserHandler).viewUsers-fm"
   }
 ]
