@@ -4,10 +4,10 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/daffashafwan/pointcuan/business/user"
 	"github.com/daffashafwan/pointcuan/helpers/jwt"
 	"github.com/daffashafwan/pointcuan/helpers/response"
 	"github.com/daffashafwan/pointcuan/model"
-	"github.com/daffashafwan/pointcuan/business/user"
 	"github.com/daffashafwan/pointcuan/route"
 	"github.com/labstack/echo"
 	"golang.org/x/crypto/bcrypt"
@@ -21,7 +21,7 @@ func CreateUserHandler(r *echo.Echo, UserUsecase user.UserUsecase) {
 	Handler := UserHandler{UserUsecase}
 	r.POST("/user/login",Handler.login )
 	r.POST("/user/register",Handler.addUser )
-	r.GET("/user", Handler.viewUsers, route.IsLoggedInUser)
+	r.GET("/user", Handler.viewUsers, route.IsLoggedInAdmin)
 	r.GET("user/:id", Handler.viewUserId)
 	r.PUT("/user/:id", Handler.editUser)
 	r.DELETE("/user/:id", Handler.deleteUser)

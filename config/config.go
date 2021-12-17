@@ -1,9 +1,10 @@
 package config
 
 import (
-	"log"
-	"github.com/daffashafwan/pointcuan/model"
 	"fmt"
+	"log"
+
+	"github.com/daffashafwan/pointcuan/model"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
@@ -37,7 +38,7 @@ func DbConnect() *gorm.DB {
 	}
 
 	db.Debug().AutoMigrate(
-		model.User{},
+		model.User{}, model.Admin{},
 	)
 	return db
 }
