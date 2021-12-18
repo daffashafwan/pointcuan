@@ -2,7 +2,7 @@ package repo
 
 import (
 	"fmt"
-	"github.com/daffashafwan/pointcuan/model"
+	"github.com/daffashafwan/pointcuan/business/user/domain"
 	"github.com/daffashafwan/pointcuan/business/user"
 
 	"github.com/jinzhu/gorm"
@@ -16,7 +16,7 @@ func CreateUserRepo(DB *gorm.DB) user.UserRepo {
 	return &UserRepoImpl{DB}
 }
 
-func (e *UserRepoImpl) Create(user *model.User) (*model.User, error) {
+func (e *UserRepoImpl) Create(user *domain.Domain) (*domain.Domain, error) {
 	err := e.DB.Save(&user).Error
 	if err != nil {
 		fmt.Printf("[UserRepoImpl.Create] error execute query %v \n", err)
@@ -25,8 +25,8 @@ func (e *UserRepoImpl) Create(user *model.User) (*model.User, error) {
 	return user, nil
 }
 
-func (e *UserRepoImpl) ReadAll() (*[]model.User, error) {
-	var users []model.User
+func (e *UserRepoImpl) ReadAll() (*[]domain.Domain, error) {
+	var users []domain.Domain
 	err := e.DB.Find(&users).Error
 	if err != nil {
 		fmt.Printf("[UserRepoImpl.ReadAll] error execute query %v \n", err)
@@ -35,8 +35,8 @@ func (e *UserRepoImpl) ReadAll() (*[]model.User, error) {
 	return &users, nil
 }
 
-func (e *UserRepoImpl) ReadById(id int)(*model.User, error) {
-	var user = model.User{}
+func (e *UserRepoImpl) ReadById(id int)(*domain.Domain, error) {
+	var user = domain.Domain{}
 	err := e.DB.Table("users").Where("id = ?", id).First(&user).Error
 	if err != nil {
 		fmt.Printf("[UserRepoImpl.ReadById] error execute query %v \n", err)
@@ -45,8 +45,8 @@ func (e *UserRepoImpl) ReadById(id int)(*model.User, error) {
 	return &user, nil
 }
 
-func (e *UserRepoImpl) ReadByUsername(username string)(*model.User, error) {
-	var user = model.User{}
+func (e *UserRepoImpl) ReadByUsername(username string)(*domain.Domain, error) {
+	var user = domain.Domain{}
 	err := e.DB.Table("users").Where("username = ?", username).Where("status", "1").First(&user).Error
 	if err != nil {
 		fmt.Printf("[UserRepoImpl.ReadById] error execute query %v \n", err)
@@ -55,8 +55,18 @@ func (e *UserRepoImpl) ReadByUsername(username string)(*model.User, error) {
 	return &user, nil
 }
 
-func (e *UserRepoImpl) Update(id int, user *model.User) (*model.User, error) {
-	var upUser = model.User{}
+func (e *UserRepoImpl) ReadByToken(token string)(*domain.Domain, error) {
+	var user = domain.Domain{}
+	err := e.DB.Table("users").Where("token = ?", token).First(&user).Error
+	if err != nil {
+		fmt.Printf("[UserRepoImpl.ReadById] error execute query %v \n", err)
+		return nil, fmt.Errorf("username is not exist or is not activated")
+	}
+	return &user, nil
+}
+
+func (e *UserRepoImpl) Update(id int, user *domain.Domain) (*domain.Domain, error) {
+	var upUser = domain.Domain{}
 	err := e.DB.Table("users").Where("id = ?", id).First(&upUser).Update(&user).Error
 	if err != nil {
 		fmt.Printf("[UserRepoImpl.Update] error execute query %v \n", err)
@@ -66,7 +76,7 @@ func (e *UserRepoImpl) Update(id int, user *model.User) (*model.User, error) {
 }
 
 func (e *UserRepoImpl) Delete(id int) error {
-	var user = model.User{}
+	var user = domain.Domain{}
 	err := e.DB.Table("users").Where("id = ?", id).First(&user).Delete(&user).Error
 	if err != nil {
 		fmt.Printf("[UserRepoImpl.Delete] error execute query %v \n", err)
