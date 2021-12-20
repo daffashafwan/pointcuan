@@ -25,7 +25,7 @@ type Usecase interface {
 	Update(ctx context.Context, domain Domain, id int) (Domain, error)
 	GetAll(ctx context.Context) ([]Domain, error)
 	GetById(ctx context.Context, id int) (Domain, error)
-	//Delete(ctx context.Context, domain Domain) (Domain, error)
+	Delete(ctx context.Context, id int) ( error)
 	//GetAll(ctx context.Context, domain Domain) (Domain, error)
 }
 
@@ -35,7 +35,7 @@ type Repository interface {
 	Update(ctx context.Context, domain Domain) (Domain, error)
 	GetAll(ctx context.Context) ([]Domain, error)
 	GetById(ctx context.Context, id int) (Domain, error)
-	//Delete(ctx context.Context, id int) (Domain, error)
+	Delete(ctx context.Context, id int) ( error)
 	//GetAll(ctx context.Context) (Domain, error)
 	//GetById(ctx context.Context, id int) (Domain, error)
 	//Update(ctx context.Context, id int) (Domain, error)

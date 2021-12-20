@@ -91,6 +91,18 @@ func (rep *UserRepo) GetById(ctx context.Context, id int) (users.Domain, error) 
 	return data.ToDomain(), nil
 }
 
+func (rep *UserRepo) Delete(ctx context.Context, id int) error {
+	user := User{}
+	err := rep.DB.Table("users").Where("id = ?", id).First(&user).Delete(&user)
+	if err.Error != nil {
+		return err.Error
+	}
+	if err.RowsAffected == 0 {
+		return errors.New("id not found")
+	}
+	return nil
+}
+
 // func (e *UserRepoImpl) Create(user *domain.Domain) (*domain.Domain, error) {
 // 	err := e.DB.Save(&user).Error
 // 	if err != nil {

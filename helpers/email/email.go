@@ -6,10 +6,10 @@ import (
 	gomail "gopkg.in/mail.v2"
 
 	"github.com/daffashafwan/pointcuan/helpers/response"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
-func SendEmail(c echo.Context, to string, subject string, body string) error{
+func SendEmail(c echo.Context, to string, subject string, body string) error {
 	msg := gomail.NewMessage()
 	msg.SetHeader("From", "daffashafwan.dev@gmail.com")
 	msg.SetHeader("To", to)
@@ -37,6 +37,6 @@ func SendEmail(c echo.Context, to string, subject string, body string) error{
 	// // send mail
 	// // func SendMail(addr string, a Auth, from string, to []string, msg []byte) error
 	// err := smtp.SendMail(address, auth, from, recipient, message)
-	
+
 	return response.SuccessResponse(c, http.StatusOK, "Sukses Kirim Email")
 }

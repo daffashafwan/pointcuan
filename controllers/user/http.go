@@ -1,13 +1,14 @@
 package users
 
 import (
+	"net/http"
+	"strconv"
+
 	"github.com/daffashafwan/pointcuan/business/users"
-	"github.com/daffashafwan/pointcuan/helpers/response"
 	"github.com/daffashafwan/pointcuan/controllers/user/requests"
 	"github.com/daffashafwan/pointcuan/controllers/user/responses"
-	"net/http"
-	"github.com/labstack/echo"
-	"strconv"
+	"github.com/daffashafwan/pointcuan/helpers/response"
+	"github.com/labstack/echo/v4"
 )
 
 type UserController struct {
@@ -90,3 +91,16 @@ func (userController UserController) GetById(c echo.Context) error {
 	return response.SuccessResponse(c,http.StatusOK, responses.FromDomain(data))
 }
 
+func (userController UserController) Delete(c echo.Context) error {
+	id := c.Param("id")
+	convInt, err := strconv.Atoi(id)
+	if err != nil {
+		return response.ErrorResponse(c, http.StatusBadRequest, err)
+	}
+	ctx := c.Request().Context()
+	err = userController.UserUseCase.Delete(ctx, convInt)
+	if err != nil {
+		return response.ErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	return response.SuccessResponse(c,http.StatusOK, convInt)
+}

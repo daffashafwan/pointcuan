@@ -1,19 +1,20 @@
 package main
 
 import (
+	"time"
+
 	"github.com/daffashafwan/pointcuan/app/routes"
 	_userUsecase "github.com/daffashafwan/pointcuan/business/users"
+	_mysqlDriver "github.com/daffashafwan/pointcuan/config"
 	_userController "github.com/daffashafwan/pointcuan/controllers/user"
 	_userdb "github.com/daffashafwan/pointcuan/model/user"
-	_mysqlDriver "github.com/daffashafwan/pointcuan/config"
-	"time"
 
 	_middleware "github.com/daffashafwan/pointcuan/app/middlewares"
 	_userRepository "github.com/daffashafwan/pointcuan/model/user"
 
 	"log"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
 )

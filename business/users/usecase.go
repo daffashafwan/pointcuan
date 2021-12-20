@@ -84,33 +84,12 @@ func (uc *UserUsecase) Create(ctx context.Context, domain Domain) (Domain, error
 	return user, nil
 }
 
-func (uc *UserUsecase) Delete(ctx context.Context, domain Domain) (Domain, error) {
-	if domain.Username == "" {
-		return Domain{}, errors.New("username empty")
-	}
-
-	if domain.Password == "" {
-		return Domain{}, errors.New("password empty")
-	}
-	var err error
-
+func (uc *UserUsecase) Delete(ctx context.Context, id int) ( error) {
+	err := uc.Repo.Delete(ctx, id)
 	if err != nil {
-		return Domain{}, err
+		return err
 	}
-
-	user, err := uc.Repo.Login(ctx, domain.Username, domain.Password)
-
-	if err != nil {
-		return Domain{}, err
-	}
-
-	// user.Token, err = uc.ConfigJWT.GenerateToken(user.Id)
-
-	if err != nil {
-		return Domain{}, err
-	}
-
-	return user, nil
+	return nil
 }
 
 func (uc *UserUsecase) GetAll(ctx context.Context) ([]Domain, error) {
