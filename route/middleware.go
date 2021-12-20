@@ -1,8 +1,8 @@
 package route
 
 import (
-	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+	"github.com/labstack/echo/v4"
 )
 
 var IsLoggedInUser = middleware.JWTWithConfig(middleware.JWTConfig{
