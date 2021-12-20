@@ -95,6 +95,9 @@ func (userController UserController) Verif(c echo.Context) error {
 	ctxNative := c.Request().Context()
 	token := c.Param("token")
 	data, err := userController.UserUseCase.GetByToken(ctxNative, token)
+	if data.Status == "1"{
+		return response.SuccessResponse(c,http.StatusOK, "Anda Sudah Pernah Melakukan Verifikasi")
+	}
 	if err != nil {
 		return response.ErrorResponse(c, http.StatusInternalServerError, err)
 	}
