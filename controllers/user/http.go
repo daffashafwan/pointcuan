@@ -76,3 +76,17 @@ func (userController UserController) GetAll(c echo.Context) error {
 	return response.SuccessResponse(c, http.StatusOK, responses.FromListDomain(data))
 }
 
+func (userController UserController) GetById(c echo.Context) error {
+	ctxNative := c.Request().Context()
+	id := c.Param("id")
+	convInt, errConvInt := strconv.Atoi(id)
+	if errConvInt != nil {
+		return response.ErrorResponse(c, http.StatusBadRequest, errConvInt)
+	}
+	data, err := userController.UserUseCase.GetById(ctxNative, convInt)
+	if err != nil {
+		return response.ErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	return response.SuccessResponse(c,http.StatusOK, responses.FromDomain(data))
+}
+

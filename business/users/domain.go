@@ -24,9 +24,9 @@ type Usecase interface {
 	Create(ctx context.Context, domain Domain) (Domain, error)
 	Update(ctx context.Context, domain Domain, id int) (Domain, error)
 	GetAll(ctx context.Context) ([]Domain, error)
+	GetById(ctx context.Context, id int) (Domain, error)
 	//Delete(ctx context.Context, domain Domain) (Domain, error)
 	//GetAll(ctx context.Context, domain Domain) (Domain, error)
-	//GetById(ctx context.Context, domain Domain) (Domain, error)
 }
 
 type Repository interface {
@@ -34,6 +34,7 @@ type Repository interface {
 	Create(ctx context.Context, domain *Domain) (Domain, error)
 	Update(ctx context.Context, domain Domain) (Domain, error)
 	GetAll(ctx context.Context) ([]Domain, error)
+	GetById(ctx context.Context, id int) (Domain, error)
 	//Delete(ctx context.Context, id int) (Domain, error)
 	//GetAll(ctx context.Context) (Domain, error)
 	//GetById(ctx context.Context, id int) (Domain, error)

@@ -16,6 +16,7 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 
 	//USERS
 	e.GET("users", cl.UserController.GetAll)
+	e.GET("users/:id", cl.UserController.GetById)
 	e.POST("users/login", cl.UserController.Login)
 	e.POST("users/register", cl.UserController.Register)
 	e.PUT("users/:id", cl.UserController.Update)

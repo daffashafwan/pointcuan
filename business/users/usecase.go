@@ -121,34 +121,17 @@ func (uc *UserUsecase) GetAll(ctx context.Context) ([]Domain, error) {
 	return user, nil
 }
 
-func (uc *UserUsecase) GetById(ctx context.Context, domain Domain) (Domain, error) {
-	if domain.Username == "" {
-		return Domain{}, errors.New("username empty")
-	}
-
-	if domain.Password == "" {
-		return Domain{}, errors.New("password empty")
-	}
-	var err error
-
+func (uc *UserUsecase) GetById(ctx context.Context, id int) (Domain, error) {
+	user, err := uc.Repo.GetById(ctx, id)
 	if err != nil {
 		return Domain{}, err
 	}
-
-	user, err := uc.Repo.Login(ctx, domain.Username, domain.Password)
-
-	if err != nil {
-		return Domain{}, err
+	if user.Id == 0 {
+		return Domain{}, errors.New("ID NOT FOUND")
 	}
-
-	// user.Token, err = uc.ConfigJWT.GenerateToken(user.Id)
-
-	if err != nil {
-		return Domain{}, err
-	}
-
 	return user, nil
 }
+
 
 func (uc *UserUsecase) Update(ctx context.Context, domain Domain, id int) (Domain, error) {
 	domain.Password, _ = encrypt.Encrypt(domain.Password)

@@ -73,13 +73,22 @@ func (rep *UserRepo) Update(ctx context.Context, userU users.Domain) (users.Doma
 	return data.ToDomain(), nil
 }
 
-func (repo *UserRepo) GetAll(ctx context.Context) ([]users.Domain, error) {
+func (rep *UserRepo) GetAll(ctx context.Context) ([]users.Domain, error) {
 	var data []User
-	err := repo.DB.Table("users").Find(&data)
+	err := rep.DB.Table("users").Find(&data)
 	if err.Error != nil {
 		return []users.Domain{}, err.Error
 	}
 	return ToListDomain(data), nil
+}
+
+func (rep *UserRepo) GetById(ctx context.Context, id int) (users.Domain, error) {
+	var data User
+	err := rep.DB.Table("users").Find(&data, "id=?", id)
+	if err.Error != nil {
+		return users.Domain{}, err.Error
+	}
+	return data.ToDomain(), nil
 }
 
 // func (e *UserRepoImpl) Create(user *domain.Domain) (*domain.Domain, error) {
