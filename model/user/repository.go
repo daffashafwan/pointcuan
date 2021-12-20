@@ -5,6 +5,7 @@ import (
 	"github.com/daffashafwan/pointcuan/business/users"
 	"github.com/daffashafwan/pointcuan/helpers/encrypt"
 	"gorm.io/gorm"
+	"fmt"
 	"errors"
 )
 
@@ -31,6 +32,54 @@ func (rep *UserRepo) Login(ctx context.Context, username string, password string
 	}
 	return user.ToDomain(), nil
 
+}
+
+func (rep *UserRepo) Create(ctx context.Context,userR *users.Domain) (users.Domain, error) {
+	user := User{
+		Name:     userR.Name,
+		Email:    userR.Email,
+		Username: userR.Username,
+		Password: userR.Password,
+		Address:  userR.Address,
+		Status: userR.Status,
+		Token: userR.Token,
+	}
+	err := rep.DB.Create(&user)
+	if err.Error != nil {
+		fmt.Printf("[UserRepoImpl.Create] error execute query %v \n", err)
+		return users.Domain{}, fmt.Errorf("failed insert data")
+	}
+	fmt.Println(user.Username)
+	fmt.Println(user.ToDomain())
+	return user.ToDomain(), nil
+}
+
+func (rep *UserRepo) Update(ctx context.Context, userU users.Domain) (users.Domain, error) {
+	data := FromDomain(userU)
+	err := rep.DB.Table("users").First(&data)
+	if err.Error != nil {
+		return users.Domain{}, err.Error
+	}
+	data.Name = userU.Name
+	data.Username = userU.Username
+	data.Password = userU.Password
+	data.Email = userU.Email
+	data.Address = userU.Address
+	
+
+	if rep.DB.Save(&data).Error != nil {
+		return users.Domain{}, errors.New("bad requests")
+	}
+	return data.ToDomain(), nil
+}
+
+func (repo *UserRepo) GetAll(ctx context.Context) ([]users.Domain, error) {
+	var data []User
+	err := repo.DB.Table("users").Find(&data)
+	if err.Error != nil {
+		return []users.Domain{}, err.Error
+	}
+	return ToListDomain(data), nil
 }
 
 // func (e *UserRepoImpl) Create(user *domain.Domain) (*domain.Domain, error) {
