@@ -108,10 +108,34 @@ func (uc *UserUsecase) GetById(ctx context.Context, id int) (Domain, error) {
 	return user, nil
 }
 
+func (uc *UserUsecase) GetByToken(ctx context.Context, token string) (Domain, error) {
+	user, err := uc.Repo.GetByToken(ctx, token)
+	if err != nil {
+		return Domain{}, err
+	}
+	if user.Id == 0 {
+		return Domain{}, errors.New("ID NOT FOUND")
+	}
+	return user, nil
+}
+
 
 func (uc *UserUsecase) Update(ctx context.Context, domain Domain, id int) (Domain, error) {
 	domain.Password, _ = encrypt.Encrypt(domain.Password)
 	domain.Id = id
+	user, err := uc.Repo.Update(ctx, domain)
+
+	if err != nil {
+		return Domain{}, err
+	}
+
+	return user, nil
+}
+
+func (uc *UserUsecase) Verif(ctx context.Context, domain Domain, id int) (Domain, error) {
+	domain.Password, _ = encrypt.Encrypt(domain.Password)
+	domain.Id = id
+	domain.Status = "1"
 	user, err := uc.Repo.Update(ctx, domain)
 
 	if err != nil {

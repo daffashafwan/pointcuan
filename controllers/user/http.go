@@ -91,6 +91,23 @@ func (userController UserController) GetById(c echo.Context) error {
 	return response.SuccessResponse(c,http.StatusOK, responses.FromDomain(data))
 }
 
+func (userController UserController) Verif(c echo.Context) error {
+	ctxNative := c.Request().Context()
+	token := c.Param("token")
+	data, err := userController.UserUseCase.GetByToken(ctxNative, token)
+	if err != nil {
+		return response.ErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	userVerif := requests.UserRegister{}
+	err = c.Bind(&userVerif)
+	ctx := c.Request().Context()
+	data, errs := userController.UserUseCase.Verif(ctx, userVerif.ToDomain(), data.Id)
+	if errs != nil {
+		return response.ErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	return response.SuccessResponse(c,http.StatusOK, responses.FromDomain(data))
+}
+
 func (userController UserController) Delete(c echo.Context) error {
 	id := c.Param("id")
 	convInt, err := strconv.Atoi(id)

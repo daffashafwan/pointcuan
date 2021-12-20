@@ -22,7 +22,7 @@ func CreateUserRepo(conn *gorm.DB) users.Repository {
 
 func (rep *UserRepo) Login(ctx context.Context, username string, password string) (users.Domain, error) {
 	var user User
-	result := rep.DB.Table("users").Where("username = ?", username).First(&user).Error
+	result := rep.DB.Table("users").Where("username = ?", username).Where("status = ? ", "1").First(&user).Error
 
 	if result != nil {
 		return users.Domain{}, result
@@ -63,6 +63,7 @@ func (rep *UserRepo) Update(ctx context.Context, userU users.Domain) (users.Doma
 	data.Name = userU.Name
 	data.Username = userU.Username
 	data.Password = userU.Password
+	data.Status = userU.Status
 	data.Email = userU.Email
 	data.Address = userU.Address
 	
@@ -85,6 +86,15 @@ func (rep *UserRepo) GetAll(ctx context.Context) ([]users.Domain, error) {
 func (rep *UserRepo) GetById(ctx context.Context, id int) (users.Domain, error) {
 	var data User
 	err := rep.DB.Table("users").Find(&data, "id=?", id)
+	if err.Error != nil {
+		return users.Domain{}, err.Error
+	}
+	return data.ToDomain(), nil
+}
+
+func (rep *UserRepo) GetByToken(ctx context.Context, token string) (users.Domain, error) {
+	var data User
+	err := rep.DB.Table("users").Find(&data, "token=?", token)
 	if err.Error != nil {
 		return users.Domain{}, err.Error
 	}
