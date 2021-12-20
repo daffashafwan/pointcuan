@@ -6,7 +6,8 @@ import (
 	"time"
 
 	"github.com/daffashafwan/pointcuan/helpers/encrypt"
-	//"github.com/daffashafwan/pointcuan/helpers/encrypt"
+	"github.com/daffashafwan/pointcuan/helpers/email"
+	"github.com/daffashafwan/pointcuan/helpers/randomizer"
 )
 
 type UserUsecase struct {
@@ -69,17 +70,13 @@ func (uc *UserUsecase) Create(ctx context.Context, domain Domain) (Domain, error
 	var hashed string
 	hashed,_ = encrypt.Encrypt(domain.Password)
 	domain.Password = hashed
+	domain.Token = randomizer.Randomize()
 	user, err := uc.Repo.Create(ctx, &domain)
 
 	if err != nil {
 		return Domain{}, err
 	}
-
-	// user.Token, err = uc.ConfigJWT.GenerateToken(user.Id)
-
-	if err != nil {
-		return Domain{}, err
-	}
+	email.SendEmail(ctx, domain.Email, "Verifikasi Email Pointcuan", "<a href=`http://localhost:1323/user/verif/"+domain.Token+"`>Link Verifikasi</a>")
 
 	return user, nil
 }
