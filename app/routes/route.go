@@ -2,6 +2,7 @@ package routes
 
 import (
 	"github.com/daffashafwan/pointcuan/app/middlewares"
+	admins "github.com/daffashafwan/pointcuan/controllers/admin"
 	users "github.com/daffashafwan/pointcuan/controllers/user"
 
 	"github.com/labstack/echo/v4"
@@ -11,6 +12,7 @@ import (
 type ControllerList struct {
 	JwtConfig      middleware.JWTConfig
 	UserController users.UserController
+	AdminController admins.AdminController
 }
 
 func (cl *ControllerList) RouteRegister(e *echo.Echo) {
@@ -23,6 +25,10 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	e.PUT("users/:id", cl.UserController.Update)
 	e.DELETE("users/:id", cl.UserController.Delete)
 	e.GET("users/verif/:token", cl.UserController.Verif)
+
+	//ADMIN 
+	e.GET("admin/:id", cl.AdminController.GetById)
+	e.POST("admin/login", cl.AdminController.Login)
 
 	//POINTS
 

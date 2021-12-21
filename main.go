@@ -12,6 +12,11 @@ import (
 	_middleware "github.com/daffashafwan/pointcuan/app/middlewares"
 	_userRepository "github.com/daffashafwan/pointcuan/model/user"
 
+	//admin
+	_admindb "github.com/daffashafwan/pointcuan/model/admin"
+	_adminUsecase "github.com/daffashafwan/pointcuan/business/admin"
+	_adminController "github.com/daffashafwan/pointcuan/controllers/admin"
+
 	"log"
 
 	"github.com/labstack/echo/v4"
@@ -31,7 +36,7 @@ func init() {
 }
 
 func DbMigrate(db *gorm.DB) {
-	db.AutoMigrate(&_userdb.User{})
+	db.AutoMigrate(&_userdb.User{}, &_admindb.Admin{})
 }
 
 func main() {
@@ -59,9 +64,16 @@ func main() {
 	userUseCase := _userUsecase.NewUserUsecase(userRepository, timeoutContext)
 	userController := _userController.NewUserController(userUseCase)
 
+	//admin
+	adminRepository := _admindb.CreateAdminRepo(Conn)
+	adminUseCase := _adminUsecase.NewUsecase(adminRepository, timeoutContext)
+	adminController := _adminController.NewAdminController(adminUseCase)
+
+
 	routesInit := routes.ControllerList{
 		JwtConfig:      configJWT.Init(),
 		UserController: *userController,
+		AdminController: *adminController,
 	}
 
 	routesInit.RouteRegister(e)
