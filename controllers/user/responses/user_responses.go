@@ -20,6 +20,7 @@ func FromDomain(domain users.Domain) UserResponse {
 	return UserResponse{
 		Id:        domain.Id,
 		Name:      domain.Name,
+		Username:  domain.Username,
 		Email:     domain.Email,
 		Address:   domain.Address,
 		JWTToken:  domain.JWTToken,

@@ -61,7 +61,7 @@ func main() {
 	timeoutContext := time.Duration(viper.GetInt("context.timeout")) * time.Second
 
 	userRepository := _userRepository.CreateUserRepo(Conn)
-	userUseCase := _userUsecase.NewUserUsecase(userRepository, timeoutContext)
+	userUseCase := _userUsecase.NewUserUsecase(userRepository, timeoutContext, configJWT)
 	userController := _userController.NewUserController(userUseCase)
 
 	//admin
