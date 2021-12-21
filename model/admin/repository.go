@@ -17,15 +17,15 @@ func CreateAdminRepo(gormDb *gorm.DB) admin.Repository {
 	}
 }
 
+func (repo *AdminRepo) Login(ctx context.Context, username string, password string) (admin.Domain, error) {
+	var adm Admin
+	result := repo.DB.Table("admins").Where("username = ?", username).First(&adm).Error
 
-func (repo AdminRepo) Login(domain admin.Domain, ctx context.Context) (admin.Domain, error){
-	adminDb := FromDomain(domain)
-
-	err := repo.DB.Where("username = ? AND password = ?", adminDb.Username, adminDb.Password).First(&adminDb).Error
-	if err != nil {
-		return admin.Domain{}, err
+	if result != nil {
+		return admin.Domain{}, result
 	}
-	return adminDb.ToDomain(), nil
+	return adm.ToDomain(), nil
+
 }
 
 func (repo *AdminRepo) GetById(ctx context.Context, id int) (admin.Domain, error) {

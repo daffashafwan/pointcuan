@@ -32,7 +32,7 @@ func (usecase *AdminUsecase) Login(ctx context.Context, domain Domain) (Domain, 
 		return Domain{}, err
 	}
 
-	admin, err := usecase.Repo.Login(ctx, domain)
+	admin, err := usecase.Repo.Login(ctx, domain.Username, domain.Password)
 
 	if err != nil {
 		return Domain{}, err
