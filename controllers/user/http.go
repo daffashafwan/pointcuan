@@ -3,7 +3,6 @@ package users
 import (
 	"net/http"
 	"strconv"
-
 	"github.com/daffashafwan/pointcuan/business/users"
 	"github.com/daffashafwan/pointcuan/controllers/user/requests"
 	"github.com/daffashafwan/pointcuan/controllers/user/responses"
@@ -101,7 +100,15 @@ func (userController UserController) Verif(c echo.Context) error {
 	if err != nil {
 		return response.ErrorResponse(c, http.StatusInternalServerError, err)
 	}
-	userVerif := requests.UserRegister{}
+	userVerif := requests.UserRegister{
+		Name: data.Name,
+		Username: data.Username,
+		Status: "1",
+		Password: data.Password,
+		Email: data.Email,
+		Address: data.Address,
+		Token: data.Token,
+	}
 	err = c.Bind(&userVerif)
 	ctx := c.Request().Context()
 	data, errs := userController.UserUseCase.Verif(ctx, userVerif.ToDomain(), data.Id)
