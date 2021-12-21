@@ -1,4 +1,4 @@
-package admin
+package admins
 
 import (
 	"context"
@@ -9,6 +9,13 @@ import (
 type AdminUsecase struct {
 	Repo           Repository
 	contextTimeout time.Duration
+}
+
+func NewUsecase(repo Repository, timeout time.Duration) Usecase {
+	return &AdminUsecase{
+		Repo:           repo,
+		contextTimeout: timeout,
+	}
 }
 
 func (usecase *AdminUsecase) Login(ctx context.Context, domain Domain) (Domain, error) {
