@@ -18,6 +18,7 @@ func FromDomain(domain admins.Domain) AdminResponse {
 	return AdminResponse{
 		Id:        domain.Id,
 		Name:      domain.Name,
+		Username: domain.Username,
 		CreatedAt: domain.CreatedAt,
 		UpdatedAt: domain.UpdatedAt,
 	}
