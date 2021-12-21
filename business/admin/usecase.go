@@ -1,4 +1,4 @@
-package admins
+package admin
 
 import (
 	"context"
@@ -32,7 +32,7 @@ func (usecase *AdminUsecase) Login(ctx context.Context, domain Domain) (Domain, 
 		return Domain{}, err
 	}
 
-	admin, err := usecase.Repo.Login(ctx, domain.Username, domain.Password)
+	admin, err := usecase.Repo.Login(ctx, domain)
 
 	if err != nil {
 		return Domain{}, err

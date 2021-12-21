@@ -1,4 +1,4 @@
-package admins
+package admin
 
 import (
 	"context"
@@ -20,6 +20,6 @@ type Usecase interface {
 }
 
 type Repository interface {
-	Login(ctx context.Context, username string, password string) (Domain, error)
+	Login(ctx context.Context, domain Domain) (Domain, error)
 	GetById(ctx context.Context, id int) (Domain, error)
 }

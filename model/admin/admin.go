@@ -1,9 +1,9 @@
-package admins
+package admin
 
 import (
 	"time"
 
-	admins "github.com/daffashafwan/pointcuan/business/admin"
+	"github.com/daffashafwan/pointcuan/business/admin"
 )
 
 type Admin struct {
@@ -15,18 +15,18 @@ type Admin struct {
 	UpdatedAt time.Time
 }
 
-func (admin *Admin) ToDomain() admins.Domain {
-	return admins.Domain {
-		Id:        admin.Id,
-		Name:      admin.Name,
-		Username:  admin.Username,
-		Password:  admin.Password,
-		CreatedAt: admin.CreatedAt,
-		UpdatedAt: admin.UpdatedAt,
+func (ad *Admin) ToDomain() admin.Domain {
+	return admin.Domain {
+		Id:        ad.Id,
+		Name:      ad.Name,
+		Username:  ad.Username,
+		Password:  ad.Password,
+		CreatedAt: ad.CreatedAt,
+		UpdatedAt: ad.UpdatedAt,
 	}
 }
 
-func FromDomain(domain admins.Domain) Admin {
+func FromDomain(domain admin.Domain) Admin {
 	return Admin{
 		Id:        domain.Id,
 		Name:      domain.Name,
