@@ -11,7 +11,7 @@ type UserResponse struct {
 	Email     string    `json:"email"`
 	Username  string    `json:"username"`
 	Address   string    `json:"address"`
-	JWTToken  string    `json:"jwt_token"`
+	JWTToken  string    `json:"jwtToken"`
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
 }
