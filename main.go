@@ -13,9 +13,9 @@ import (
 	_userRepository "github.com/daffashafwan/pointcuan/model/user"
 
 	//admin
-	_admindb "github.com/daffashafwan/pointcuan/model/admin"
 	_adminUsecase "github.com/daffashafwan/pointcuan/business/admin"
 	_adminController "github.com/daffashafwan/pointcuan/controllers/admin"
+	_admindb "github.com/daffashafwan/pointcuan/model/admin"
 
 	"log"
 
@@ -66,7 +66,7 @@ func main() {
 
 	//admin
 	adminRepository := _admindb.CreateAdminRepo(Conn)
-	adminUseCase := _adminUsecase.NewUsecase(adminRepository, timeoutContext)
+	adminUseCase := _adminUsecase.NewUsecase(adminRepository, timeoutContext, configJWT)
 	adminController := _adminController.NewAdminController(adminUseCase)
 
 
