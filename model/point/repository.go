@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/daffashafwan/pointcuan/business/point"
 	"gorm.io/gorm"
-	"fmt"
 	"errors"
 )
 
@@ -26,8 +25,7 @@ func (rep *PointRepo) Create(ctx context.Context,pointC *point.Domain) (point.Do
 	}
 	err := rep.DB.Create(&points)
 	if err.Error != nil {
-		fmt.Printf("[PointRepoImpl.Create] error execute query %v \n", err)
-		return point.Domain{}, fmt.Errorf("failed insert data")
+		return point.Domain{}, err.Error
 	}
 	return points.ToDomain(), nil
 }
@@ -38,7 +36,6 @@ func (rep *PointRepo) Update(ctx context.Context, pointU point.Domain) (point.Do
 	if err.Error != nil {
 		return point.Domain{}, err.Error
 	}
-	data.UserId = pointU.UserId
 	data.Point = pointU.Point
 	if rep.DB.Save(&data).Error != nil {
 		return point.Domain{}, errors.New("bad requests")
@@ -57,7 +54,7 @@ func (rep *PointRepo) GetAll(ctx context.Context) ([]point.Domain, error) {
 
 func (rep *PointRepo) GetByUserId(ctx context.Context, id int) (point.Domain, error) {
 	var data Point
-	err := rep.DB.Table("point").Find(&data, "user_id=?", id)
+	err := rep.DB.Table("points").Find(&data, "user_id=?", id)
 	if err.Error != nil {
 		return point.Domain{}, err.Error
 	}
@@ -66,7 +63,7 @@ func (rep *PointRepo) GetByUserId(ctx context.Context, id int) (point.Domain, er
 
 func (rep *PointRepo) Delete(ctx context.Context, id int) error {
 	user := Point{}
-	err := rep.DB.Table("points]").Where("user_id = ?", id).First(&user).Delete(&user)
+	err := rep.DB.Table("points").Where("user_id = ?", id).First(&user).Delete(&user)
 	if err.Error != nil {
 		return err.Error
 	}

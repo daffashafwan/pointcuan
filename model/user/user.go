@@ -6,11 +6,11 @@ import (
 )
 
 type User struct {
-	Id        int `gorm:"primaryKey]"`
+	Id        int `gorm:"primaryKey"`
 	Name      string
-	Username  string `gorm:"unique"`
+	Username  string
 	Password  string
-	Email     string `gorm:"unique"`
+	Email     string
 	Address   string
 	Status    string
 	Token     string

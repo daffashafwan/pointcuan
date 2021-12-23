@@ -6,7 +6,7 @@ import (
 )
 
 type Point struct {
-	Id        int `gorm:"primaryKey]"`
+	Id        int `gorm:"primaryKey"`
 	UserId    int `gorm:"unique"`
 	Point     float64
 	CreatedAt time.Time

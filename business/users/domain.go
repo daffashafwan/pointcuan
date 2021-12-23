@@ -28,7 +28,7 @@ type Usecase interface {
 	GetById(ctx context.Context, id int) (Domain, error)
 	GetByToken(ctx context.Context, token string) (Domain, error)
 	Delete(ctx context.Context, id int) ( error)
-	Verif(ctx context.Context, domain Domain, id int) (Domain, error)
+	Verify(ctx context.Context, domain Domain, id int) (Domain, error)
 	//GetAll(ctx context.Context, domain Domain) (Domain, error)
 }
 

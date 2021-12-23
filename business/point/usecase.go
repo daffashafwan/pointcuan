@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"time"
+
 	"github.com/daffashafwan/pointcuan/app/middlewares"
 )
 
@@ -25,10 +26,6 @@ func NewPointUsecase(repo Repository, timeout time.Duration, configJWT middlewar
 
 func (pc *PointUsecase) Create(ctx context.Context, domain Domain) (Domain, error) {
 	var err error
-
-	if err != nil {
-		return Domain{}, err
-	}
 	point, err := pc.Repo.Create(ctx, &domain)
 	if err != nil {
 		return Domain{}, err
@@ -65,6 +62,7 @@ func (pc *PointUsecase) GetByUserId(ctx context.Context, id int) (Domain, error)
 }
 
 func (pc *PointUsecase) Update(ctx context.Context, domain Domain, id int) (Domain, error) {
+	domain.Id = id
 	point, err := pc.Repo.Update(ctx, domain)
 
 	if err != nil {

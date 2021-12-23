@@ -5,7 +5,6 @@ import (
 	"github.com/daffashafwan/pointcuan/business/users"
 	"github.com/daffashafwan/pointcuan/helpers/encrypt"
 	"gorm.io/gorm"
-	"fmt"
 	"errors"
 )
 
@@ -46,11 +45,8 @@ func (rep *UserRepo) Create(ctx context.Context,userR *users.Domain) (users.Doma
 	}
 	err := rep.DB.Create(&user)
 	if err.Error != nil {
-		fmt.Printf("[UserRepoImpl.Create] error execute query %v \n", err)
-		return users.Domain{}, fmt.Errorf("failed insert data")
+		return users.Domain{}, err.Error
 	}
-	fmt.Println(user.Username)
-	fmt.Println(user.ToDomain())
 	return user.ToDomain(), nil
 }
 
