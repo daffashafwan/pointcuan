@@ -116,6 +116,7 @@ func (rep *UserRepo) Delete(ctx context.Context, id int) error {
 func (rep *UserRepo) ForgotPassword(ctx context.Context,userR *users.Domain) (users.Domain, error) {
 	user := User{
 		Token: userR.Token,
+		Email: userR.Email,
 	}
 	err := rep.DB.Create(&user)
 	if err.Error != nil {

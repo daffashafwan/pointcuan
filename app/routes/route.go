@@ -25,6 +25,7 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	e.PUT("users/:id", cl.UserController.Update)
 	e.DELETE("users/:id", cl.UserController.Delete)
 	e.GET("users/verif/:token", cl.UserController.Verif)
+	e.POST("users/forgot/password", cl.UserController.ForgotPassword)
 
 	//ADMIN 
 	e.GET("admin/:id", cl.AdminController.GetById)
