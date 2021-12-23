@@ -15,6 +15,7 @@ type Domain struct {
 	Status string 
 	Token string 
 	JWTToken string
+	Point float64
 	CreatedAt time.Time 
 	UpdatedAt time.Time 
 }

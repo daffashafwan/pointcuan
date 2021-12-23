@@ -33,6 +33,7 @@ func (user *User) ToDomain() users.Domain {
 	}
 }
 
+
 func ToListDomain(data []User) (result []users.Domain) {
 	result = []users.Domain{}
 	for _, user := range data {

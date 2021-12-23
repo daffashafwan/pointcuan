@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"time"
+	"github.com/daffashafwan/pointcuan/business/point"
 	"github.com/daffashafwan/pointcuan/app/middlewares"
 	"github.com/daffashafwan/pointcuan/helpers/email"
 	"github.com/daffashafwan/pointcuan/helpers/encrypt"
@@ -13,13 +14,15 @@ import (
 
 type UserUsecase struct {
 	// ConfigJWT      middlewares.ConfigJWT
+	PointUsecase   point.PointUsecase
 	Repo           Repository
 	contextTimeout time.Duration
 	ConfigJWT		middlewares.ConfigJWT
 }
 
-func NewUserUsecase(repo Repository, timeout time.Duration, configJWT middlewares.ConfigJWT) Usecase {
+func NewUserUsecase(repo Repository, timeout time.Duration, configJWT middlewares.ConfigJWT, PointUsecase point.PointUsecase) Usecase {
 	return &UserUsecase{
+		PointUsecase: PointUsecase,
 		ConfigJWT:      configJWT,
 		Repo:           repo,
 		contextTimeout: timeout,
