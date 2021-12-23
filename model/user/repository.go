@@ -27,7 +27,7 @@ func (rep *UserRepo) Login(ctx context.Context, username string, password string
 		return users.Domain{}, result
 	}
 	if !(encrypt.Compare(password,user.Password)) {
-		return users.Domain{}, errors.New("username tidak cocok")
+		return users.Domain{}, errors.New("Password tidak cocok")
 	}
 	return user.ToDomain(), nil
 

@@ -41,7 +41,7 @@ func (usecase *AdminUsecase) Login(ctx context.Context, domain Domain) (Domain, 
 	if err != nil {
 		return Domain{}, err
 	}
-	admin.JWTToken, err = usecase.ConfigJWT.GenerateTokenJWT(admin.Id, 0)
+	admin.JWTToken, err = usecase.ConfigJWT.GenerateTokenJWT(admin.Id, 1)
 
 	if err != nil {
 		return Domain{}, err
