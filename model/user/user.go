@@ -6,11 +6,11 @@ import (
 )
 
 type User struct {
-	Id        int `gorm:"primaryKey]"`
+	Id        int `gorm:"primaryKey"`
 	Name      string
-	Username  string `gorm:"unique"`
+	Username  string
 	Password  string
-	Email     string `gorm:"unique"`
+	Email     string
 	Address   string
 	Status    string
 	Token     string
@@ -32,6 +32,7 @@ func (user *User) ToDomain() users.Domain {
 		UpdatedAt: user.UpdatedAt,
 	}
 }
+
 
 func ToListDomain(data []User) (result []users.Domain) {
 	result = []users.Domain{}

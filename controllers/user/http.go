@@ -3,8 +3,9 @@ package users
 import (
 	"net/http"
 	"strconv"
-
+	"github.com/daffashafwan/pointcuan/business/point"
 	"github.com/daffashafwan/pointcuan/business/users"
+	pointRequest "github.com/daffashafwan/pointcuan/controllers/point/requests"
 	"github.com/daffashafwan/pointcuan/controllers/user/requests"
 	"github.com/daffashafwan/pointcuan/controllers/user/responses"
 	"github.com/daffashafwan/pointcuan/helpers/response"
@@ -13,11 +14,13 @@ import (
 
 type UserController struct {
 	UserUseCase users.Usecase
+	PointUsecase point.Usecase
 }
 
-func NewUserController(userUseCase users.Usecase) *UserController {
+func NewUserController(userUseCase users.Usecase, pointUsecase point.Usecase) *UserController {
 	return &UserController{
 		UserUseCase: userUseCase,
+		PointUsecase: pointUsecase,
 	}
 }
 
@@ -88,10 +91,16 @@ func (userController UserController) GetById(c echo.Context) error {
 	if err != nil {
 		return response.ErrorResponse(c, http.StatusInternalServerError, err)
 	}
+	point, errs := userController.PointUsecase.GetByUserId(ctxNative, data.Id)
+
+	data.Point = point.Point
+	if errs != nil {
+		return response.ErrorResponse(c, http.StatusInternalServerError, err)
+	}
 	return response.SuccessResponse(c,http.StatusOK, responses.FromDomain(data))
 }
 
-func (userController UserController) Verif(c echo.Context) error {
+func (userController UserController) Verify(c echo.Context) error {
 	ctxNative := c.Request().Context()
 	token := c.Param("token")
 	data, err := userController.UserUseCase.GetByToken(ctxNative, token)
@@ -102,6 +111,7 @@ func (userController UserController) Verif(c echo.Context) error {
 		return response.ErrorResponse(c, http.StatusInternalServerError, err)
 	}
 	userVerif := requests.UserRegister{
+		Id: data.Id,
 		Name: data.Name,
 		Username: data.Username,
 		Status: "1",
@@ -112,10 +122,20 @@ func (userController UserController) Verif(c echo.Context) error {
 	}
 	err = c.Bind(&userVerif)
 	ctx := c.Request().Context()
-	data, errs := userController.UserUseCase.Verif(ctx, userVerif.ToDomain(), data.Id)
+	data, errs := userController.UserUseCase.Verify(ctx, userVerif.ToDomain(), data.Id)
 	if errs != nil {
 		return response.ErrorResponse(c, http.StatusInternalServerError, err)
 	}
+	pointReq := pointRequest.PointRequest{
+		UserId: data.Id,
+		Point: 0,
+	}
+	point, errors := userController.PointUsecase.Create(ctx, pointReq.ToDomain())
+	data.Point = point.Point
+	if errors != nil {
+		return response.ErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	
 	return response.SuccessResponse(c,http.StatusOK, responses.FromDomain(data))
 }
 

@@ -26,10 +26,10 @@ func (adminController AdminController) Login(c echo.Context) error {
 	adminLogin := requests.AdminLogin{}
 	c.Bind(&adminLogin)
 	ctx := c.Request().Context()
-	admin, error := adminController.AdminUseCase.Login(ctx, adminLogin.ToDomain())
+	admin, errors := adminController.AdminUseCase.Login(ctx, adminLogin.ToDomain())
 
-	if error != nil {
-		return response.ErrorResponse(c, http.StatusInternalServerError, error)
+	if errors != nil {
+		return response.ErrorResponse(c, http.StatusInternalServerError, errors)
 	}
 
 	return response.SuccessResponse(c,http.StatusOK, responses.FromDomain(admin))
