@@ -113,6 +113,20 @@ func (rep *UserRepo) Delete(ctx context.Context, id int) error {
 	return nil
 }
 
+func (rep *UserRepo) ForgotPassword(ctx context.Context,userR *users.Domain) (users.Domain, error) {
+	user := User{
+		Token: userR.Token,
+	}
+	err := rep.DB.Create(&user)
+	if err.Error != nil {
+		fmt.Printf("[UserRepoImpl.Create] error execute query %v \n", err)
+		return users.Domain{}, fmt.Errorf("failed insert data")
+	}
+	fmt.Println(user.Username)
+	fmt.Println(user.ToDomain())
+	return user.ToDomain(), nil
+}
+
 // func (e *UserRepoImpl) Create(user *domain.Domain) (*domain.Domain, error) {
 // 	err := e.DB.Save(&user).Error
 // 	if err != nil {
