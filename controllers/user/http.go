@@ -132,3 +132,17 @@ func (userController UserController) Delete(c echo.Context) error {
 	}
 	return response.SuccessResponse(c,http.StatusOK, convInt)
 }
+
+func (userController UserController) ForgotPassword(c echo.Context) error {
+
+	userForgotPassword := requests.UserForgotPassword{}
+	c.Bind(&userForgotPassword)
+	ctx := c.Request().Context()
+	user, error := userController.UserUseCase.Create(ctx, userForgotPassword.ToDomain())
+
+	if error != nil {
+		return response.ErrorResponse(c, http.StatusInternalServerError, error)
+	}
+
+	return response.SuccessResponse(c,http.StatusOK, responses.FromDomain(user))
+}
