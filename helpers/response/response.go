@@ -4,7 +4,7 @@ import "github.com/labstack/echo/v4"
 
 type SuccessResp struct {
 	successCode int
-	data        interface{}
+	Data        interface{}
 }
 
 type ErrorResp struct {
@@ -15,7 +15,7 @@ type ErrorResp struct {
 func SuccessResponse(c echo.Context, statusCode int, data interface{}) error {
 	resp := &SuccessResp{
 		successCode: statusCode,
-		data:        data,
+		Data:        data,
 	}
 	c.Response().WriteHeader(statusCode)
 	c.Response().Header().Set(echo.HeaderContentType, echo.MIMEApplicationJSONCharsetUTF8)

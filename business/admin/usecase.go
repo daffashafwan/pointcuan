@@ -4,17 +4,21 @@ import (
 	"context"
 	"errors"
 	"time"
+
+	"github.com/daffashafwan/pointcuan/app/middlewares"
 )
 
 type AdminUsecase struct {
 	Repo           Repository
 	contextTimeout time.Duration
+	ConfigJWT		middlewares.ConfigJWT
 }
 
-func NewUsecase(repo Repository, timeout time.Duration) Usecase {
+func NewUsecase(repo Repository, timeout time.Duration, configJWT	middlewares.ConfigJWT) Usecase {
 	return &AdminUsecase{
 		Repo:           repo,
 		contextTimeout: timeout,
+		ConfigJWT:      configJWT,
 	}
 }
 
@@ -33,6 +37,11 @@ func (usecase *AdminUsecase) Login(ctx context.Context, domain Domain) (Domain, 
 	}
 
 	admin, err := usecase.Repo.Login(ctx, domain.Username, domain.Password)
+
+	if err != nil {
+		return Domain{}, err
+	}
+	admin.JWTToken, err = usecase.ConfigJWT.GenerateTokenJWT(admin.Id, 0)
 
 	if err != nil {
 		return Domain{}, err
