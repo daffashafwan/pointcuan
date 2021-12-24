@@ -3,6 +3,7 @@ package routes
 import (
 	"github.com/daffashafwan/pointcuan/app/middlewares"
 	admins "github.com/daffashafwan/pointcuan/controllers/admin"
+	pcrcrud "github.com/daffashafwan/pointcuan/controllers/pcr_crud"
 	users "github.com/daffashafwan/pointcuan/controllers/user"
 
 	"github.com/labstack/echo/v4"
@@ -13,6 +14,7 @@ type ControllerList struct {
 	JwtConfig      middleware.JWTConfig
 	UserController users.UserController
 	AdminController admins.AdminController
+	PcrController pcrcrud.PcrController
 }
 
 func (cl *ControllerList) RouteRegister(e *echo.Echo) {
@@ -31,6 +33,9 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	e.POST("admin/login", cl.AdminController.Login)
 
 	//POINTS
+	e.GET("pcr/:id", cl.PcrController.GetById)
+	e.PUT("pcr/:id", cl.PcrController.Update)
+	//PCR
 
 	// e.GET("users", cl.UserController.Login, middleware.JWTWithConfig(cl.JwtConfig))
 }

@@ -12,7 +12,7 @@ type Domain struct {
 }
 
 type Usecase interface {
-	Update(ctx context.Context, domain Domain) (Domain, error)
+	Update(ctx context.Context, domain Domain, id int) (Domain, error)
 	GetById(ctx context.Context, id int) (Domain, error)
 }
 

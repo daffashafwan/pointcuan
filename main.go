@@ -17,6 +17,11 @@ import (
 	_adminController "github.com/daffashafwan/pointcuan/controllers/admin"
 	_admindb "github.com/daffashafwan/pointcuan/model/admin"
 
+	//pcr
+	_pcr "github.com/daffashafwan/pointcuan/business/pcr_crud"
+	_pcrdb "github.com/daffashafwan/pointcuan/model/pcr_crud"
+	_pcrController "github.com/daffashafwan/pointcuan/controllers/pcr_crud"
+
 	"log"
 
 	"github.com/labstack/echo/v4"
@@ -36,7 +41,7 @@ func init() {
 }
 
 func DbMigrate(db *gorm.DB) {
-	db.AutoMigrate(&_userdb.User{}, &_admindb.Admin{})
+	db.AutoMigrate(&_userdb.User{}, &_admindb.Admin{}, &_pcrdb.Pcrcrud{})
 }
 
 func main() {
@@ -69,11 +74,16 @@ func main() {
 	adminUseCase := _adminUsecase.NewUsecase(adminRepository, timeoutContext, configJWT)
 	adminController := _adminController.NewAdminController(adminUseCase)
 
+	//pcr
+	pcrRepo := _pcrdb.CreatePcrRepo(Conn)
+	pcrUseCase := _pcr.NewPcrcase(pcrRepo, timeoutContext)
+	pcrController := _pcrController.NewPcrController(pcrUseCase)
 
 	routesInit := routes.ControllerList{
 		JwtConfig:      configJWT.Init(),
 		UserController: *userController,
 		AdminController: *adminController,
+		PcrController: *pcrController,
 	}
 
 	routesInit.RouteRegister(e)
