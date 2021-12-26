@@ -19,8 +19,8 @@ import (
 
 	//pcr
 	_pcr "github.com/daffashafwan/pointcuan/business/pcr_crud"
-	_pcrdb "github.com/daffashafwan/pointcuan/model/pcr_crud"
 	_pcrController "github.com/daffashafwan/pointcuan/controllers/pcr_crud"
+	_pcrdb "github.com/daffashafwan/pointcuan/model/pcr_crud"
 
 	"log"
 
