@@ -8,14 +8,14 @@ import (
 
 type PcrResponse struct {
 	Id        int       `json:"id"`
-	NilaiPcr int `json:"nilaiPcr"`
+	PcrValue int `json:"pcrValue"`
 	UpdatedAt time.Time `json:"updatedAt"`
 }
 
 func FromDomain(domain pcrcrud.Domain) PcrResponse {
 	return PcrResponse{
 		Id:        domain.Id,
-		NilaiPcr: domain.NilaiPcr,
+		PcrValue: domain.PcrValue,
 		UpdatedAt: domain.UpdatedAt,
 	}
 }

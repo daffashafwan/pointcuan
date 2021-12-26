@@ -24,7 +24,7 @@ func (rep *PcrRepo) Update(ctx context.Context, pcr pcrcrud.Domain) (pcrcrud.Dom
 	if err.Error != nil {
 		return pcrcrud.Domain{}, err.Error
 	}
-	data.NilaiPcr = pcr.NilaiPcr
+	data.PcrValue = pcr.PcrValue
 
 	if rep.DB.Save(&data).Error != nil {
 		return pcrcrud.Domain{}, errors.New("bad requests")

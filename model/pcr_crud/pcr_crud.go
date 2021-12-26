@@ -8,14 +8,14 @@ import (
 
 type Pcrcrud struct {
 	Id        int `gorm:"primaryKey]"`
-	NilaiPcr int
+	PcrValue int
 	UpdatedAt time.Time
 }
 
 func (pcr *Pcrcrud) ToDomain() pcrcrud.Domain {
 	return pcrcrud.Domain {
 		Id:        pcr.Id,
-		NilaiPcr:  pcr.NilaiPcr,
+		PcrValue:  pcr.PcrValue,
 		UpdatedAt: pcr.UpdatedAt,
 	}
 }
@@ -23,7 +23,7 @@ func (pcr *Pcrcrud) ToDomain() pcrcrud.Domain {
 func FromDomain(domain pcrcrud.Domain) Pcrcrud {
 	return Pcrcrud{
 		Id:        domain.Id,
-		NilaiPcr: domain.NilaiPcr,
+		PcrValue: domain.PcrValue,
 		UpdatedAt: domain.UpdatedAt,
 	}
 }

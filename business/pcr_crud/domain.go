@@ -7,7 +7,7 @@ import (
 
 type Domain struct {
 	Id   int
-	NilaiPcr int
+	PcrValue int
 	UpdatedAt time.Time 
 }
 
