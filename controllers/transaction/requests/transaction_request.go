@@ -2,12 +2,11 @@ package requests
 
 import (
 	"github.com/daffashafwan/pointcuan/business/transactions"
-	"time"
 )
 
 type TransactionRequest struct {
 	UserId                int       `json:"userId"`
-	TransactionDate       time.Time `json:"transactionDate"`
+	TransactionDate       string `json:"transactionDate"`
 	Transaction           string    `json:"transaction"`
 	TransactionAttachment string    `json:"transactionAttachment"`
 	Status                int8      `json:"status"`

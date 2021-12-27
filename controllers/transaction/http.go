@@ -1,7 +1,6 @@
 package transaction
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -29,7 +28,6 @@ func (transactionController TransactionController) Create(c echo.Context) error 
 	id := c.Param("id")
 	convId, _ := strconv.Atoi(id)
 	transCreate.UserId = convId
-	fmt.Println(transCreate.ToDomain())
 	transaction, error := transactionController.TransactionUsecase.Create(ctx, transCreate.ToDomain())
 	if error != nil {
 		return response.ErrorResponse(c, http.StatusInternalServerError, error.Error())
