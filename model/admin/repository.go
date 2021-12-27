@@ -2,8 +2,10 @@ package admin
 
 import (
 	"context"
+	"errors"
 
 	"github.com/daffashafwan/pointcuan/business/admin"
+	"github.com/daffashafwan/pointcuan/helpers/encrypt"
 	"gorm.io/gorm"
 )
 
@@ -23,6 +25,9 @@ func (repo *AdminRepo) Login(ctx context.Context, username string, password stri
 
 	if result != nil {
 		return admin.Domain{}, result
+	}
+	if !(encrypt.Compare(password,adm.Password)) {
+		return admin.Domain{}, errors.New("password tidak cocok")
 	}
 	return adm.ToDomain(), nil
 
