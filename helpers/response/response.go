@@ -3,18 +3,18 @@ package response
 import "github.com/labstack/echo/v4"
 
 type SuccessResp struct {
-	successCode int
-	Data        interface{}
+	SuccessCode int `json:"successCode"`
+	Data        interface{} `json:"data"`
 }
 
 type ErrorResp struct {
-	errorCode int
-	messages  interface{}
+	ErrorCode int `json:"errorCode"`
+	Messages  interface{} `json:"data"`
 }
 
 func SuccessResponse(c echo.Context, statusCode int, data interface{}) error {
 	resp := &SuccessResp{
-		successCode: statusCode,
+		SuccessCode: statusCode,
 		Data:        data,
 	}
 	c.Response().WriteHeader(statusCode)
@@ -24,8 +24,8 @@ func SuccessResponse(c echo.Context, statusCode int, data interface{}) error {
 
 func ErrorResponse(c echo.Context, errorCode int, messages interface{}) error {
 	resp := &ErrorResp{
-		errorCode: errorCode,
-		messages:  messages,
+		ErrorCode: errorCode,
+		Messages:  messages,
 	}
 	c.Response().WriteHeader(errorCode)
 	c.Response().Header().Set(echo.HeaderContentType, echo.MIMEApplicationJSONCharsetUTF8)

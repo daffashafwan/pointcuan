@@ -9,6 +9,11 @@ import (
 	_userController "github.com/daffashafwan/pointcuan/controllers/user"
 	_userdb "github.com/daffashafwan/pointcuan/model/user"
 
+	_pointRepository "github.com/daffashafwan/pointcuan/model/point"
+	_pointUsecase "github.com/daffashafwan/pointcuan/business/point"
+	_pointdb "github.com/daffashafwan/pointcuan/model/point"
+	_pointController "github.com/daffashafwan/pointcuan/controllers/point"
+
 	_middleware "github.com/daffashafwan/pointcuan/app/middlewares"
 	_userRepository "github.com/daffashafwan/pointcuan/model/user"
 
@@ -41,7 +46,7 @@ func init() {
 }
 
 func DbMigrate(db *gorm.DB) {
-	db.AutoMigrate(&_userdb.User{}, &_admindb.Admin{}, &_pcrdb.Pcrcrud{})
+	db.AutoMigrate(&_userdb.User{}, &_admindb.Admin{}, &_pointdb.Point{}, &_pcrdb.Pcrcrud{})
 }
 
 func main() {
@@ -65,9 +70,13 @@ func main() {
 	e := echo.New()
 	timeoutContext := time.Duration(viper.GetInt("context.timeout")) * time.Second
 
+	pointRepository := _pointRepository.CreatePointRepo(Conn)
+	pointUseCase := _pointUsecase.NewPointUsecase(pointRepository, timeoutContext, configJWT)
+	pointController := _pointController.NewPointController(pointUseCase)
+
 	userRepository := _userRepository.CreateUserRepo(Conn)
 	userUseCase := _userUsecase.NewUserUsecase(userRepository, timeoutContext, configJWT)
-	userController := _userController.NewUserController(userUseCase)
+	userController := _userController.NewUserController(userUseCase, pointUseCase)
 
 	//admin
 	adminRepository := _admindb.CreateAdminRepo(Conn)
@@ -84,6 +93,7 @@ func main() {
 		UserController: *userController,
 		AdminController: *adminController,
 		PcrController: *pcrController,
+		PointController: *pointController,
 	}
 
 	routesInit.RouteRegister(e)

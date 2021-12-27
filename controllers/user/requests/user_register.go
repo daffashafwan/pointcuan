@@ -3,6 +3,7 @@ package requests
 import "github.com/daffashafwan/pointcuan/business/users"
 
 type UserRegister struct {
+	Id		int
 	Name     string `json:"name"`
 	Email    string `json:"email"`
 	Username string `json:"username"`
@@ -14,6 +15,7 @@ type UserRegister struct {
 
 func (ur *UserRegister) ToDomain() users.Domain {
 	return users.Domain{
+		Id: ur.Id,
 		Username: ur.Username,
 		Password: ur.Password,
 		Email:    ur.Email,

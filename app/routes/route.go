@@ -5,6 +5,7 @@ import (
 	admins "github.com/daffashafwan/pointcuan/controllers/admin"
 	pcrcrud "github.com/daffashafwan/pointcuan/controllers/pcr_crud"
 	users "github.com/daffashafwan/pointcuan/controllers/user"
+	point "github.com/daffashafwan/pointcuan/controllers/point"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -15,6 +16,7 @@ type ControllerList struct {
 	UserController users.UserController
 	AdminController admins.AdminController
 	PcrController pcrcrud.PcrController
+	PointController point.PointController
 }
 
 func (cl *ControllerList) RouteRegister(e *echo.Echo) {
@@ -26,7 +28,11 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	e.POST("users/register", cl.UserController.Register)
 	e.PUT("users/:id", cl.UserController.Update)
 	e.DELETE("users/:id", cl.UserController.Delete)
-	e.GET("users/verif/:token", cl.UserController.Verif)
+	e.GET("users/verify/:token", cl.UserController.Verify)
+
+	//USERS WITH POINT
+	e.PUT("users/:id/point", cl.PointController.Update)
+	e.DELETE("users/:id/point", cl.PointController.Delete)
 
 	//ADMIN 
 	e.GET("admin/:id", cl.AdminController.GetById)

@@ -3,7 +3,6 @@ package users
 import (
 	"context"
 	"errors"
-	"fmt"
 	"time"
 	"github.com/daffashafwan/pointcuan/app/middlewares"
 	"github.com/daffashafwan/pointcuan/helpers/email"
@@ -12,7 +11,6 @@ import (
 )
 
 type UserUsecase struct {
-	// ConfigJWT      middlewares.ConfigJWT
 	Repo           Repository
 	contextTimeout time.Duration
 	ConfigJWT		middlewares.ConfigJWT
@@ -76,7 +74,7 @@ func (uc *UserUsecase) Create(ctx context.Context, domain Domain) (Domain, error
 	if err != nil {
 		return Domain{}, err
 	}
-	email.SendEmail(ctx, domain.Email, "Verifikasi Email Pointcuan", "<a href=`http://localhost:1323/users/verif/"+domain.Token+"`>Link Verifikasi</a>")
+	email.SendEmail(ctx, domain.Email, "Verifikasi Email Pointcuan", "<a href=`http://localhost:1323/users/verify/"+domain.Token+"`>Link Verifikasi</a>")
 
 	return user, nil
 }
@@ -132,11 +130,9 @@ func (uc *UserUsecase) Update(ctx context.Context, domain Domain, id int) (Domai
 	return user, nil
 }
 
-func (uc *UserUsecase) Verif(ctx context.Context, domain Domain, id int) (Domain, error) {
+func (uc *UserUsecase) Verify(ctx context.Context, domain Domain, id int) (Domain, error) {
 	domain.Status = "1"
-	fmt.Println(domain)
 	user, err := uc.Repo.Update(ctx, domain)
-
 	if err != nil {
 		return Domain{}, err
 	}
