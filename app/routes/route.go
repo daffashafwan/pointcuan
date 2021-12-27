@@ -44,7 +44,7 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	e.DELETE("users/:id/transaction/:tid", cl.TransactionController.Delete)
 
 	//TRANSACTION
-	e.GET("transactions", cl.TransactionController.GetAll)
+	e.GET("transaction", cl.TransactionController.GetAll)
 
 	//ADMIN 
 	e.GET("admin/:id", cl.AdminController.GetById)

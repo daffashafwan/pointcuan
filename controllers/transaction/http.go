@@ -1,8 +1,10 @@
 package transaction
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
+
 	"github.com/daffashafwan/pointcuan/business/transactions"
 	"github.com/daffashafwan/pointcuan/controllers/transaction/requests"
 	"github.com/daffashafwan/pointcuan/controllers/transaction/responses"
@@ -27,9 +29,10 @@ func (transactionController TransactionController) Create(c echo.Context) error 
 	id := c.Param("id")
 	convId, _ := strconv.Atoi(id)
 	transCreate.UserId = convId
+	fmt.Println(transCreate.ToDomain())
 	transaction, error := transactionController.TransactionUsecase.Create(ctx, transCreate.ToDomain())
 	if error != nil {
-		return response.ErrorResponse(c, http.StatusInternalServerError, error)
+		return response.ErrorResponse(c, http.StatusInternalServerError, error.Error())
 	}
 	return response.SuccessResponse(c,http.StatusOK, responses.FromDomain(transaction))
 }
