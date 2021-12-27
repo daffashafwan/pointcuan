@@ -6,53 +6,52 @@ import (
 )
 
 type Transaction struct {
-	Id        int `gorm:"primaryKey"`
-	Name      string
-	Username  string
-	Password  string
-	Email     string
-	Address   string
-	Status    string
-	Token     string
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	Id                    int `gorm:"primaryKey"`
+	UserId                int
+	TransactionDate       time.Time
+	Transaction           string
+	TransactionAttachment string
+	Status                int8
+	Point                 float64
+	Description           string
+	CreatedAt             time.Time
+	UpdatedAt             time.Time
 }
 
-func (user *User) ToDomain() users.Domain {
-	return users.Domain{
-		Id:        user.Id,
-		Name:      user.Name,
-		Email:     user.Email,
-		Username:  user.Username,
-		Status:    user.Status,
-		Token:     user.Token,
-		Address:   user.Address,
-		Password:  user.Password,
-		CreatedAt: user.CreatedAt,
-		UpdatedAt: user.UpdatedAt,
+func (tr *Transaction) ToDomain() transactions.Domain {
+	return transactions.Domain{
+		Id:                    tr.Id,
+		UserId:                tr.UserId,
+		TransactionDate:       tr.TransactionDate,
+		Transaction:           tr.Transaction,
+		TransactionAttachment: tr.TransactionAttachment,
+		Point:                 tr.Point,
+		Description:           tr.Description,
+		Status:                tr.Status,
+		CreatedAt:             tr.CreatedAt,
+		UpdatedAt:             tr.UpdatedAt,
 	}
 }
 
-
-func ToListDomain(data []User) (result []users.Domain) {
-	result = []users.Domain{}
+func ToListDomain(data []Transaction) (result []transactions.Domain) {
+	result = []transactions.Domain{}
 	for _, user := range data {
 		result = append(result, user.ToDomain())
 	}
 	return
 }
 
-func FromDomain(domain users.Domain) User {
-	return User{
-		Id:        domain.Id,
-		Name:      domain.Name,
-		Email:     domain.Email,
-		Address:   domain.Address,
-		Password:  domain.Password,
-		Username:  domain.Username,
-		Status:    domain.Status,
-		Token:     domain.Token,
-		CreatedAt: domain.CreatedAt,
-		UpdatedAt: domain.UpdatedAt,
+func FromDomain(domain transactions.Domain) Transaction {
+	return Transaction{
+		Id:                    domain.Id,
+		UserId:                domain.UserId,
+		TransactionDate:       domain.TransactionDate,
+		Transaction:           domain.Transaction,
+		TransactionAttachment: domain.TransactionAttachment,
+		Point:                 domain.Point,
+		Description:           domain.Description,
+		Status:                domain.Status,
+		CreatedAt:             domain.CreatedAt,
+		UpdatedAt:             domain.UpdatedAt,
 	}
 }

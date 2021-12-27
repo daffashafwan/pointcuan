@@ -3,7 +3,6 @@ package transactions
 import (
 	"context"
 	"github.com/daffashafwan/pointcuan/business/transactions"
-	"github.com/daffashafwan/pointcuan/helpers/encrypt"
 	"gorm.io/gorm"
 	"errors"
 )
@@ -18,30 +17,15 @@ func CreateTransactionRepo(conn *gorm.DB) transactions.Repository {
 	}
 }
 
-
-func (rep *TransactionRepo) Login(ctx context.Context, username string, password string) (transactions.Domain, error) {
-	var user Transaction
-	result := rep.DB.Table("users").Where("username = ?", username).Where("status = ? ", "1").First(&user).Error
-
-	if result != nil {
-		return transactions.Domain{}, result
-	}
-	if !(encrypt.Compare(password,user.Password)) {
-		return transactions.Domain{}, errors.New("Password tidak cocok")
-	}
-	return user.ToDomain(), nil
-
-}
-
-func (rep *TransactionRepo) Create(ctx context.Context,userR *transactions.Domain) (transactions.Domain, error) {
+func (rep *TransactionRepo) Create(ctx context.Context,transR *transactions.Domain) (transactions.Domain, error) {
 	user := Transaction{
-		Name:     userR.Name,
-		Email:    userR.Email,
-		Transactionname: userR.Transactionname,
-		Password: userR.Password,
-		Address:  userR.Address,
-		Status: userR.Status,
-		Token: userR.Token,
+		UserId: transR.UserId,
+		Transaction: transR.Transaction,
+		Description: transR.Description,
+		Point: transR.Point,
+		TransactionAttachment: transR.TransactionAttachment,
+		TransactionDate: transR.TransactionDate,
+		Status: transR.Status,
 	}
 	err := rep.DB.Create(&user)
 	if err.Error != nil {
@@ -50,20 +34,13 @@ func (rep *TransactionRepo) Create(ctx context.Context,userR *transactions.Domai
 	return user.ToDomain(), nil
 }
 
-func (rep *TransactionRepo) Update(ctx context.Context, userU transactions.Domain) (transactions.Domain, error) {
-	data := FromDomain(userU)
-	err := rep.DB.Table("users").First(&data)
+func (rep *TransactionRepo) Update(ctx context.Context, transU transactions.Domain) (transactions.Domain, error) {
+	data := FromDomain(transU)
+	err := rep.DB.Table("transactions").First(&data)
 	if err.Error != nil {
 		return transactions.Domain{}, err.Error
 	}
-	data.Name = userU.Name
-	data.Transaction = userU.Transaction
-	data.Password = userU.Password
-	data.Status = userU.Status
-	data.Email = userU.Email
-	data.Address = userU.Address
-	
-
+	data.Status = transU.Status
 	if rep.DB.Save(&data).Error != nil {
 		return transactions.Domain{}, errors.New("bad requests")
 	}
@@ -72,7 +49,7 @@ func (rep *TransactionRepo) Update(ctx context.Context, userU transactions.Domai
 
 func (rep *TransactionRepo) GetAll(ctx context.Context) ([]transactions.Domain, error) {
 	var data []Transaction
-	err := rep.DB.Table("users").Find(&data)
+	err := rep.DB.Table("transactions").Find(&data)
 	if err.Error != nil {
 		return []transactions.Domain{}, err.Error
 	}
@@ -81,7 +58,7 @@ func (rep *TransactionRepo) GetAll(ctx context.Context) ([]transactions.Domain, 
 
 func (rep *TransactionRepo) GetById(ctx context.Context, id int) (transactions.Domain, error) {
 	var data Transaction
-	err := rep.DB.Table("users").Find(&data, "id=?", id)
+	err := rep.DB.Table("transactions").Find(&data, "id=?", id)
 	if err.Error != nil {
 		return transactions.Domain{}, err.Error
 	}
@@ -89,18 +66,18 @@ func (rep *TransactionRepo) GetById(ctx context.Context, id int) (transactions.D
 }
 
 
-func (rep *TransactionRepo) GetByToken(ctx context.Context, token string) (transactions.Domain, error) {
-	var data Transaction
-	err := rep.DB.Table("users").Find(&data, "token=?", token)
+func (rep *TransactionRepo) GetByUserId(ctx context.Context, id int) ([]transactions.Domain, error) {
+	var data []Transaction
+	err := rep.DB.Table("transactions").Find(&data, "user_id=?", id)
 	if err.Error != nil {
-		return transactions.Domain{}, err.Error
+		return []transactions.Domain{}, err.Error
 	}
-	return data.ToDomain(), nil
+	return ToListDomain(data), nil
 }
 
 func (rep *TransactionRepo) Delete(ctx context.Context, id int) error {
 	user := Transaction{}
-	err := rep.DB.Table("users").Where("id = ?", id).First(&user).Delete(&user)
+	err := rep.DB.Table("transactions").Where("id = ?", id).First(&user).Delete(&user)
 	if err.Error != nil {
 		return err.Error
 	}

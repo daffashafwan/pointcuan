@@ -14,6 +14,11 @@ import (
 	_pointdb "github.com/daffashafwan/pointcuan/model/point"
 	_pointController "github.com/daffashafwan/pointcuan/controllers/point"
 
+	_transactionRepository "github.com/daffashafwan/pointcuan/model/transactions"
+	_transactionUsecase "github.com/daffashafwan/pointcuan/business/transactions"
+	_transactiondb "github.com/daffashafwan/pointcuan/model/transactions"
+	_transactionController "github.com/daffashafwan/pointcuan/controllers/transaction"
+
 	_middleware "github.com/daffashafwan/pointcuan/app/middlewares"
 	_userRepository "github.com/daffashafwan/pointcuan/model/user"
 
@@ -46,7 +51,7 @@ func init() {
 }
 
 func DbMigrate(db *gorm.DB) {
-	db.AutoMigrate(&_userdb.User{}, &_admindb.Admin{}, &_pointdb.Point{}, &_pcrdb.Pcrcrud{})
+	db.AutoMigrate(&_userdb.User{}, &_admindb.Admin{}, &_pointdb.Point{}, &_pcrdb.Pcrcrud{}, &_transactiondb.Transaction{})
 }
 
 func main() {
@@ -74,6 +79,10 @@ func main() {
 	pointUseCase := _pointUsecase.NewPointUsecase(pointRepository, timeoutContext, configJWT)
 	pointController := _pointController.NewPointController(pointUseCase)
 
+	transactionRepository := _transactionRepository.CreateTransactionRepo(Conn)
+	transactionUseCase := _transactionUsecase.NewTransactionUsecase(transactionRepository, timeoutContext, configJWT)
+	transactionController := _transactionController.NewTransactionController(transactionUseCase)
+
 	userRepository := _userRepository.CreateUserRepo(Conn)
 	userUseCase := _userUsecase.NewUserUsecase(userRepository, timeoutContext, configJWT)
 	userController := _userController.NewUserController(userUseCase, pointUseCase)
@@ -94,6 +103,7 @@ func main() {
 		AdminController: *adminController,
 		PcrController: *pcrController,
 		PointController: *pointController,
+		TransactionController: *transactionController,
 	}
 
 	routesInit.RouteRegister(e)

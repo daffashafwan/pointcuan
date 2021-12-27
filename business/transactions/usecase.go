@@ -78,22 +78,19 @@ func (tc *TransactionUsecase) GetByUserId(ctx context.Context, id int) ([]Domain
 	if err != nil {
 		return []Domain{}, err
 	}
-	if transaction.Id == 0 {
-		return []Domain{}, errors.New("ID NOT FOUND")
-	}
 	return transaction, nil
 }
 
-func (tc *TransactionUsecase) GetByUserIdAndStatus(ctx context.Context, id int, status int) ([]Domain, error) {
-	transaction, err := tc.Repo.GetByUserIdAndStatus(ctx, id, status)
-	if err != nil {
-		return []Domain{}, err
-	}
-	if transaction.Id == 0 {
-		return []Domain{}, errors.New("ID NOT FOUND")
-	}
-	return transaction, nil
-}
+// func (tc *TransactionUsecase) GetByUserIdAndStatus(ctx context.Context, id int, status int) ([]Domain, error) {
+// 	transaction, err := tc.Repo.GetByUserIdAndStatus(ctx, id, status)
+// 	if err != nil {
+// 		return []Domain{}, err
+// 	}
+// 	if transaction.Id == 0 {
+// 		return []Domain{}, errors.New("ID NOT FOUND")
+// 	}
+// 	return transaction, nil
+// }
 
 
 func (tc *TransactionUsecase) Update(ctx context.Context, domain Domain, id int) (Domain, error) {
