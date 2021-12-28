@@ -8,7 +8,7 @@ import (
 type Domain struct {
 	Id                    int
 	UserId                int
-	TransactionDate       string
+	TransactionDate       time.Time
 	Transaction           string
 	TransactionAttachment string
 	Status                int8

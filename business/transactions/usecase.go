@@ -1,7 +1,6 @@
 package transactions
 
 import (
-	"fmt"
 	"context"
 	"errors"
 	"time"
@@ -23,10 +22,11 @@ func NewTransactionUsecase(repo Repository, timeout time.Duration, configJWT mid
 }
 
 func (tc *TransactionUsecase) Create(ctx context.Context, domain Domain) (Domain, error) {
-	fmt.Println(domain.TransactionDate)
-	fmt.Println(domain.Transaction)
-	fmt.Println(domain.UserId)
-	fmt.Println(domain.TransactionAttachment)
+	
+	if domain.Description == "" {
+		return Domain{}, errors.New("Description empty")
+	}
+
 	if domain.TransactionAttachment == "" {
 		return Domain{}, errors.New("attachment empty")
 	}
@@ -35,7 +35,7 @@ func (tc *TransactionUsecase) Create(ctx context.Context, domain Domain) (Domain
 		return Domain{}, errors.New("transaction empty")
 	}
 
-	if domain.TransactionDate == "" {
+	if domain.TransactionDate.String() == "" {
 		return Domain{}, errors.New("date empty")
 	}
 	var err error

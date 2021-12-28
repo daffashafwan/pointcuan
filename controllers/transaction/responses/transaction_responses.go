@@ -18,6 +18,11 @@ type TransactionResponse struct {
 func FromDomain(domain transactions.Domain) TransactionResponse {
 	return TransactionResponse{
 		UserId: domain.UserId,
+		TransactionDate: domain.TransactionDate,
+		Transaction: domain.Transaction,
+		TransactionAttachment: domain.TransactionAttachment,
+		Status: domain.Status,
+		Description: domain.Description,
 		Point:  domain.Point,
 	}
 }

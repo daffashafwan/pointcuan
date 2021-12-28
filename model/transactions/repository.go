@@ -3,8 +3,6 @@ package transactions
 import (
 	"context"
 	"errors"
-	"time"
-
 	"github.com/daffashafwan/pointcuan/business/transactions"
 	"gorm.io/gorm"
 )
@@ -20,15 +18,13 @@ func CreateTransactionRepo(conn *gorm.DB) transactions.Repository {
 }
 
 func (rep *TransactionRepo) Create(ctx context.Context,transR *transactions.Domain) (transactions.Domain, error) {
-	layout := "YYYY-MM-DD"
-	date,_ := time.Parse(layout, transR.TransactionDate)
 	user := Transaction{
 		UserId: transR.UserId,
 		Transaction: transR.Transaction,
 		Description: transR.Description,
 		Point: transR.Point,
 		TransactionAttachment: transR.TransactionAttachment,
-		TransactionDate: date,
+		TransactionDate: transR.TransactionDate,
 		Status: transR.Status,
 	}
 	err := rep.DB.Create(&user)

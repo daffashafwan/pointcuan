@@ -22,7 +22,7 @@ func (tr *Transaction) ToDomain() transactions.Domain {
 	return transactions.Domain{
 		Id:                    tr.Id,
 		UserId:                tr.UserId,
-		TransactionDate:       tr.TransactionDate.String(),
+		TransactionDate:       tr.TransactionDate,
 		Transaction:           tr.Transaction,
 		TransactionAttachment: tr.TransactionAttachment,
 		Point:                 tr.Point,
@@ -42,12 +42,10 @@ func ToListDomain(data []Transaction) (result []transactions.Domain) {
 }
 
 func FromDomain(domain transactions.Domain) Transaction {
-	layout := "YYYY-MM-DD"
-	date,_ := time.Parse(layout, domain.TransactionDate)
 	return Transaction{
 		Id:                    domain.Id,
 		UserId:                domain.UserId,
-		TransactionDate:       date,
+		TransactionDate:       domain.TransactionDate,
 		Transaction:           domain.Transaction,
 		TransactionAttachment: domain.TransactionAttachment,
 		Point:                 domain.Point,
