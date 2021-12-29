@@ -18,19 +18,28 @@ func NewPcrcase(repo Repository, timeout time.Duration) Usecase {
 	}
 }
 
-func (uc *PcrUsecase) Update(ctx context.Context, domain Domain, id int) (Domain, error) {
-	domain.Id = id
-	pcr, err := uc.Repo.Update(ctx, domain)
-
-	if err != nil {
-		return Domain{}, err
+func (uc *PcrUsecase) Update(ctx context.Context, domain Domain) (Domain, error) {
+	var pcr Domain
+	var err error
+	data,_ := uc.GetPCR(ctx)
+	if data.Id == 0 {
+		pcr, err = uc.Repo.Create(ctx, &domain)
+		if err != nil {
+			return Domain{}, err
+		}
+	}else{
+		domain.Id = data.Id
+		pcr, err = uc.Repo.Update(ctx, domain)
+		if err != nil {
+			return Domain{}, err
+		}
 	}
 
 	return pcr, nil
 }
 
-func (usecase *PcrUsecase) GetById(ctx context.Context, id int) (Domain, error) {
-	pcr, err := usecase.Repo.GetById(ctx, id)
+func (usecase *PcrUsecase) GetPCR(ctx context.Context) (Domain, error) {
+	pcr, err := usecase.Repo.GetPCR(ctx)
 	if err != nil {
 		return Domain{}, err
 	}
