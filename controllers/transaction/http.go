@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/daffashafwan/pointcuan/business/pcr_crud"
 	"github.com/daffashafwan/pointcuan/business/transactions"
 	"github.com/daffashafwan/pointcuan/controllers/transaction/requests"
 	"github.com/daffashafwan/pointcuan/controllers/transaction/responses"
@@ -13,11 +14,13 @@ import (
 
 type TransactionController struct {
 	TransactionUsecase transactions.Usecase
+	PcrUsecase         pcrcrud.Usecase
 }
 
-func NewTransactionController(transactionUsecase transactions.Usecase) *TransactionController {
+func NewTransactionController(transactionUsecase transactions.Usecase, pcrUseCase pcrcrud.Usecase) *TransactionController {
 	return &TransactionController{
 		TransactionUsecase: transactionUsecase,
+		PcrUsecase: pcrUseCase,
 	}
 }
 
@@ -28,11 +31,16 @@ func (transactionController TransactionController) Create(c echo.Context) error 
 	id := c.Param("id")
 	convId, _ := strconv.Atoi(id)
 	transCreate.UserId = convId
+	pcr, err := transactionController.PcrUsecase.GetPCR(ctx)
+	if err != nil {
+		return response.ErrorResponse(c, http.StatusInternalServerError, err.Error())
+	}
+	transCreate.Point = transCreate.Transaction / pcr.PcrValue
 	transaction, error := transactionController.TransactionUsecase.Create(ctx, transCreate.ToDomain())
 	if error != nil {
 		return response.ErrorResponse(c, http.StatusInternalServerError, error.Error())
 	}
-	return response.SuccessResponse(c,http.StatusOK, responses.FromDomain(transaction))
+	return response.SuccessResponse(c, http.StatusOK, responses.FromDomain(transaction))
 }
 
 func (transactionController TransactionController) GetAll(c echo.Context) error {
@@ -55,7 +63,7 @@ func (transactionController TransactionController) GetById(c echo.Context) error
 	if err != nil {
 		return response.ErrorResponse(c, http.StatusInternalServerError, err)
 	}
-	return response.SuccessResponse(c,http.StatusOK, responses.FromDomain(data))
+	return response.SuccessResponse(c, http.StatusOK, responses.FromDomain(data))
 }
 
 func (transactionController TransactionController) GetByUserId(c echo.Context) error {
@@ -69,7 +77,7 @@ func (transactionController TransactionController) GetByUserId(c echo.Context) e
 	if err != nil {
 		return response.ErrorResponse(c, http.StatusInternalServerError, err)
 	}
-	return response.SuccessResponse(c,http.StatusOK, responses.FromListDomain(data))
+	return response.SuccessResponse(c, http.StatusOK, responses.FromListDomain(data))
 }
 
 func (transactionController TransactionController) Update(c echo.Context) error {
@@ -89,7 +97,7 @@ func (transactionController TransactionController) Update(c echo.Context) error 
 	if err != nil {
 		return response.ErrorResponse(c, http.StatusInternalServerError, err)
 	}
-	return response.SuccessResponse(c,http.StatusOK, responses.FromDomain(data))
+	return response.SuccessResponse(c, http.StatusOK, responses.FromDomain(data))
 }
 
 func (transactionController TransactionController) Delete(c echo.Context) error {
@@ -103,5 +111,5 @@ func (transactionController TransactionController) Delete(c echo.Context) error 
 	if err != nil {
 		return response.ErrorResponse(c, http.StatusInternalServerError, err)
 	}
-	return response.SuccessResponse(c,http.StatusOK, convInt)
+	return response.SuccessResponse(c, http.StatusOK, convInt)
 }

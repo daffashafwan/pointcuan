@@ -8,7 +8,7 @@ import (
 type TransactionResponse struct {
 	UserId                int `json:"userId"`
 	TransactionDate       time.Time `json:"transactionDate"`
-	Transaction           string `json:"transaction"`
+	Transaction           float64 `json:"transaction"`
 	TransactionAttachment string `json:"transactionAttachment"`
 	Status                int8 `json:"status"`
 	Point                 float64 `json:"point"`

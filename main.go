@@ -79,10 +79,6 @@ func main() {
 	pointUseCase := _pointUsecase.NewPointUsecase(pointRepository, timeoutContext, configJWT)
 	pointController := _pointController.NewPointController(pointUseCase)
 
-	transactionRepository := _transactionRepository.CreateTransactionRepo(Conn)
-	transactionUseCase := _transactionUsecase.NewTransactionUsecase(transactionRepository, timeoutContext, configJWT)
-	transactionController := _transactionController.NewTransactionController(transactionUseCase)
-
 	userRepository := _userRepository.CreateUserRepo(Conn)
 	userUseCase := _userUsecase.NewUserUsecase(userRepository, timeoutContext, configJWT)
 	userController := _userController.NewUserController(userUseCase, pointUseCase)
@@ -96,6 +92,10 @@ func main() {
 	pcrRepo := _pcrdb.CreatePcrRepo(Conn)
 	pcrUseCase := _pcr.NewPcrcase(pcrRepo, timeoutContext)
 	pcrController := _pcrController.NewPcrController(pcrUseCase)
+
+	transactionRepository := _transactionRepository.CreateTransactionRepo(Conn)
+	transactionUseCase := _transactionUsecase.NewTransactionUsecase(transactionRepository, timeoutContext, configJWT)
+	transactionController := _transactionController.NewTransactionController(transactionUseCase, pcrUseCase)
 
 	routesInit := routes.ControllerList{
 		JwtConfig:      configJWT.Init(),

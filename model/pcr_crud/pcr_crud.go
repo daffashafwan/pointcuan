@@ -8,7 +8,7 @@ import (
 
 type Pcrcrud struct {
 	Id        int `gorm:"primaryKey]"`
-	PcrValue int
+	PcrValue float64
 	UpdatedAt time.Time
 }
 

@@ -9,7 +9,7 @@ type Domain struct {
 	Id                    int
 	UserId                int
 	TransactionDate       time.Time
-	Transaction           string
+	Transaction           float64
 	TransactionAttachment string
 	Status                int8
 	Point                 float64

@@ -4,13 +4,14 @@ import (
 	"context"
 	"errors"
 	"time"
+
 	"github.com/daffashafwan/pointcuan/app/middlewares"
 )
 
 type TransactionUsecase struct {
 	Repo           Repository
 	contextTimeout time.Duration
-	ConfigJWT		middlewares.ConfigJWT
+	ConfigJWT      middlewares.ConfigJWT
 }
 
 func NewTransactionUsecase(repo Repository, timeout time.Duration, configJWT middlewares.ConfigJWT) Usecase {
@@ -22,16 +23,11 @@ func NewTransactionUsecase(repo Repository, timeout time.Duration, configJWT mid
 }
 
 func (tc *TransactionUsecase) Create(ctx context.Context, domain Domain) (Domain, error) {
-	
-	if domain.Description == "" {
-		return Domain{}, errors.New("Description empty")
-	}
-
 	if domain.TransactionAttachment == "" {
 		return Domain{}, errors.New("attachment empty")
 	}
 
-	if domain.Transaction == "" {
+	if  domain.Transaction == 0 {
 		return Domain{}, errors.New("transaction empty")
 	}
 
@@ -43,7 +39,7 @@ func (tc *TransactionUsecase) Create(ctx context.Context, domain Domain) (Domain
 	if err != nil {
 		return Domain{}, err
 	}
-	
+
 	transaction, err := tc.Repo.Create(ctx, &domain)
 	if err != nil {
 		return Domain{}, err
@@ -52,7 +48,7 @@ func (tc *TransactionUsecase) Create(ctx context.Context, domain Domain) (Domain
 	return transaction, nil
 }
 
-func (tc *TransactionUsecase) Delete(ctx context.Context, id int) ( error) {
+func (tc *TransactionUsecase) Delete(ctx context.Context, id int) error {
 	err := tc.Repo.Delete(ctx, id)
 	if err != nil {
 		return err
@@ -97,7 +93,6 @@ func (tc *TransactionUsecase) GetByUserId(ctx context.Context, id int) ([]Domain
 // 	}
 // 	return transaction, nil
 // }
-
 
 func (tc *TransactionUsecase) Update(ctx context.Context, domain Domain, id int) (Domain, error) {
 	domain.Id = id
