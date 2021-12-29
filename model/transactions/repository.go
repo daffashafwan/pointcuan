@@ -41,6 +41,7 @@ func (rep *TransactionRepo) Update(ctx context.Context, transU transactions.Doma
 		return transactions.Domain{}, err.Error
 	}
 	data.Status = transU.Status
+	data.Description = transU.Description
 	if rep.DB.Save(&data).Error != nil {
 		return transactions.Domain{}, errors.New("bad requests")
 	}
