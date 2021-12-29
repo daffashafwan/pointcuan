@@ -51,8 +51,8 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	e.POST("admin/login", cl.AdminController.Login)
 
 	//POINTS
-	e.GET("pcr/:id", cl.PcrController.GetById)
-	e.PUT("pcr/:id", cl.PcrController.Update)
+	e.GET("pcr", cl.PcrController.GetPCR)
+	e.PUT("pcr", cl.PcrController.Update)
 	//PCR
 
 	// e.GET("users", cl.UserController.Login, middleware.JWTWithConfig(cl.JwtConfig))
