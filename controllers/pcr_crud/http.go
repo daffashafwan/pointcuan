@@ -1,8 +1,8 @@
 package pcrcrud
 
 import (
+	"errors"
 	"net/http"
-	"strconv"
 
 	pcrcrud "github.com/daffashafwan/pointcuan/business/pcr_crud"
 	"github.com/daffashafwan/pointcuan/controllers/pcr_crud/requests"
@@ -21,32 +21,22 @@ func NewPcrController(pcrUseCase pcrcrud.Usecase) *PcrController {
 	}
 }
 func (pcrController PcrController) Update(c echo.Context) error {
-	id := c.Param("id")
-	convId, err := strconv.Atoi(id)
-	if err != nil {
-		return response.ErrorResponse(c, http.StatusBadRequest, err)
-	}
 	pcrUpdate := requests.PcrUpdate{}
-	err = c.Bind(&pcrUpdate)
-	if err != nil {
-		return err
-	}
+	c.Bind(&pcrUpdate)
 	ctx := c.Request().Context()
-	data, err := pcrController.PcrUseCase.Update(ctx, pcrUpdate.ToDomain(), convId)
+	data, err := pcrController.PcrUseCase.Update(ctx, pcrUpdate.ToDomain())
 	if err != nil {
 		return response.ErrorResponse(c, http.StatusInternalServerError, err)
 	}
 	return response.SuccessResponse(c,http.StatusOK, responses.FromDomain(data))
 }
 
-func (pcrController PcrController) GetById(c echo.Context) error {
+func (pcrController PcrController) GetPCR(c echo.Context) error {
 	ctxNative := c.Request().Context()
-	id := c.Param("id")
-	convInt, errConvInt := strconv.Atoi(id)
-	if errConvInt != nil {
-		return response.ErrorResponse(c, http.StatusBadRequest, errConvInt)
+	data, err := pcrController.PcrUseCase.GetPCR(ctxNative)
+	if data.Id == 0 {
+		return response.ErrorResponse(c, http.StatusNotFound, errors.New("tidak ada PCR"))
 	}
-	data, err := pcrController.PcrUseCase.GetById(ctxNative, convInt)
 	if err != nil {
 		return response.ErrorResponse(c, http.StatusInternalServerError, err)
 	}

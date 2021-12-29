@@ -18,6 +18,17 @@ func CreatePcrRepo(gormDb *gorm.DB) pcrcrud.Repository {
 	}
 }
 
+func (rep *PcrRepo) Create(ctx context.Context,pcr *pcrcrud.Domain) (pcrcrud.Domain, error) {
+	pcrs := Pcrcrud{
+		PcrValue: pcr.PcrValue,
+	}
+	err := rep.DB.Create(&pcrs)
+	if err.Error != nil {
+		return pcrcrud.Domain{}, err.Error
+	}
+	return pcrs.ToDomain(), nil
+}
+
 func (rep *PcrRepo) Update(ctx context.Context, pcr pcrcrud.Domain) (pcrcrud.Domain, error) {
 	data := FromDomain(pcr)
 	err := rep.DB.Table("pcrcruds").First(&data)
@@ -32,9 +43,9 @@ func (rep *PcrRepo) Update(ctx context.Context, pcr pcrcrud.Domain) (pcrcrud.Dom
 	return data.ToDomain(), nil
 }
 
-func (repo *PcrRepo) GetById(ctx context.Context, id int) (pcrcrud.Domain, error) {
+func (repo *PcrRepo) GetPCR(ctx context.Context) (pcrcrud.Domain, error) {
 	var data Pcrcrud
-	err := repo.DB.Table("pcrcruds").Find(&data, "id=?", id)
+	err := repo.DB.Table("pcrcruds").Find(&data)
 	if err.Error != nil {
 		return pcrcrud.Domain{}, err.Error
 	}
