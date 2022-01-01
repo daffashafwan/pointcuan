@@ -163,46 +163,34 @@ func (userController UserController) ForgotPassword(c echo.Context) error {
 	if err != nil {
 		return response.ErrorResponse(c, http.StatusInternalServerError, err)
 	}
-	// userForgot := requests.UserForgotPassword{}
-	// c.Bind(&userForgot)
-	// ctx := c.Request().Context()
-	// id := c.Param("id")
-	// convInt, err := strconv.Atoi(id)
-	// if err != nil {
-	// 	return response.ErrorResponse(c, http.StatusBadRequest, err)
-	// }
-	// ctx := c.Request().Context()
-	// err = userController.UserUseCase.Delete(ctx, convInt)
-	// if err != nil {
-	// 	return response.ErrorResponse(c, http.StatusInternalServerError, err)
-	// }
 	return response.SuccessResponse(c,http.StatusOK, responses.FromDomain(users))
 }
 
 func (userController UserController) VerifyTokenPassword(c echo.Context) error {
-	id := c.Param("id")
-	convInt, err := strconv.Atoi(id)
+	ctxNative := c.Request().Context()
+	token := c.Param("token")
+	data, err := userController.UserUseCase.GetByToken(ctxNative, token)
 	if err != nil {
 		return response.ErrorResponse(c, http.StatusBadRequest, err)
 	}
-	// ctx := c.Request().Context()
-	// err = userController.UserUseCase.Delete(ctx, convInt)
-	// if err != nil {
-	// 	return response.ErrorResponse(c, http.StatusInternalServerError, err)
-	// }
-	return response.SuccessResponse(c,http.StatusOK, convInt)
+	return response.SuccessResponse(c,http.StatusOK, responses.FromDomain(data))
 }
 
 func (userController UserController) ResetPassword(c echo.Context) error {
 	id := c.Param("id")
-	convInt, err := strconv.Atoi(id)
+	convId, err := strconv.Atoi(id)
 	if err != nil {
 		return response.ErrorResponse(c, http.StatusBadRequest, err)
 	}
-	// ctx := c.Request().Context()
-	// err = userController.UserUseCase.Delete(ctx, convInt)
-	// if err != nil {
-	// 	return response.ErrorResponse(c, http.StatusInternalServerError, err)
-	// }
-	return response.SuccessResponse(c,http.StatusOK, convInt)
+	userReset := requests.UserResetPassword{}
+	err = c.Bind(&userReset)
+	if err != nil || userReset.Password != userReset.RetypePassword {
+		return response.ErrorResponse(c, http.StatusNotAcceptable, err)
+	}
+	ctx := c.Request().Context()
+	data, err := userController.UserUseCase.ResetPassword(ctx, userReset.Password, convId)
+	if err != nil {
+		return response.ErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	return response.SuccessResponse(c,http.StatusOK, responses.FromDomain(data))
 }

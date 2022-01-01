@@ -24,6 +24,7 @@ type Usecase interface {
 	Login(ctx context.Context, domain Domain) (Domain, error)
 	Create(ctx context.Context, domain Domain) (Domain, error)
 	Update(ctx context.Context, domain Domain, id int) (Domain, error)
+	ResetPassword(ctx context.Context, password string, id int) (Domain, error)
 	GetAll(ctx context.Context) ([]Domain, error)
 	GetById(ctx context.Context, id int) (Domain, error)
 	GetByToken(ctx context.Context, token string) (Domain, error)

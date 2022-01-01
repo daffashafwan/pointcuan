@@ -152,7 +152,24 @@ func (uc *UserUsecase) ForgotPassword(ctx context.Context, emails string) (Domai
 	if err != nil {
 		return Domain{}, err
 	}
-	email.SendEmail(ctx, users.Email, "Verifikasi Email Pointcuan", "<a href=`http://localhost:1323/users/forgotpassword/verify/"+user.Token+"`>Link Verifikasi</a>")
+	email.SendEmail(ctx, users.Email, "Verifikasi Email Pointcuan", "<a href=`http://localhost:1323/users/forgotpassword/"+user.Token+"`>Link Verifikasi</a>")
+
+	return user, nil
+}
+
+func (uc *UserUsecase) ResetPassword(ctx context.Context, password string, id int) (Domain, error) {
+	users, errs := uc.Repo.GetById(ctx, id)
+	if errs != nil {
+		return Domain{}, errs
+	}
+	users.Token = randomizer.Randomize()
+	users.Password,_ = encrypt.Encrypt(password)
+	fmt.Println(users)
+	user, err := uc.Repo.Update(ctx, users)
+	if err != nil {
+		return Domain{}, err
+	}
+	email.SendEmail(ctx, users.Email, "Verifikasi Email Pointcuan", "<a href=`http://localhost:1323/users/forgotpassword/"+user.Token+"`>Link Verifikasi</a>")
 
 	return user, nil
 }
