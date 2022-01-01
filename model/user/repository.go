@@ -62,6 +62,7 @@ func (rep *UserRepo) Update(ctx context.Context, userU users.Domain) (users.Doma
 	data.Status = userU.Status
 	data.Email = userU.Email
 	data.Address = userU.Address
+	data.Token = userU.Token
 	
 
 	if rep.DB.Save(&data).Error != nil {
@@ -108,4 +109,13 @@ func (rep *UserRepo) Delete(ctx context.Context, id int) error {
 		return errors.New("id not found")
 	}
 	return nil
+}
+
+func (rep *UserRepo) GetByEmail(ctx context.Context, email string) (users.Domain, error) {
+	var data User
+	err := rep.DB.Table("users").Find(&data, "email=?", email)
+	if err.Error != nil {
+		return users.Domain{}, err.Error
+	}
+	return data.ToDomain(), nil
 }

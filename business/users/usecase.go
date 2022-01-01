@@ -3,7 +3,9 @@ package users
 import (
 	"context"
 	"errors"
+	"fmt"
 	"time"
+
 	"github.com/daffashafwan/pointcuan/app/middlewares"
 	"github.com/daffashafwan/pointcuan/helpers/email"
 	"github.com/daffashafwan/pointcuan/helpers/encrypt"
@@ -136,5 +138,38 @@ func (uc *UserUsecase) Verify(ctx context.Context, domain Domain, id int) (Domai
 	if err != nil {
 		return Domain{}, err
 	}
+	return user, nil
+}
+
+func (uc *UserUsecase) ForgotPassword(ctx context.Context, emails string) (Domain, error) {
+	users, errs := uc.Repo.GetByEmail(ctx, emails)
+	if errs != nil {
+		return Domain{}, errs
+	}
+	users.Token = randomizer.Randomize()
+	fmt.Println(users)
+	user, err := uc.Repo.Update(ctx, users)
+	if err != nil {
+		return Domain{}, err
+	}
+	email.SendEmail(ctx, users.Email, "Verifikasi Email Pointcuan", "<a href=`http://localhost:1323/users/forgotpassword/"+user.Token+"`>Link Verifikasi</a>")
+
+	return user, nil
+}
+
+func (uc *UserUsecase) ResetPassword(ctx context.Context, password string, id int) (Domain, error) {
+	users, errs := uc.Repo.GetById(ctx, id)
+	if errs != nil {
+		return Domain{}, errs
+	}
+	users.Token = randomizer.Randomize()
+	users.Password,_ = encrypt.Encrypt(password)
+	fmt.Println(users)
+	user, err := uc.Repo.Update(ctx, users)
+	if err != nil {
+		return Domain{}, err
+	}
+	email.SendEmail(ctx, users.Email, "Verifikasi Email Pointcuan", "<a href=`http://localhost:1323/users/forgotpassword/"+user.Token+"`>Link Verifikasi</a>")
+
 	return user, nil
 }

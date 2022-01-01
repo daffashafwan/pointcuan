@@ -3,6 +3,7 @@ package users
 import (
 	"net/http"
 	"strconv"
+
 	"github.com/daffashafwan/pointcuan/business/point"
 	"github.com/daffashafwan/pointcuan/business/users"
 	pointRequest "github.com/daffashafwan/pointcuan/controllers/point/requests"
@@ -151,4 +152,45 @@ func (userController UserController) Delete(c echo.Context) error {
 		return response.ErrorResponse(c, http.StatusInternalServerError, err)
 	}
 	return response.SuccessResponse(c,http.StatusOK, convInt)
+}
+
+func (userController UserController) ForgotPassword(c echo.Context) error {
+	var err error
+	userForgot := requests.UserForgotPassword{}
+	c.Bind(&userForgot)
+	ctx := c.Request().Context()
+	users, err := userController.UserUseCase.ForgotPassword(ctx, userForgot.Email)
+	if err != nil {
+		return response.ErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	return response.SuccessResponse(c,http.StatusOK, responses.FromDomain(users))
+}
+
+func (userController UserController) VerifyTokenPassword(c echo.Context) error {
+	ctxNative := c.Request().Context()
+	token := c.Param("token")
+	data, err := userController.UserUseCase.GetByToken(ctxNative, token)
+	if err != nil {
+		return response.ErrorResponse(c, http.StatusBadRequest, err)
+	}
+	return response.SuccessResponse(c,http.StatusOK, responses.FromDomain(data))
+}
+
+func (userController UserController) ResetPassword(c echo.Context) error {
+	id := c.Param("id")
+	convId, err := strconv.Atoi(id)
+	if err != nil {
+		return response.ErrorResponse(c, http.StatusBadRequest, err)
+	}
+	userReset := requests.UserResetPassword{}
+	err = c.Bind(&userReset)
+	if err != nil || userReset.Password != userReset.RetypePassword {
+		return response.ErrorResponse(c, http.StatusNotAcceptable, err)
+	}
+	ctx := c.Request().Context()
+	data, err := userController.UserUseCase.ResetPassword(ctx, userReset.Password, convId)
+	if err != nil {
+		return response.ErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	return response.SuccessResponse(c,http.StatusOK, responses.FromDomain(data))
 }
