@@ -6,6 +6,7 @@ import (
 	pcrcrud "github.com/daffashafwan/pointcuan/controllers/pcr_crud"
 	users "github.com/daffashafwan/pointcuan/controllers/user"
 	point "github.com/daffashafwan/pointcuan/controllers/point"
+	transaction "github.com/daffashafwan/pointcuan/controllers/transaction"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -17,10 +18,10 @@ type ControllerList struct {
 	AdminController admins.AdminController
 	PcrController pcrcrud.PcrController
 	PointController point.PointController
+	TransactionController transaction.TransactionController
 }
 
 func (cl *ControllerList) RouteRegister(e *echo.Echo) {
-
 	//USERS
 	e.GET("users", cl.UserController.GetAll, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
 	e.GET("users/:id", cl.UserController.GetById)
@@ -33,6 +34,16 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	//USERS WITH POINT
 	e.PUT("users/:id/point", cl.PointController.Update)
 	e.DELETE("users/:id/point", cl.PointController.Delete)
+
+	//USERS WITH TRANSACTION
+	e.GET("users/:id/transaction/:tid", cl.TransactionController.GetById)
+	e.GET("users/:id/transaction", cl.TransactionController.GetByUserId)
+	e.POST("users/:id/transaction", cl.TransactionController.Create)
+	e.PUT("users/:id/transaction/:tid", cl.TransactionController.Update)
+	e.DELETE("users/:id/transaction/:tid", cl.TransactionController.Delete)
+
+	//TRANSACTION
+	e.GET("transaction", cl.TransactionController.GetAll)
 
 	//ADMIN 
 	e.GET("admin/:id", cl.AdminController.GetById)

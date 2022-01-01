@@ -3,7 +3,7 @@ package requests
 import pcrcrud "github.com/daffashafwan/pointcuan/business/pcr_crud"
 
 type PcrUpdate struct {
-	PcrValue    int `json:"pcrValue"`
+	PcrValue    float64 `json:"pcrValue"`
 }
 
 func (pcr *PcrUpdate) ToDomain() pcrcrud.Domain {

@@ -8,7 +8,7 @@ import (
 
 type PcrResponse struct {
 	Id        int       `json:"id"`
-	PcrValue int `json:"pcrValue"`
+	PcrValue float64 `json:"pcrValue"`
 	UpdatedAt time.Time `json:"updatedAt"`
 }
 

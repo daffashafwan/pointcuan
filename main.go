@@ -9,10 +9,16 @@ import (
 	_userController "github.com/daffashafwan/pointcuan/controllers/user"
 	_userdb "github.com/daffashafwan/pointcuan/model/user"
 
-	_pointRepository "github.com/daffashafwan/pointcuan/model/point"
+
 	_pointUsecase "github.com/daffashafwan/pointcuan/business/point"
-	_pointdb "github.com/daffashafwan/pointcuan/model/point"
 	_pointController "github.com/daffashafwan/pointcuan/controllers/point"
+	_pointRepository "github.com/daffashafwan/pointcuan/model/point"
+	_pointdb "github.com/daffashafwan/pointcuan/model/point"
+
+	_transactionUsecase "github.com/daffashafwan/pointcuan/business/transactions"
+	_transactionController "github.com/daffashafwan/pointcuan/controllers/transaction"
+	_transactionRepository "github.com/daffashafwan/pointcuan/model/transactions"
+	_transactiondb "github.com/daffashafwan/pointcuan/model/transactions"
 
 	_middleware "github.com/daffashafwan/pointcuan/app/middlewares"
 	_userRepository "github.com/daffashafwan/pointcuan/model/user"
@@ -28,7 +34,6 @@ import (
 	_pcrdb "github.com/daffashafwan/pointcuan/model/pcr_crud"
 
 	"log"
-
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
@@ -46,7 +51,7 @@ func init() {
 }
 
 func DbMigrate(db *gorm.DB) {
-	db.AutoMigrate(&_userdb.User{}, &_admindb.Admin{}, &_pointdb.Point{}, &_pcrdb.Pcrcrud{})
+	db.AutoMigrate(&_userdb.User{}, &_admindb.Admin{}, &_pointdb.Point{}, &_pcrdb.Pcrcrud{}, &_transactiondb.Transaction{})
 }
 
 func main() {
@@ -88,14 +93,19 @@ func main() {
 	pcrUseCase := _pcr.NewPcrcase(pcrRepo, timeoutContext)
 	pcrController := _pcrController.NewPcrController(pcrUseCase)
 
+	transactionRepository := _transactionRepository.CreateTransactionRepo(Conn)
+	transactionUseCase := _transactionUsecase.NewTransactionUsecase(transactionRepository, timeoutContext, configJWT)
+	transactionController := _transactionController.NewTransactionController(transactionUseCase, pcrUseCase)
+
 	routesInit := routes.ControllerList{
 		JwtConfig:      configJWT.Init(),
 		UserController: *userController,
 		AdminController: *adminController,
 		PcrController: *pcrController,
 		PointController: *pointController,
+		TransactionController: *transactionController,
 	}
-
+	
 	routesInit.RouteRegister(e)
 	log.Fatal(e.Start(viper.GetString("server.address")))
 }
