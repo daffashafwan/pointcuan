@@ -29,6 +29,7 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	e.PUT("users/:id", cl.UserController.Update)
 	e.DELETE("users/:id", cl.UserController.Delete)
 	e.GET("users/verify/:token", cl.UserController.Verify)
+	e.POST("users/forgotpassword", cl.UserController.ForgotPassword)
 
 	//USERS WITH POINT
 	e.PUT("users/:id/point", cl.PointController.Update)

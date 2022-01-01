@@ -3,6 +3,7 @@ package users
 import (
 	"net/http"
 	"strconv"
+
 	"github.com/daffashafwan/pointcuan/business/point"
 	"github.com/daffashafwan/pointcuan/business/users"
 	pointRequest "github.com/daffashafwan/pointcuan/controllers/point/requests"
@@ -150,5 +151,58 @@ func (userController UserController) Delete(c echo.Context) error {
 	if err != nil {
 		return response.ErrorResponse(c, http.StatusInternalServerError, err)
 	}
+	return response.SuccessResponse(c,http.StatusOK, convInt)
+}
+
+func (userController UserController) ForgotPassword(c echo.Context) error {
+	var err error
+	userForgot := requests.UserForgotPassword{}
+	c.Bind(&userForgot)
+	ctx := c.Request().Context()
+	users, err := userController.UserUseCase.ForgotPassword(ctx, userForgot.Email)
+	if err != nil {
+		return response.ErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	// userForgot := requests.UserForgotPassword{}
+	// c.Bind(&userForgot)
+	// ctx := c.Request().Context()
+	// id := c.Param("id")
+	// convInt, err := strconv.Atoi(id)
+	// if err != nil {
+	// 	return response.ErrorResponse(c, http.StatusBadRequest, err)
+	// }
+	// ctx := c.Request().Context()
+	// err = userController.UserUseCase.Delete(ctx, convInt)
+	// if err != nil {
+	// 	return response.ErrorResponse(c, http.StatusInternalServerError, err)
+	// }
+	return response.SuccessResponse(c,http.StatusOK, responses.FromDomain(users))
+}
+
+func (userController UserController) VerifyTokenPassword(c echo.Context) error {
+	id := c.Param("id")
+	convInt, err := strconv.Atoi(id)
+	if err != nil {
+		return response.ErrorResponse(c, http.StatusBadRequest, err)
+	}
+	// ctx := c.Request().Context()
+	// err = userController.UserUseCase.Delete(ctx, convInt)
+	// if err != nil {
+	// 	return response.ErrorResponse(c, http.StatusInternalServerError, err)
+	// }
+	return response.SuccessResponse(c,http.StatusOK, convInt)
+}
+
+func (userController UserController) ResetPassword(c echo.Context) error {
+	id := c.Param("id")
+	convInt, err := strconv.Atoi(id)
+	if err != nil {
+		return response.ErrorResponse(c, http.StatusBadRequest, err)
+	}
+	// ctx := c.Request().Context()
+	// err = userController.UserUseCase.Delete(ctx, convInt)
+	// if err != nil {
+	// 	return response.ErrorResponse(c, http.StatusInternalServerError, err)
+	// }
 	return response.SuccessResponse(c,http.StatusOK, convInt)
 }

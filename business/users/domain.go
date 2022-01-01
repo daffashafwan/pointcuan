@@ -27,8 +27,10 @@ type Usecase interface {
 	GetAll(ctx context.Context) ([]Domain, error)
 	GetById(ctx context.Context, id int) (Domain, error)
 	GetByToken(ctx context.Context, token string) (Domain, error)
+	ForgotPassword(ctx context.Context, email string) (Domain, error)
 	Delete(ctx context.Context, id int) ( error)
 	Verify(ctx context.Context, domain Domain, id int) (Domain, error)
+	//VerifyTokenPassword(ctx context.Context, domain Domain, id int) (Domain, error)
 	//GetAll(ctx context.Context, domain Domain) (Domain, error)
 }
 
@@ -39,6 +41,7 @@ type Repository interface {
 	GetAll(ctx context.Context) ([]Domain, error)
 	GetById(ctx context.Context, id int) (Domain, error)
 	GetByToken(ctx context.Context, token string) (Domain, error)
+	GetByEmail(ctx context.Context, email string) (Domain, error)
 	Delete(ctx context.Context, id int) ( error)
 	//GetAll(ctx context.Context) (Domain, error)
 	//GetById(ctx context.Context, id int) (Domain, error)
