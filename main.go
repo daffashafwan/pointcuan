@@ -9,15 +9,16 @@ import (
 	_userController "github.com/daffashafwan/pointcuan/controllers/user"
 	_userdb "github.com/daffashafwan/pointcuan/model/user"
 
-	_pointRepository "github.com/daffashafwan/pointcuan/model/point"
-	_pointUsecase "github.com/daffashafwan/pointcuan/business/point"
-	_pointdb "github.com/daffashafwan/pointcuan/model/point"
-	_pointController "github.com/daffashafwan/pointcuan/controllers/point"
 
-	_transactionRepository "github.com/daffashafwan/pointcuan/model/transactions"
+	_pointUsecase "github.com/daffashafwan/pointcuan/business/point"
+	_pointController "github.com/daffashafwan/pointcuan/controllers/point"
+	_pointRepository "github.com/daffashafwan/pointcuan/model/point"
+	_pointdb "github.com/daffashafwan/pointcuan/model/point"
+
 	_transactionUsecase "github.com/daffashafwan/pointcuan/business/transactions"
-	_transactiondb "github.com/daffashafwan/pointcuan/model/transactions"
 	_transactionController "github.com/daffashafwan/pointcuan/controllers/transaction"
+	_transactionRepository "github.com/daffashafwan/pointcuan/model/transactions"
+	_transactiondb "github.com/daffashafwan/pointcuan/model/transactions"
 
 	_middleware "github.com/daffashafwan/pointcuan/app/middlewares"
 	_userRepository "github.com/daffashafwan/pointcuan/model/user"
@@ -33,7 +34,6 @@ import (
 	_pcrdb "github.com/daffashafwan/pointcuan/model/pcr_crud"
 
 	"log"
-
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
@@ -105,7 +105,7 @@ func main() {
 		PointController: *pointController,
 		TransactionController: *transactionController,
 	}
-
+	
 	routesInit.RouteRegister(e)
 	log.Fatal(e.Start(viper.GetString("server.address")))
 }

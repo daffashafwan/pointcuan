@@ -22,7 +22,6 @@ type ControllerList struct {
 }
 
 func (cl *ControllerList) RouteRegister(e *echo.Echo) {
-
 	//USERS
 	e.GET("users", cl.UserController.GetAll, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
 	e.GET("users/:id", cl.UserController.GetById)
