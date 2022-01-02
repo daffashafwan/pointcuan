@@ -1,20 +1,20 @@
 {
-    "debug": true,
-    "server": {
-      "address": ":1323"
-    },
-    "context":{
-      "timeout":2
-    },
-    "database": {
-        "host": "localhost",
-        "port": "3306",
-        "user": "pointcuan",
-        "pass": "pointcuan",
-        "name": "pointcuan_db"
-    },
-    "jwt" : {
-      "secret" : "kampusmerdeka#212",
-      "expired" : 72
-    }
+  "debug": true,
+  "server": {
+    "address": ":1323"
+  },
+  "context": {
+    "timeout": 2
+  },
+  "database": {
+    "host": "localhost",
+    "port": "3306",
+    "user": "root",
+    "pass": "moid",
+    "name": "pointcuan_db"
+  },
+  "jwt": {
+    "secret": "kampusmerdeka#212",
+    "expired": 72
   }
+}

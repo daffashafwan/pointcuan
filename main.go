@@ -9,10 +9,10 @@ import (
 	_userController "github.com/daffashafwan/pointcuan/controllers/user"
 	_userdb "github.com/daffashafwan/pointcuan/model/user"
 
-	_pointRepository "github.com/daffashafwan/pointcuan/model/point"
 	_pointUsecase "github.com/daffashafwan/pointcuan/business/point"
-	_pointdb "github.com/daffashafwan/pointcuan/model/point"
 	_pointController "github.com/daffashafwan/pointcuan/controllers/point"
+	_pointRepository "github.com/daffashafwan/pointcuan/model/point"
+	_pointdb "github.com/daffashafwan/pointcuan/model/point"
 
 	_middleware "github.com/daffashafwan/pointcuan/app/middlewares"
 	_userRepository "github.com/daffashafwan/pointcuan/model/user"

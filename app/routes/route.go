@@ -4,8 +4,8 @@ import (
 	"github.com/daffashafwan/pointcuan/app/middlewares"
 	admins "github.com/daffashafwan/pointcuan/controllers/admin"
 	pcrcrud "github.com/daffashafwan/pointcuan/controllers/pcr_crud"
-	users "github.com/daffashafwan/pointcuan/controllers/user"
 	point "github.com/daffashafwan/pointcuan/controllers/point"
+	users "github.com/daffashafwan/pointcuan/controllers/user"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -42,6 +42,13 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	e.GET("pcr", cl.PcrController.GetPCR)
 	e.PUT("pcr", cl.PcrController.Update)
 	//PCR
+
+	//Category
+	e.GET("categoryitems", cl.CategoryItemController.GetAll)
+	e.GET("categoryitem/:id", cl.CategoryItem.GetById)
+	e.POST("categoryitem", cl.CategoryItem.Register)
+	e.PUT("categoryitem/:id", cl.CategoryItem.Update)
+	e.DELETE("categoryitem/:id", cl.CategoryItem.Delete)
 
 	// e.GET("users", cl.UserController.Login, middleware.JWTWithConfig(cl.JwtConfig))
 }
