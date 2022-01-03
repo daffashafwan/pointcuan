@@ -9,7 +9,6 @@ import (
 	_userController "github.com/daffashafwan/pointcuan/controllers/user"
 	_userdb "github.com/daffashafwan/pointcuan/model/user"
 
-
 	_pointUsecase "github.com/daffashafwan/pointcuan/business/point"
 	_pointController "github.com/daffashafwan/pointcuan/controllers/point"
 	_pointRepository "github.com/daffashafwan/pointcuan/model/point"
@@ -19,6 +18,11 @@ import (
 	_transactionController "github.com/daffashafwan/pointcuan/controllers/transaction"
 	_transactionRepository "github.com/daffashafwan/pointcuan/model/transactions"
 	_transactiondb "github.com/daffashafwan/pointcuan/model/transactions"
+
+	_categoryUsecase "github.com/daffashafwan/pointcuan/business/categoryItems"
+	_categoryController "github.com/daffashafwan/pointcuan/controllers/categoryitem"
+	_categoryRepository "github.com/daffashafwan/pointcuan/model/category"
+	_categorydb "github.com/daffashafwan/pointcuan/model/category"
 
 	_middleware "github.com/daffashafwan/pointcuan/app/middlewares"
 	_userRepository "github.com/daffashafwan/pointcuan/model/user"
@@ -51,7 +55,7 @@ func init() {
 }
 
 func DbMigrate(db *gorm.DB) {
-	db.AutoMigrate(&_userdb.User{}, &_admindb.Admin{}, &_pointdb.Point{}, &_pcrdb.Pcrcrud{}, &_transactiondb.Transaction{})
+	db.AutoMigrate(&_userdb.User{}, &_admindb.Admin{}, &_pointdb.Point{}, &_pcrdb.Pcrcrud{}, &_transactiondb.Transaction{}, &_categorydb.Category{})
 }
 
 func main() {
@@ -97,6 +101,10 @@ func main() {
 	transactionUseCase := _transactionUsecase.NewTransactionUsecase(transactionRepository, timeoutContext, configJWT)
 	transactionController := _transactionController.NewTransactionController(transactionUseCase, pcrUseCase)
 
+	categoryRepository := _categoryRepository.CreateCategoryRepo(Conn)
+	categoryUseCase := _categoryUsecase.NewCategoryUsecase(categoryRepository, timeoutContext, configJWT)
+	categoryController := _categoryController.NewCategoryController(categoryUseCase)
+
 	routesInit := routes.ControllerList{
 		JwtConfig:      configJWT.Init(),
 		UserController: *userController,
@@ -104,6 +112,7 @@ func main() {
 		PcrController: *pcrController,
 		PointController: *pointController,
 		TransactionController: *transactionController,
+		CategoryController: *categoryController,
 	}
 	
 	routesInit.RouteRegister(e)

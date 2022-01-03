@@ -4,9 +4,10 @@ import (
 	"github.com/daffashafwan/pointcuan/app/middlewares"
 	admins "github.com/daffashafwan/pointcuan/controllers/admin"
 	pcrcrud "github.com/daffashafwan/pointcuan/controllers/pcr_crud"
-	users "github.com/daffashafwan/pointcuan/controllers/user"
 	point "github.com/daffashafwan/pointcuan/controllers/point"
 	transaction "github.com/daffashafwan/pointcuan/controllers/transaction"
+	users "github.com/daffashafwan/pointcuan/controllers/user"
+	category "github.com/daffashafwan/pointcuan/controllers/categoryitem"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -19,6 +20,7 @@ type ControllerList struct {
 	PcrController pcrcrud.PcrController
 	PointController point.PointController
 	TransactionController transaction.TransactionController
+	CategoryController category.CategoryItemController
 }
 
 func (cl *ControllerList) RouteRegister(e *echo.Echo) {
@@ -56,6 +58,13 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	e.GET("pcr", cl.PcrController.GetPCR)
 	e.PUT("pcr", cl.PcrController.Update)
 	//PCR
+
+	//Category
+	e.GET("categoryitems", cl.CategoryController.GetAll)
+	e.GET("categoryitems/:id", cl.CategoryController.GetById)
+	e.POST("categoryitems", cl.CategoryController.Create)
+	e.PUT("categoryitems/:id", cl.CategoryController.Update)
+	e.DELETE("categoryitems/:id", cl.CategoryController.Delete)
 
 	// e.GET("users", cl.UserController.Login, middleware.JWTWithConfig(cl.JwtConfig))
 }
