@@ -44,7 +44,7 @@ func (adminController AdminController) GetById(c echo.Context) error {
 	}
 	data, err := adminController.AdminUseCase.GetById(ctxNative, convInt)
 	if err != nil {
-		return response.ErrorResponse(c, http.StatusInternalServerError, err)
+		return response.ErrorResponse(c, http.StatusInternalServerError, err.Error())
 	}
 	return response.SuccessResponse(c,http.StatusOK, responses.FromDomain(data))
 }

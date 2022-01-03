@@ -8,6 +8,7 @@ var (
 	ErrInvalidId                = errors.New("invalid id, id not numeric")
 	ErrUserIdNotFound           = errors.New("user id not found")
 	ErrEmailHasBeenRegister     = errors.New("email has been used")
+	ErrUsernameAlreadyExisted   = errors.New("username already exist")
 	ErrPasswordRequired         = errors.New("password is required")
 	ErrEmailNotValid            = errors.New("email is not valid")
 	ErrEmailRequired            = errors.New("email is required")
@@ -17,4 +18,5 @@ var (
 	ErrInvalidAuthentication    = errors.New("authentication failed: invalid user credentials")
 	ErrInvalidTokenCredential   = errors.New("token not found")
 	ErrBadRequest               = errors.New("bad requests")
+	ErrPasswordDidntMatch       = errors.New("password didnt match")
 )

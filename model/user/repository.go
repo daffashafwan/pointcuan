@@ -119,3 +119,12 @@ func (rep *UserRepo) GetByEmail(ctx context.Context, email string) (users.Domain
 	}
 	return data.ToDomain(), nil
 }
+
+func (rep *UserRepo) GetByUsername(ctx context.Context, username string) (users.Domain, error) {
+	var data User
+	err := rep.DB.Table("users").Find(&data, "username=?", username)
+	if err.Error != nil {
+		return users.Domain{}, err.Error
+	}
+	return data.ToDomain(), nil
+}

@@ -1,7 +1,6 @@
 package pcrcrud
 
 import (
-	"errors"
 	"net/http"
 
 	pcrcrud "github.com/daffashafwan/pointcuan/business/pcr_crud"
@@ -26,7 +25,7 @@ func (pcrController PcrController) Update(c echo.Context) error {
 	ctx := c.Request().Context()
 	data, err := pcrController.PcrUseCase.Update(ctx, pcrUpdate.ToDomain())
 	if err != nil {
-		return response.ErrorResponse(c, http.StatusInternalServerError, err)
+		return response.ErrorResponse(c, http.StatusInternalServerError, err.Error())
 	}
 	return response.SuccessResponse(c,http.StatusOK, responses.FromDomain(data))
 }
@@ -35,10 +34,10 @@ func (pcrController PcrController) GetPCR(c echo.Context) error {
 	ctxNative := c.Request().Context()
 	data, err := pcrController.PcrUseCase.GetPCR(ctxNative)
 	if data.Id == 0 {
-		return response.ErrorResponse(c, http.StatusNotFound, errors.New("tidak ada PCR"))
+		return response.ErrorResponse(c, http.StatusNotFound, err.Error())
 	}
 	if err != nil {
-		return response.ErrorResponse(c, http.StatusInternalServerError, err)
+		return response.ErrorResponse(c, http.StatusInternalServerError, err.Error())
 	}
 	return response.SuccessResponse(c,http.StatusOK, responses.FromDomain(data))
 }

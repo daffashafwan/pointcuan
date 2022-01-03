@@ -2,14 +2,13 @@ package users
 
 import (
 	"context"
-	"errors"
 	"fmt"
-	"time"
-
+	"time" 
 	"github.com/daffashafwan/pointcuan/app/middlewares"
 	"github.com/daffashafwan/pointcuan/helpers/email"
 	"github.com/daffashafwan/pointcuan/helpers/encrypt"
 	"github.com/daffashafwan/pointcuan/helpers/randomizer"
+	errors "github.com/daffashafwan/pointcuan/helpers/errors"
 )
 
 type UserUsecase struct {
@@ -29,16 +28,11 @@ func NewUserUsecase(repo Repository, timeout time.Duration, configJWT middleware
 // core bisinis login
 func (uc *UserUsecase) Login(ctx context.Context, domain Domain) (Domain, error) {
 	if domain.Username == "" {
-		return Domain{}, errors.New("username empty")
+		return Domain{}, errors.ErrUsernamePasswordNotFound
 	}
 
 	if domain.Password == "" {
-		return Domain{}, errors.New("password empty")
-	}
-	var err error
-
-	if err != nil {
-		return Domain{}, err
+		return Domain{}, errors.ErrUsernamePasswordNotFound
 	}
 
 	user, err := uc.Repo.Login(ctx, domain.Username, domain.Password)
@@ -57,11 +51,11 @@ func (uc *UserUsecase) Login(ctx context.Context, domain Domain) (Domain, error)
 
 func (uc *UserUsecase) Create(ctx context.Context, domain Domain) (Domain, error) {
 	if domain.Username == "" {
-		return Domain{}, errors.New("username empty")
+		return Domain{}, errors.ErrPasswordRequired
 	}
 
 	if domain.Password == "" {
-		return Domain{}, errors.New("password empty")
+		return Domain{}, errors.ErrPasswordRequired
 	}
 	var err error
 
@@ -72,6 +66,14 @@ func (uc *UserUsecase) Create(ctx context.Context, domain Domain) (Domain, error
 	hashed,_ = encrypt.Encrypt(domain.Password)
 	domain.Password = hashed
 	domain.Token = randomizer.Randomize()
+	usern, _ := uc.Repo.GetByUsername(ctx, domain.Username)
+	if usern.Id != 0 {
+		return Domain{}, errors.ErrUsernameAlreadyExisted
+	}
+	usere, _ := uc.Repo.GetByEmail(ctx, domain.Email)
+	if usere.Id != 0 {
+		return Domain{}, errors.ErrEmailHasBeenRegister
+	}
 	user, err := uc.Repo.Create(ctx, &domain)
 	if err != nil {
 		return Domain{}, err
@@ -103,7 +105,7 @@ func (uc *UserUsecase) GetById(ctx context.Context, id int) (Domain, error) {
 		return Domain{}, err
 	}
 	if user.Id == 0 {
-		return Domain{}, errors.New("ID NOT FOUND")
+		return Domain{}, errors.ErrIDNotFound
 	}
 	return user, nil
 }
@@ -114,7 +116,7 @@ func (uc *UserUsecase) GetByToken(ctx context.Context, token string) (Domain, er
 		return Domain{}, err
 	}
 	if user.Id == 0 {
-		return Domain{}, errors.New("ID NOT FOUND")
+		return Domain{}, errors.ErrIDNotFound
 	}
 	return user, nil
 }
@@ -157,7 +159,10 @@ func (uc *UserUsecase) ForgotPassword(ctx context.Context, emails string) (Domai
 	return user, nil
 }
 
-func (uc *UserUsecase) ResetPassword(ctx context.Context, password string, id int) (Domain, error) {
+func (uc *UserUsecase) ResetPassword(ctx context.Context, password string,retypePassword string, id int) (Domain, error) {
+	if password != retypePassword {
+		return Domain{}, errors.ErrPasswordDidntMatch
+	}
 	users, errs := uc.Repo.GetById(ctx, id)
 	if errs != nil {
 		return Domain{}, errs
