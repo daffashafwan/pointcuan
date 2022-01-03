@@ -36,9 +36,9 @@ func (transactionController TransactionController) Create(c echo.Context) error 
 		return response.ErrorResponse(c, http.StatusInternalServerError, err.Error())
 	}
 	transCreate.Point = transCreate.Transaction / pcr.PcrValue
-	transaction, error := transactionController.TransactionUsecase.Create(ctx, transCreate.ToDomain())
-	if error != nil {
-		return response.ErrorResponse(c, http.StatusInternalServerError, error.Error())
+	transaction, errors := transactionController.TransactionUsecase.Create(ctx, transCreate.ToDomain())
+	if errors != nil {
+		return response.ErrorResponse(c, http.StatusInternalServerError, errors)
 	}
 	return response.SuccessResponse(c, http.StatusOK, responses.FromDomain(transaction))
 }
@@ -47,7 +47,7 @@ func (transactionController TransactionController) GetAll(c echo.Context) error 
 	ctxNative := c.Request().Context()
 	data, err := transactionController.TransactionUsecase.GetAll(ctxNative)
 	if err != nil {
-		return response.ErrorResponse(c, http.StatusInternalServerError, err)
+		return response.ErrorResponse(c, http.StatusInternalServerError, err.Error())
 	}
 	return response.SuccessResponse(c, http.StatusOK, responses.FromListDomain(data))
 }
@@ -57,11 +57,11 @@ func (transactionController TransactionController) GetById(c echo.Context) error
 	id := c.Param("tid")
 	convInt, errConvInt := strconv.Atoi(id)
 	if errConvInt != nil {
-		return response.ErrorResponse(c, http.StatusBadRequest, errConvInt)
+		return response.ErrorResponse(c, http.StatusBadRequest, errConvInt.Error())
 	}
 	data, err := transactionController.TransactionUsecase.GetById(ctxNative, convInt)
 	if err != nil {
-		return response.ErrorResponse(c, http.StatusInternalServerError, err)
+		return response.ErrorResponse(c, http.StatusInternalServerError, err.Error())
 	}
 	return response.SuccessResponse(c, http.StatusOK, responses.FromDomain(data))
 }
@@ -71,11 +71,11 @@ func (transactionController TransactionController) GetByUserId(c echo.Context) e
 	id := c.Param("id")
 	convInt, errConvInt := strconv.Atoi(id)
 	if errConvInt != nil {
-		return response.ErrorResponse(c, http.StatusBadRequest, errConvInt)
+		return response.ErrorResponse(c, http.StatusBadRequest, errConvInt.Error())
 	}
 	data, err := transactionController.TransactionUsecase.GetByUserId(ctxNative, convInt)
 	if err != nil {
-		return response.ErrorResponse(c, http.StatusInternalServerError, err)
+		return response.ErrorResponse(c, http.StatusInternalServerError, err.Error())
 	}
 	return response.SuccessResponse(c, http.StatusOK, responses.FromListDomain(data))
 }
@@ -85,7 +85,7 @@ func (transactionController TransactionController) Update(c echo.Context) error 
 	id := c.Param("tid")
 	convId, err := strconv.Atoi(id)
 	if err != nil {
-		return response.ErrorResponse(c, http.StatusBadRequest, err)
+		return response.ErrorResponse(c, http.StatusBadRequest, err.Error())
 	}
 	transaction, _ := transactionController.TransactionUsecase.GetById(ctx, convId)
 	transactionReq := requests.TransactionRequest{}
@@ -95,7 +95,7 @@ func (transactionController TransactionController) Update(c echo.Context) error 
 	}
 	data, err := transactionController.TransactionUsecase.Update(ctx, transactionReq.ToDomain(), transaction.Id)
 	if err != nil {
-		return response.ErrorResponse(c, http.StatusInternalServerError, err)
+		return response.ErrorResponse(c, http.StatusInternalServerError, err.Error())
 	}
 	return response.SuccessResponse(c, http.StatusOK, responses.FromDomain(data))
 }
@@ -104,12 +104,12 @@ func (transactionController TransactionController) Delete(c echo.Context) error 
 	id := c.Param("tid")
 	convInt, err := strconv.Atoi(id)
 	if err != nil {
-		return response.ErrorResponse(c, http.StatusBadRequest, err)
+		return response.ErrorResponse(c, http.StatusBadRequest, err.Error())
 	}
 	ctx := c.Request().Context()
 	err = transactionController.TransactionUsecase.Delete(ctx, convInt)
 	if err != nil {
-		return response.ErrorResponse(c, http.StatusInternalServerError, err)
+		return response.ErrorResponse(c, http.StatusInternalServerError, err.Error())
 	}
 	return response.SuccessResponse(c, http.StatusOK, convInt)
 }

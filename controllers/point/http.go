@@ -25,7 +25,7 @@ func (pointController PointController) Update(c echo.Context) error {
 	id := c.Param("id")
 	convId, err := strconv.Atoi(id)
 	if err != nil {
-		return response.ErrorResponse(c, http.StatusBadRequest, err)
+		return response.ErrorResponse(c, http.StatusBadRequest, err.Error())
 	}
 	point, _ := pointController.PointUsecase.GetByUserId(ctx, convId)
 	pointReq := requests.PointRequest{}
@@ -35,7 +35,7 @@ func (pointController PointController) Update(c echo.Context) error {
 	}
 	data, err := pointController.PointUsecase.Update(ctx, pointReq.ToDomain(), point.Id)
 	if err != nil {
-		return response.ErrorResponse(c, http.StatusInternalServerError, err)
+		return response.ErrorResponse(c, http.StatusInternalServerError, err.Error())
 	}
 	return response.SuccessResponse(c,http.StatusOK, responses.FromDomain(data))
 }
@@ -44,12 +44,12 @@ func (pointController PointController) Delete(c echo.Context) error {
 	id := c.Param("id")
 	convInt, err := strconv.Atoi(id)
 	if err != nil {
-		return response.ErrorResponse(c, http.StatusBadRequest, err)
+		return response.ErrorResponse(c, http.StatusBadRequest, err.Error())
 	}
 	ctx := c.Request().Context()
 	err = pointController.PointUsecase.Delete(ctx, convInt)
 	if err != nil {
-		return response.ErrorResponse(c, http.StatusInternalServerError, err)
+		return response.ErrorResponse(c, http.StatusInternalServerError, err.Error())
 	}
 	return response.SuccessResponse(c,http.StatusOK, convInt)
 }
