@@ -2,12 +2,13 @@ package routes
 
 import (
 	"github.com/daffashafwan/pointcuan/app/middlewares"
+	item "github.com/daffashafwan/pointcuan/controllers/items"
 	admins "github.com/daffashafwan/pointcuan/controllers/admin"
+	category "github.com/daffashafwan/pointcuan/controllers/categoryitem"
 	pcrcrud "github.com/daffashafwan/pointcuan/controllers/pcr_crud"
 	point "github.com/daffashafwan/pointcuan/controllers/point"
 	transaction "github.com/daffashafwan/pointcuan/controllers/transaction"
 	users "github.com/daffashafwan/pointcuan/controllers/user"
-	category "github.com/daffashafwan/pointcuan/controllers/categoryitem"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -21,6 +22,7 @@ type ControllerList struct {
 	PointController point.PointController
 	TransactionController transaction.TransactionController
 	CategoryController category.CategoryItemController
+	ItemsController item.ItemsController
 }
 
 func (cl *ControllerList) RouteRegister(e *echo.Echo) {
@@ -65,6 +67,13 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	e.POST("categoryitems", cl.CategoryController.Create)
 	e.PUT("categoryitems/:id", cl.CategoryController.Update)
 	e.DELETE("categoryitems/:id", cl.CategoryController.Delete)
+
+	//Items
+	e.GET("items", cl.CategoryController.GetAll)
+	e.GET("items/:id", cl.CategoryController.GetById)
+	e.POST("items", cl.CategoryController.Create)
+	e.PUT("items/:id", cl.CategoryController.Update)
+	e.DELETE("items/:id", cl.CategoryController.Delete)
 
 	// e.GET("users", cl.UserController.Login, middleware.JWTWithConfig(cl.JwtConfig))
 }
