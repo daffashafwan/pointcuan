@@ -24,6 +24,11 @@ import (
 	_categoryRepository "github.com/daffashafwan/pointcuan/model/category"
 	_categorydb "github.com/daffashafwan/pointcuan/model/category"
 
+	_itemsUsecase "github.com/daffashafwan/pointcuan/business/items"
+	_itemsController "github.com/daffashafwan/pointcuan/controllers/items"
+	_itemsRepository "github.com/daffashafwan/pointcuan/model/items"
+	_itemsdb "github.com/daffashafwan/pointcuan/model/items"
+
 	_middleware "github.com/daffashafwan/pointcuan/app/middlewares"
 	_userRepository "github.com/daffashafwan/pointcuan/model/user"
 
@@ -55,7 +60,14 @@ func init() {
 }
 
 func DbMigrate(db *gorm.DB) {
-	db.AutoMigrate(&_userdb.User{}, &_admindb.Admin{}, &_pointdb.Point{}, &_pcrdb.Pcrcrud{}, &_transactiondb.Transaction{}, &_categorydb.Category{})
+	db.AutoMigrate(
+		&_userdb.User{}, 
+		&_admindb.Admin{}, 
+		&_pointdb.Point{}, 
+		&_pcrdb.Pcrcrud{}, 
+		&_transactiondb.Transaction{}, 
+		&_categorydb.Category{},
+		&_itemsdb.Items{},)
 }
 
 func main() {
@@ -105,6 +117,10 @@ func main() {
 	categoryUseCase := _categoryUsecase.NewCategoryUsecase(categoryRepository, timeoutContext, configJWT)
 	categoryController := _categoryController.NewCategoryController(categoryUseCase)
 
+	itemsRepository := _itemsRepository.CreateItemRepo(Conn)
+	itemsUseCase := _itemsUsecase.NewItemsUsecase(itemsRepository, timeoutContext)
+	itemsController := _itemsController.NewItemsController(itemsUseCase)
+
 	routesInit := routes.ControllerList{
 		JwtConfig:      configJWT.Init(),
 		UserController: *userController,
@@ -113,6 +129,7 @@ func main() {
 		PointController: *pointController,
 		TransactionController: *transactionController,
 		CategoryController: *categoryController,
+		ItemsController: *itemsController,
 	}
 	
 	routesInit.RouteRegister(e)
