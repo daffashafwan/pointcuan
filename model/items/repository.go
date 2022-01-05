@@ -38,7 +38,7 @@ func (repo *ItemsRepo) Update(ctx context.Context, itemUpdate items.Domain) (ite
 	if err.Error != nil {
 		return items.Domain{}, err.Error
 	}
-	data.Items = itemUpdate.Items
+	
 	if repo.DB.Save(&data).Error != nil {
 		return items.Domain{}, errors.New("bad requests")
 	}
