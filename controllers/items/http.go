@@ -19,6 +19,14 @@ func NewItemsController(itemsUsecase items.Usecase) *ItemsController {
 		ItemsUsecase: itemsUsecase,
 	}
 }
+func (itemsController ItemsController) GetAll(c echo.Context) error {
+	ctxNative := c.Request().Context()
+	data, err := itemsController.ItemsUsecase.GetAll(ctxNative)
+	if err != nil {
+		return response.ErrorResponse(c, http.StatusInternalServerError, err.Error())
+	}
+	return response.SuccessResponse(c, http.StatusOK, responses.FromListDomain(data))
+}
 
 func (itemsController ItemsController) Update(c echo.Context) error {
 	ctx := c.Request().Context()

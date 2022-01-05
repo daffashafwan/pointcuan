@@ -19,3 +19,11 @@ func FromDomain(domain items.Domain) ItemsResponse {
 		Stock: domain.Stock,
 	}
 }
+
+func FromListDomain(domain []items.Domain) []ItemsResponse {
+	var list []ItemsResponse
+	for _, v := range domain {
+		list = append(list, FromDomain(v))
+	}
+	return list
+}
