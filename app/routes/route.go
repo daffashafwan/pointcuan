@@ -69,8 +69,12 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	e.DELETE("categoryitems/:id", cl.CategoryController.Delete)
 
 	//Items
+	e.POST("items", cl.ItemsController.Create)
 	e.GET("items", cl.ItemsController.GetAll)
+	e.GET("items/:id", cl.ItemsController.GetById)
+	e.GET("items/category/:id", cl.ItemsController.GetByCategoryId)
 	e.PUT("items/:id", cl.ItemsController.Update)
+	e.PUT("items/:id/stock", cl.ItemsController.UpdateStock)
 	e.DELETE("items/:id", cl.ItemsController.Delete)
 
 	// e.GET("users", cl.UserController.Login, middleware.JWTWithConfig(cl.JwtConfig))

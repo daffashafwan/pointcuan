@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"time"
-
 )
 
 type ItemsUsecase struct {
@@ -57,10 +56,36 @@ func (ic *ItemsUsecase) GetByItemId(ctx context.Context, id int) (Domain, error)
 	return items, nil
 }
 
+func (ic *ItemsUsecase) GetByCategoryId(ctx context.Context, id int) ([]Domain, error) {
+	items, err := ic.Repo.GetByCategoryId(ctx, id)
+	if err != nil {
+		return []Domain{}, err
+	}
+	return items, nil
+}
+
 func (ic *ItemsUsecase) Update(ctx context.Context, domain Domain, id int) (Domain, error) {
 	domain.Id = id
 	items, err := ic.Repo.Update(ctx, domain)
 
+	if err != nil {
+		return Domain{}, err
+	}
+
+	return items, nil
+}
+
+func (ic *ItemsUsecase) UpdateStock(ctx context.Context, domain Domain, id int) (Domain, error) {
+	item, errs := ic.Repo.GetByItemId(ctx, id)
+	if errs != nil {
+		return Domain{}, errs
+	}
+	item.Id = id
+	if (domain.Stock == ""){
+		return Domain{}, errors.New("stock harus terisi")
+	}
+	item.Stock = domain.Stock
+	items, err := ic.Repo.UpdateStock(ctx, item)
 	if err != nil {
 		return Domain{}, err
 	}

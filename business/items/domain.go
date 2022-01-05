@@ -10,7 +10,7 @@ type Domain struct {
 	CategoryId  int
 	Name        string
 	PointRedeem int
-	Stock       int
+	Stock       string
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 }
@@ -18,15 +18,19 @@ type Domain struct {
 type Usecase interface {
 	Create(ctx context.Context, domain Domain) (Domain, error)
 	Update(ctx context.Context, domain Domain, id int) (Domain, error)
+	UpdateStock(ctx context.Context, domain Domain, id int) (Domain, error)
 	GetAll(ctx context.Context) ([]Domain, error)
 	GetByItemId(ctx context.Context, id int) (Domain, error)
+	GetByCategoryId(ctx context.Context, id int) ([]Domain, error)
 	Delete(ctx context.Context, id int) ( error)
 }
 
 type Repository interface {
 	Create(ctx context.Context, domain *Domain) (Domain, error)
 	Update(ctx context.Context, domain Domain) (Domain, error)
+	UpdateStock(ctx context.Context, domain Domain) (Domain, error)
 	GetAll(ctx context.Context) ([]Domain, error)
 	GetByItemId(ctx context.Context, id int) (Domain, error)
+	GetByCategoryId(ctx context.Context, id int) ([]Domain, error)
 	Delete(ctx context.Context, id int) ( error)
 }

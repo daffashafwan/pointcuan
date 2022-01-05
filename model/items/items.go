@@ -11,7 +11,7 @@ type Items struct {
 	CategoryId  int
 	Name        string
 	PointRedeem int
-	Stock       int
+	Stock       string
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 }
