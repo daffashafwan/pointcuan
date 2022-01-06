@@ -49,6 +49,7 @@ import (
 
 	"log"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
 )
@@ -95,6 +96,10 @@ func main() {
 	DbMigrate(Conn)
 
 	e := echo.New()
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"http://localhost:3000"},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderAccessControlAllowMethods, echo.HeaderAccessControlAllowOrigin, echo.HeaderAccessControlAllowHeaders},
+	  }))
 	timeoutContext := time.Duration(viper.GetInt("context.timeout")) * time.Second
 
 	pointRepository := _pointRepository.CreatePointRepo(Conn)

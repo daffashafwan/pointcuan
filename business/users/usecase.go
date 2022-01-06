@@ -51,7 +51,7 @@ func (uc *UserUsecase) Login(ctx context.Context, domain Domain) (Domain, error)
 
 func (uc *UserUsecase) Create(ctx context.Context, domain Domain) (Domain, error) {
 	if domain.Username == "" {
-		return Domain{}, errors.ErrPasswordRequired
+		return Domain{}, errors.ErrUsernameRequired
 	}
 
 	if domain.Password == "" {
