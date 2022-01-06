@@ -10,6 +10,8 @@ type Domain struct {
 	UserId     int
 	ItemId     int
 	DataRedeem string
+	Status     int
+	RefId string
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
 }

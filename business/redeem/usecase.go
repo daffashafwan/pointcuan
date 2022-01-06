@@ -30,7 +30,7 @@ func (tc *RedeemUsecase) Create(ctx context.Context, domain Domain) (Domain, err
 	if err != nil {
 		return Domain{}, err
 	}
-
+	
 	redeem, err := tc.Repo.Create(ctx, &domain)
 	if err != nil {
 		return Domain{}, err

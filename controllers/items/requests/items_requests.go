@@ -8,16 +8,16 @@ type ItemRequest struct {
 	CategoryId  int    `json:"categoryId"`
 	Name        string `json:"name"`
 	PointRedeem int    `json:"pointRedeem"`
-	Stock       string    `json:"stock"`
+	Stock       string `json:"stock"`
 }
 
 type ItemRequestStock struct {
-	Stock       string    `json:"stock"`
+	Stock string `json:"stock"`
 }
 
 func (item *ItemRequestStock) StockToDomain() items.Domain {
 	return items.Domain{
-		Stock:       item.Stock,
+		Stock: item.Stock,
 	}
 }
 

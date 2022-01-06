@@ -1,8 +1,9 @@
 package redeem
 
 import (
-	"github.com/daffashafwan/pointcuan/business/redeem"
 	"time"
+
+	"github.com/daffashafwan/pointcuan/business/redeem"
 )
 
 type Redeem struct {
@@ -10,6 +11,7 @@ type Redeem struct {
 	UserId     int
 	ItemId     int
 	DataRedeem string
+	Status     int
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
 }
@@ -20,6 +22,7 @@ func (tr *Redeem) ToDomain() redeem.Domain {
 		UserId:     tr.UserId,
 		ItemId:     tr.ItemId,
 		DataRedeem: tr.DataRedeem,
+		Status:     tr.Status,
 		CreatedAt:  tr.CreatedAt,
 		UpdatedAt:  tr.UpdatedAt,
 	}

@@ -3,20 +3,25 @@ package redeem
 import (
 	"net/http"
 	"strconv"
+
+	"github.com/daffashafwan/pointcuan/business/items"
 	"github.com/daffashafwan/pointcuan/business/redeem"
 	"github.com/daffashafwan/pointcuan/controllers/redeem/requests"
 	"github.com/daffashafwan/pointcuan/controllers/redeem/responses"
+	"github.com/daffashafwan/pointcuan/helpers/randomizer"
 	"github.com/daffashafwan/pointcuan/helpers/response"
 	"github.com/labstack/echo/v4"
 )
 
 type RedeemController struct {
 	RedeemUsecase redeem.Usecase
+	ItemsUsecase items.Usecase
 }
 
-func NewRedeemController(redeemUsecase redeem.Usecase) *RedeemController {
+func NewRedeemController(redeemUsecase redeem.Usecase, itemsUsecase items.Usecase) *RedeemController {
 	return &RedeemController{
 		RedeemUsecase: redeemUsecase,
+		ItemsUsecase: itemsUsecase,
 	}
 }
 
@@ -27,6 +32,8 @@ func (redeemController RedeemController) Create(c echo.Context) error {
 	id := c.Param("id")
 	convId, _ := strconv.Atoi(id)
 	transCreate.UserId = convId
+	transCreate.RefId = randomizer.Randomize(5)
+	//item, _ := redeemController.ItemsUsecase.GetByItemId(ctx, transCreate.ItemId)
 	transaction, errors := redeemController.RedeemUsecase.Create(ctx, transCreate.ToDomain())
 	if errors != nil {
 		return response.ErrorResponse(c, http.StatusInternalServerError, errors)

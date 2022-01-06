@@ -11,6 +11,7 @@ type RedeemResponse struct {
 	ItemId     int       `json:"itemId"`
 	RedeemDate time.Time `json:"redeemDate"`
 	DataRedeem string    `json:"dataRedeem"`
+	Status     int       `json:"status"`
 }
 
 func FromDomain(domain redeem.Domain) RedeemResponse {
@@ -20,6 +21,7 @@ func FromDomain(domain redeem.Domain) RedeemResponse {
 		DataRedeem: domain.DataRedeem,
 		ItemId:     domain.ItemId,
 		RedeemDate: domain.CreatedAt,
+		Status:     domain.Status,
 	}
 }
 

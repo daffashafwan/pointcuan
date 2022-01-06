@@ -22,7 +22,7 @@ type Usecase interface {
 	GetAll(ctx context.Context) ([]Domain, error)
 	GetByItemId(ctx context.Context, id int) (Domain, error)
 	GetByCategoryId(ctx context.Context, id int) ([]Domain, error)
-	Delete(ctx context.Context, id int) ( error)
+	Delete(ctx context.Context, id int) error
 }
 
 type Repository interface {
@@ -32,5 +32,5 @@ type Repository interface {
 	GetAll(ctx context.Context) ([]Domain, error)
 	GetByItemId(ctx context.Context, id int) (Domain, error)
 	GetByCategoryId(ctx context.Context, id int) ([]Domain, error)
-	Delete(ctx context.Context, id int) ( error)
+	Delete(ctx context.Context, id int) error
 }

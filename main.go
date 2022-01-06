@@ -129,7 +129,7 @@ func main() {
 
 	redeemRepository := _redeemRepository.CreateRedeemRepo(Conn)
 	redeemUseCase := _redeemUsecase.NewRedeemUsecase(redeemRepository, timeoutContext, configJWT)
-	redeemController := _redeemController.NewRedeemController(redeemUseCase)
+	redeemController := _redeemController.NewRedeemController(redeemUseCase, itemsUseCase)
 
 	routesInit := routes.ControllerList{
 		JwtConfig:      configJWT.Init(),

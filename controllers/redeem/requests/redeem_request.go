@@ -8,6 +8,7 @@ type RedeemRequest struct {
 	UserId     int    `json:"userId"`
 	ItemId     int    `json:"itemId"`
 	DataRedeem string `json:"dataRedeem"`
+	RefId string `json:"refId"`
 }
 
 func (tr *RedeemRequest) ToDomain() redeem.Domain {
@@ -15,5 +16,6 @@ func (tr *RedeemRequest) ToDomain() redeem.Domain {
 		UserId:     tr.UserId,
 		ItemId:     tr.ItemId,
 		DataRedeem: tr.DataRedeem,
+		RefId: tr.RefId,
 	}
 }
