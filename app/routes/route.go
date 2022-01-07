@@ -9,6 +9,7 @@ import (
 	point "github.com/daffashafwan/pointcuan/controllers/point"
 	transaction "github.com/daffashafwan/pointcuan/controllers/transaction"
 	users "github.com/daffashafwan/pointcuan/controllers/user"
+	redeem "github.com/daffashafwan/pointcuan/controllers/redeem"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -23,6 +24,7 @@ type ControllerList struct {
 	TransactionController transaction.TransactionController
 	CategoryController category.CategoryItemController
 	ItemsController item.ItemsController
+	RedeemController redeem.RedeemController
 }
 
 func (cl *ControllerList) RouteRegister(e *echo.Echo) {
@@ -77,5 +79,12 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	e.PUT("items/:id/stock", cl.ItemsController.UpdateStock)
 	e.DELETE("items/:id", cl.ItemsController.Delete)
 
+	//Redeem
+	e.GET("redeem", cl.RedeemController.GetAll)
+	e.GET("redeem/:id", cl.RedeemController.GetById)
+	e.GET("redeem/item/:id", cl.RedeemController.GetByItemId)
+	e.GET("users/:id/redeem", cl.RedeemController.GetByUserId)
+	e.POST("users/:id/redeem", cl.RedeemController.Create)
+	e.DELETE("redeem/:id", cl.RedeemController.Delete)
 	// e.GET("users", cl.UserController.Login, middleware.JWTWithConfig(cl.JwtConfig))
 }

@@ -29,6 +29,11 @@ import (
 	_itemsRepository "github.com/daffashafwan/pointcuan/model/items"
 	_itemsdb "github.com/daffashafwan/pointcuan/model/items"
 
+	_redeemUsecase "github.com/daffashafwan/pointcuan/business/redeem"
+	_redeemController "github.com/daffashafwan/pointcuan/controllers/redeem"
+	_redeemRepository "github.com/daffashafwan/pointcuan/model/redeem"
+	_redeemdb "github.com/daffashafwan/pointcuan/model/redeem"
+
 	_middleware "github.com/daffashafwan/pointcuan/app/middlewares"
 	_userRepository "github.com/daffashafwan/pointcuan/model/user"
 
@@ -44,6 +49,7 @@ import (
 
 	"log"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
 )
@@ -67,7 +73,8 @@ func DbMigrate(db *gorm.DB) {
 		&_pcrdb.Pcrcrud{}, 
 		&_transactiondb.Transaction{}, 
 		&_categorydb.Category{},
-		&_itemsdb.Items{},)
+		&_itemsdb.Items{},
+		&_redeemdb.Redeem{})
 }
 
 func main() {
@@ -89,6 +96,10 @@ func main() {
 	DbMigrate(Conn)
 
 	e := echo.New()
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"http://localhost:3000"},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderAccessControlAllowMethods, echo.HeaderAccessControlAllowOrigin, echo.HeaderAccessControlAllowHeaders},
+	  }))
 	timeoutContext := time.Duration(viper.GetInt("context.timeout")) * time.Second
 
 	pointRepository := _pointRepository.CreatePointRepo(Conn)
@@ -121,6 +132,10 @@ func main() {
 	itemsUseCase := _itemsUsecase.NewItemsUsecase(itemsRepository, timeoutContext)
 	itemsController := _itemsController.NewItemsController(itemsUseCase)
 
+	redeemRepository := _redeemRepository.CreateRedeemRepo(Conn)
+	redeemUseCase := _redeemUsecase.NewRedeemUsecase(redeemRepository, timeoutContext, configJWT)
+	redeemController := _redeemController.NewRedeemController(redeemUseCase, itemsUseCase)
+
 	routesInit := routes.ControllerList{
 		JwtConfig:      configJWT.Init(),
 		UserController: *userController,
@@ -130,6 +145,7 @@ func main() {
 		TransactionController: *transactionController,
 		CategoryController: *categoryController,
 		ItemsController: *itemsController,
+		RedeemController: *redeemController,
 	}
 	
 	routesInit.RouteRegister(e)

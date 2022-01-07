@@ -9,6 +9,7 @@ var (
 	ErrUserIdNotFound           = errors.New("user id not found")
 	ErrEmailHasBeenRegister     = errors.New("email has been used")
 	ErrUsernameAlreadyExisted   = errors.New("username already exist")
+	ErrUsernameRequired         = errors.New("username is required")
 	ErrPasswordRequired         = errors.New("password is required")
 	ErrEmailNotValid            = errors.New("email is not valid")
 	ErrEmailRequired            = errors.New("email is required")

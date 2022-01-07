@@ -51,7 +51,7 @@ func (uc *UserUsecase) Login(ctx context.Context, domain Domain) (Domain, error)
 
 func (uc *UserUsecase) Create(ctx context.Context, domain Domain) (Domain, error) {
 	if domain.Username == "" {
-		return Domain{}, errors.ErrPasswordRequired
+		return Domain{}, errors.ErrUsernameRequired
 	}
 
 	if domain.Password == "" {
@@ -65,7 +65,7 @@ func (uc *UserUsecase) Create(ctx context.Context, domain Domain) (Domain, error
 	var hashed string
 	hashed,_ = encrypt.Encrypt(domain.Password)
 	domain.Password = hashed
-	domain.Token = randomizer.Randomize()
+	domain.Token = randomizer.Randomize(20)
 	usern, _ := uc.Repo.GetByUsername(ctx, domain.Username)
 	if usern.Id != 0 {
 		return Domain{}, errors.ErrUsernameAlreadyExisted
@@ -148,7 +148,7 @@ func (uc *UserUsecase) ForgotPassword(ctx context.Context, emails string) (Domai
 	if errs != nil {
 		return Domain{}, errs
 	}
-	users.Token = randomizer.Randomize()
+	users.Token = randomizer.Randomize(20)
 	fmt.Println(users)
 	user, err := uc.Repo.Update(ctx, users)
 	if err != nil {
@@ -167,7 +167,7 @@ func (uc *UserUsecase) ResetPassword(ctx context.Context, password string,retype
 	if errs != nil {
 		return Domain{}, errs
 	}
-	users.Token = randomizer.Randomize()
+	users.Token = randomizer.Randomize(20)
 	users.Password,_ = encrypt.Encrypt(password)
 	fmt.Println(users)
 	user, err := uc.Repo.Update(ctx, users)
