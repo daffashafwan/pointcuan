@@ -64,7 +64,7 @@ func (categoryItemController CategoryItemController) GetAll(c echo.Context) erro
 
 func (categoryItemController CategoryItemController) GetById(c echo.Context) error {
 	ctxNative := c.Request().Context()
-	id := c.Param("id")
+	id := c.Param("cid")
 	convInt, errConvInt := strconv.Atoi(id)
 	if errConvInt != nil {
 		return response.ErrorResponse(c, http.StatusBadRequest, errConvInt.Error())

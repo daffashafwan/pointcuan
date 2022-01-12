@@ -14,7 +14,7 @@
     "name": "pointcuan_db"
   },
   "jwt": {
-    "secret": "kampusmerdeka#212",
+    "secret": "",
     "expired": 72
   }
 }
