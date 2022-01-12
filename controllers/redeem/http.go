@@ -52,7 +52,7 @@ func (redeemController RedeemController) GetAll(c echo.Context) error {
 
 func (redeemController RedeemController) GetById(c echo.Context) error {
 	ctxNative := c.Request().Context()
-	id := c.Param("id")
+	id := c.Param("rid")
 	convInt, errConvInt := strconv.Atoi(id)
 	if errConvInt != nil {
 		return response.ErrorResponse(c, http.StatusBadRequest, errConvInt.Error())
@@ -80,7 +80,7 @@ func (redeemController RedeemController) GetByUserId(c echo.Context) error {
 
 func (redeemController RedeemController) GetByItemId(c echo.Context) error {
 	ctxNative := c.Request().Context()
-	id := c.Param("id")
+	id := c.Param("iid")
 	convInt, errConvInt := strconv.Atoi(id)
 	if errConvInt != nil {
 		return response.ErrorResponse(c, http.StatusBadRequest, errConvInt.Error())

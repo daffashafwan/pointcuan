@@ -42,7 +42,7 @@ func (itemsController ItemsController) GetAll(c echo.Context) error {
 
 func (itemsController ItemsController) GetById(c echo.Context) error {
 	ctxNative := c.Request().Context()
-	id := c.Param("id")
+	id := c.Param("iid")
 	convId, _ := strconv.Atoi(id)
 	data, err := itemsController.ItemsUsecase.GetByItemId(ctxNative, convId)
 	if err != nil {
@@ -53,7 +53,7 @@ func (itemsController ItemsController) GetById(c echo.Context) error {
 
 func (itemsController ItemsController) GetByCategoryId(c echo.Context) error {
 	ctxNative := c.Request().Context()
-	id := c.Param("id")
+	id := c.Param("cid")
 	convId, _ := strconv.Atoi(id)
 	data, err := itemsController.ItemsUsecase.GetByCategoryId(ctxNative, convId)
 	if err != nil {
