@@ -3,6 +3,7 @@ package categoryitem
 import (
 	"net/http"
 	"strconv"
+
 	categoryItems "github.com/daffashafwan/pointcuan/business/categoryItems"
 	"github.com/daffashafwan/pointcuan/controllers/categoryitem/requests"
 	"github.com/daffashafwan/pointcuan/controllers/categoryitem/responses"
@@ -36,13 +37,10 @@ func (categoryItemController CategoryItemController) Create(c echo.Context) erro
 
 func (categoryItemController CategoryItemController) Update(c echo.Context) error {
 	ctx := c.Request().Context()
-	id := c.Param("id")
-	convId, err := strconv.Atoi(id)
-	if err != nil {
-		return response.ErrorResponse(c, http.StatusBadRequest, err.Error())
-	}
+	id := c.Param("cid")
+	convId, _ := strconv.Atoi(id)
 	catReq := requests.CategoryItem{}
-	err = c.Bind(&catReq)
+	var err = c.Bind(&catReq)
 	if err != nil {
 		return err
 	}
@@ -79,13 +77,10 @@ func (categoryItemController CategoryItemController) GetById(c echo.Context) err
 
 
 func (categoryItemController CategoryItemController) Delete(c echo.Context) error {
-	id := c.Param("id")
-	convInt, err := strconv.Atoi(id)
-	if err != nil {
-		return response.ErrorResponse(c, http.StatusBadRequest, err.Error())
-	}
+	id := c.Param("cid")
+	convInt, _ := strconv.Atoi(id)
 	ctx := c.Request().Context()
-	err = categoryItemController.CategoryItemsCase.Delete(ctx, convInt)
+	var err = categoryItemController.CategoryItemsCase.Delete(ctx, convInt)
 	if err != nil {
 		return response.ErrorResponse(c, http.StatusInternalServerError, err.Error())
 	}

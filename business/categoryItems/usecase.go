@@ -63,6 +63,7 @@ func (uc *CategoryItemsUsecase) GetById(ctx context.Context, id int) (Domain, er
 
 
 func (uc *CategoryItemsUsecase) Update(ctx context.Context, domain Domain, id int) (Domain, error) {
+	domain.Id = id
 	categoryItem, err := uc.Repo.Update(ctx, domain)
 
 	if err != nil {

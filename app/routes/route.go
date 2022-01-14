@@ -29,7 +29,7 @@ type ControllerList struct {
 
 func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	//USERS
-	e.GET("users", cl.UserController.GetAll, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
+	e.GET("users", cl.UserController.GetAll)
 	e.GET("users/:id", cl.UserController.GetById, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin, middlewares.IsUserId)
 	e.POST("users/login", cl.UserController.Login)
 	e.POST("users/register", cl.UserController.Register)
@@ -45,14 +45,18 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	e.DELETE("users/:id/point", cl.PointController.Delete, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
 
 	//USERS WITH TRANSACTION
-	e.GET("users/:id/transaction/:tid", cl.TransactionController.GetById, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin, middlewares.IsUserId)
-	e.GET("users/:id/transaction", cl.TransactionController.GetByUserId, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin, middlewares.IsUserId)
+	e.GET("users/:id/transaction/:tid", cl.TransactionController.GetById, middleware.JWTWithConfig(cl.JwtConfig),middlewares.IsUserId)
+	e.GET("/:id/transaction/:tid", cl.TransactionController.GetById, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
+
+	e.GET("users/:id/transaction", cl.TransactionController.GetByUserId, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsUserId)
+	e.GET("/:id/transaction", cl.TransactionController.GetByUserId, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
+
 	e.POST("users/:id/transaction", cl.TransactionController.Create, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsUserId)
 	e.PUT("users/:id/transaction/:tid", cl.TransactionController.Update, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
 	e.DELETE("users/:id/transaction/:tid", cl.TransactionController.Delete, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
 
 	//TRANSACTION
-	e.GET("transaction", cl.TransactionController.GetAll, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
+	e.GET("transaction", cl.TransactionController.GetAll)
 
 	//ADMIN 
 	e.GET("admin/:id", cl.AdminController.GetById, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
@@ -60,27 +64,27 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 
 	//POINTS
 	e.GET("/:id/pcr", cl.PcrController.GetPCR, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsUserId)
-	e.GET("pcr", cl.PcrController.GetPCR, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
-	e.PUT("pcr", cl.PcrController.Update, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
+	e.GET("pcr", cl.PcrController.GetPCR)
+	e.PUT("pcr", cl.PcrController.Update)
 	//PCR
 
 	//Category
 	e.GET("/:id/categoryitems", cl.CategoryController.GetAll, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsUserId)
-	e.GET("categoryitems", cl.CategoryController.GetAll, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
+	e.GET("categoryitems", cl.CategoryController.GetAll)
 	
 	e.GET("/:id/categoryitems/:cid", cl.CategoryController.GetById, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsUserId)
-	e.GET("categoryitems/:cid", cl.CategoryController.GetById, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
+	e.GET("categoryitems/:cid", cl.CategoryController.GetById)
 	
-	e.POST("categoryitems", cl.CategoryController.Create, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
+	e.POST("categoryitems", cl.CategoryController.Create)
 	
-	e.PUT("categoryitems/:id", cl.CategoryController.Update, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
-	e.DELETE("categoryitems/:id", cl.CategoryController.Delete, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
+	e.PUT("categoryitems/:cid", cl.CategoryController.Update)
+	e.DELETE("categoryitems/:cid", cl.CategoryController.Delete)
 
 	//Items
 	e.POST("items", cl.ItemsController.Create, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
 	
 	e.GET("/:id/items", cl.ItemsController.GetAll, middleware.JWTWithConfig(cl.JwtConfig),middlewares.IsUserId)
-	e.GET("items", cl.ItemsController.GetAll, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
+	e.GET("items", cl.ItemsController.GetAll)
 
 	e.GET("/:id/items/:iid", cl.ItemsController.GetById, middleware.JWTWithConfig(cl.JwtConfig),middlewares.IsUserId)
 	e.GET("items/:iid", cl.ItemsController.GetById, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
@@ -94,7 +98,7 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 
 	//Redeem
 	e.GET("/:id/redeem", cl.RedeemController.GetAll, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsUserId)
-	e.GET("redeem", cl.RedeemController.GetAll, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
+	e.GET("redeem", cl.RedeemController.GetAll)
 
 	e.GET("/:id/redeem/:rid", cl.RedeemController.GetById, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsUserId)
 	e.GET("redeem/:rid", cl.RedeemController.GetById, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)

@@ -2,9 +2,9 @@ package category
 
 import (
 	"context"
+	"errors"
 	"github.com/daffashafwan/pointcuan/business/categoryItems"
 	"gorm.io/gorm"
-	"errors"
 )
 
 type CategoryRepo struct {
