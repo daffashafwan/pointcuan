@@ -1,13 +1,17 @@
 package transactions
 
 import (
-	"github.com/daffashafwan/pointcuan/business/transactions"
+	"fmt"
 	"time"
+
+	"github.com/daffashafwan/pointcuan/business/transactions"
+	"github.com/daffashafwan/pointcuan/model/user"
 )
 
 type Transaction struct {
 	Id                    int `gorm:"primaryKey"`
 	UserId                int
+	User                  user.User `gorm:"foreignKey:UserId;association_foreignkey:Id"`
 	TransactionDate       time.Time
 	Transaction           float64
 	TransactionAttachment string
@@ -19,9 +23,11 @@ type Transaction struct {
 }
 
 func (tr *Transaction) ToDomain() transactions.Domain {
+	fmt.Println(tr.User)
 	return transactions.Domain{
 		Id:                    tr.Id,
 		UserId:                tr.UserId,
+		User:                  tr.User,
 		TransactionDate:       tr.TransactionDate,
 		Transaction:           tr.Transaction,
 		TransactionAttachment: tr.TransactionAttachment,

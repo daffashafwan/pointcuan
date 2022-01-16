@@ -50,7 +50,7 @@ func (rep *TransactionRepo) Update(ctx context.Context, transU transactions.Doma
 
 func (rep *TransactionRepo) GetAll(ctx context.Context) ([]transactions.Domain, error) {
 	var data []Transaction
-	err := rep.DB.Table("transactions").Find(&data)
+	err := rep.DB.Table("transactions").Preload("User").Find(&data)
 	if err.Error != nil {
 		return []transactions.Domain{}, err.Error
 	}

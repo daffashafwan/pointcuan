@@ -8,6 +8,7 @@ import (
 type Domain struct {
 	Id                    int
 	UserId                int
+	User                  interface{}
 	TransactionDate       time.Time
 	Transaction           float64
 	TransactionAttachment string

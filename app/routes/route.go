@@ -81,7 +81,7 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	e.DELETE("categoryitems/:cid", cl.CategoryController.Delete)
 
 	//Items
-	e.POST("items", cl.ItemsController.Create, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
+	e.POST("items", cl.ItemsController.Create)
 	
 	e.GET("/:id/items", cl.ItemsController.GetAll, middleware.JWTWithConfig(cl.JwtConfig),middlewares.IsUserId)
 	e.GET("items", cl.ItemsController.GetAll)
@@ -92,9 +92,9 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	e.GET("/:id/items/category/:cid", cl.ItemsController.GetByCategoryId, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsUserId)
 	e.GET("items/category/:cid", cl.ItemsController.GetByCategoryId, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
 	
-	e.PUT("items/:id", cl.ItemsController.Update, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
+	e.PUT("items/:id", cl.ItemsController.Update)
 	e.PUT("items/:id/stock", cl.ItemsController.UpdateStock, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
-	e.DELETE("items/:id", cl.ItemsController.Delete, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
+	e.DELETE("items/:id", cl.ItemsController.Delete)
 
 	//Redeem
 	e.GET("/:id/redeem", cl.RedeemController.GetAll, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsUserId)

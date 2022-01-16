@@ -65,13 +65,10 @@ func (itemsController ItemsController) GetByCategoryId(c echo.Context) error {
 func (itemsController ItemsController) Update(c echo.Context) error {
 	ctx := c.Request().Context()
 	id := c.Param("id")
-	convId, err := strconv.Atoi(id)
-	if err != nil {
-		return response.ErrorResponse(c, http.StatusBadRequest, err.Error())
-	}
+	convId, _ := strconv.Atoi(id)
 	items, _ := itemsController.ItemsUsecase.GetByItemId(ctx, convId)
 	itemsRequest := requests.ItemRequest{}
-	err = c.Bind(&itemsRequest)
+	var err = c.Bind(&itemsRequest)
 	if err != nil {
 		return err
 	}
@@ -103,12 +100,9 @@ func (itemsController ItemsController) UpdateStock(c echo.Context) error {
 
 func (itemsController ItemsController) Delete(c echo.Context) error {
 	id := c.Param("id")
-	convInt, err := strconv.Atoi(id)
-	if err != nil {
-		return response.ErrorResponse(c, http.StatusBadRequest, err.Error())
-	}
+	convInt, _ := strconv.Atoi(id)
 	ctx := c.Request().Context()
-	err = itemsController.ItemsUsecase.Delete(ctx, convInt)
+	var err = itemsController.ItemsUsecase.Delete(ctx, convInt)
 	if err != nil {
 		return response.ErrorResponse(c, http.StatusInternalServerError, err.Error())
 	}
