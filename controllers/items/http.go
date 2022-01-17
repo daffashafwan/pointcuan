@@ -1,8 +1,10 @@
 package users
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
+
 	"github.com/daffashafwan/pointcuan/business/items"
 	"github.com/daffashafwan/pointcuan/controllers/items/requests"
 	"github.com/daffashafwan/pointcuan/controllers/items/responses"
@@ -64,7 +66,7 @@ func (itemsController ItemsController) GetByCategoryId(c echo.Context) error {
 
 func (itemsController ItemsController) Update(c echo.Context) error {
 	ctx := c.Request().Context()
-	id := c.Param("id")
+	id := c.Param("iid")
 	convId, _ := strconv.Atoi(id)
 	items, _ := itemsController.ItemsUsecase.GetByItemId(ctx, convId)
 	itemsRequest := requests.ItemRequest{}
@@ -81,7 +83,7 @@ func (itemsController ItemsController) Update(c echo.Context) error {
 
 func (itemsController ItemsController) UpdateStock(c echo.Context) error {
 	ctx := c.Request().Context()
-	id := c.Param("id")
+	id := c.Param("iid")
 	convId, err := strconv.Atoi(id)
 	if err != nil {
 		return response.ErrorResponse(c, http.StatusBadRequest, err.Error())
@@ -99,8 +101,9 @@ func (itemsController ItemsController) UpdateStock(c echo.Context) error {
 }
 
 func (itemsController ItemsController) Delete(c echo.Context) error {
-	id := c.Param("id")
+	id := c.Param("iid")
 	convInt, _ := strconv.Atoi(id)
+	fmt.Println(convInt)
 	ctx := c.Request().Context()
 	var err = itemsController.ItemsUsecase.Delete(ctx, convInt)
 	if err != nil {

@@ -3,20 +3,25 @@ package transactions
 import (
 	"context"
 	"errors"
+	"fmt"
 	"time"
+
 	"github.com/daffashafwan/pointcuan/app/middlewares"
+	"github.com/daffashafwan/pointcuan/business/point"
 )
 
 type TransactionUsecase struct {
+	PointRepo      point.Repository
 	Repo           Repository
 	contextTimeout time.Duration
 	ConfigJWT      middlewares.ConfigJWT
 }
 
-func NewTransactionUsecase(repo Repository, timeout time.Duration, configJWT middlewares.ConfigJWT) Usecase {
+func NewTransactionUsecase(repo Repository, pointRepo point.Repository, timeout time.Duration, configJWT middlewares.ConfigJWT) Usecase {
 	return &TransactionUsecase{
 		ConfigJWT:      configJWT,
 		Repo:           repo,
+		PointRepo:      pointRepo,
 		contextTimeout: timeout,
 	}
 }
@@ -26,7 +31,7 @@ func (tc *TransactionUsecase) Create(ctx context.Context, domain Domain) (Domain
 		return Domain{}, errors.New("attachment empty")
 	}
 
-	if  domain.Transaction == 0 {
+	if domain.Transaction == 0 {
 		return Domain{}, errors.New("transaction empty")
 	}
 
@@ -94,11 +99,18 @@ func (tc *TransactionUsecase) GetByUserId(ctx context.Context, id int) ([]Domain
 // }
 
 func (tc *TransactionUsecase) Update(ctx context.Context, domain Domain, id int) (Domain, error) {
+	var point point.Domain
 	domain.Id = id
 	transaction, err := tc.Repo.Update(ctx, domain)
-
 	if err != nil {
 		return Domain{}, err
+	}
+	if domain.Status == 2 {
+		points, _ := tc.PointRepo.GetByUserId(ctx, id)
+		point.UserId = domain.UserId
+		point.Point = points.Point + domain.Point
+		pointU, _ := tc.PointRepo.Update(ctx, point)
+		fmt.Println(pointU)
 	}
 
 	return transaction, nil

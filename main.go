@@ -121,7 +121,7 @@ func main() {
 	pcrController := _pcrController.NewPcrController(pcrUseCase)
 
 	transactionRepository := _transactionRepository.CreateTransactionRepo(Conn)
-	transactionUseCase := _transactionUsecase.NewTransactionUsecase(transactionRepository, timeoutContext, configJWT)
+	transactionUseCase := _transactionUsecase.NewTransactionUsecase(transactionRepository,pointRepository, timeoutContext, configJWT)
 	transactionController := _transactionController.NewTransactionController(transactionUseCase, pcrUseCase)
 
 	categoryRepository := _categoryRepository.CreateCategoryRepo(Conn)

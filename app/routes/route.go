@@ -30,7 +30,7 @@ type ControllerList struct {
 func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	//USERS
 	e.GET("users", cl.UserController.GetAll)
-	e.GET("users/:id", cl.UserController.GetById, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin, middlewares.IsUserId)
+	e.GET("users/:id", cl.UserController.GetById)
 	e.POST("users/login", cl.UserController.Login)
 	e.POST("users/register", cl.UserController.Register)
 	e.PUT("users/:id", cl.UserController.Update, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin, middlewares.IsUserId)
@@ -41,7 +41,7 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	e.POST("users/resetpassword/:id", cl.UserController.ResetPassword)
 
 	//USERS WITH POINT
-	e.PUT("users/:id/point", cl.PointController.Update, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin, middlewares.IsUserId)
+	e.PUT("users/:id/point", cl.PointController.Update)
 	e.DELETE("users/:id/point", cl.PointController.Delete, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
 
 	//USERS WITH TRANSACTION
@@ -52,7 +52,7 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	e.GET("/:id/transaction", cl.TransactionController.GetByUserId, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
 
 	e.POST("users/:id/transaction", cl.TransactionController.Create, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsUserId)
-	e.PUT("users/:id/transaction/:tid", cl.TransactionController.Update, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
+	e.PUT("transaction/:tid", cl.TransactionController.Update)
 	e.DELETE("users/:id/transaction/:tid", cl.TransactionController.Delete, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
 
 	//TRANSACTION
@@ -92,9 +92,9 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	e.GET("/:id/items/category/:cid", cl.ItemsController.GetByCategoryId, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsUserId)
 	e.GET("items/category/:cid", cl.ItemsController.GetByCategoryId, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
 	
-	e.PUT("items/:id", cl.ItemsController.Update)
-	e.PUT("items/:id/stock", cl.ItemsController.UpdateStock, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
-	e.DELETE("items/:id", cl.ItemsController.Delete)
+	e.PUT("items/:iid", cl.ItemsController.Update)
+	e.PUT("items/:iid/stock", cl.ItemsController.UpdateStock, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
+	e.DELETE("items/:iid", cl.ItemsController.Delete)
 
 	//Redeem
 	e.GET("/:id/redeem", cl.RedeemController.GetAll, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsUserId)

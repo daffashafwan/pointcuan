@@ -83,13 +83,10 @@ func (transactionController TransactionController) GetByUserId(c echo.Context) e
 func (transactionController TransactionController) Update(c echo.Context) error {
 	ctx := c.Request().Context()
 	id := c.Param("tid")
-	convId, err := strconv.Atoi(id)
-	if err != nil {
-		return response.ErrorResponse(c, http.StatusBadRequest, err.Error())
-	}
+	convId, _ := strconv.Atoi(id)
 	transaction, _ := transactionController.TransactionUsecase.GetById(ctx, convId)
 	transactionReq := requests.TransactionRequest{}
-	err = c.Bind(&transactionReq)
+	var err = c.Bind(&transactionReq)
 	if err != nil {
 		return err
 	}

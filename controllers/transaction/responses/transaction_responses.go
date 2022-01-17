@@ -7,6 +7,7 @@ import (
 )
 
 type TransactionResponse struct {
+	Id                    int         `json:"id"`
 	UserId                int         `json:"userId"`
 	TransactionDate       time.Time   `json:"transactionDate"`
 	Transaction           float64     `json:"transaction"`
@@ -19,6 +20,7 @@ type TransactionResponse struct {
 
 func FromDomain(domain transactions.Domain) TransactionResponse {
 	return TransactionResponse{
+		Id:                    domain.Id,
 		UserId:                domain.UserId,
 		TransactionDate:       domain.TransactionDate,
 		Transaction:           domain.Transaction,
