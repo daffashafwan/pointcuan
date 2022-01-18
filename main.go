@@ -80,11 +80,11 @@ func DbMigrate(db *gorm.DB) {
 func main() {
 	// init koneksi databse
 	configDB := _mysqlDriver.ConfigDB{
-		DB_Username: viper.GetString(`database.user`),
-		DB_Password: viper.GetString(`database.pass`),
-		DB_Host:     viper.GetString(`database.host`),
-		DB_Port:     viper.GetString(`database.port`),
-		DB_Database: viper.GetString(`database.name`),
+		DB_Username: viper.GetString(`database-aws.user`),
+		DB_Password: viper.GetString(`database-aws.pass`),
+		DB_Host:     viper.GetString(`database-aws.host`),
+		DB_Port:     viper.GetString(`database-aws.port`),
+		DB_Database: viper.GetString(`database-aws.name`),
 	}
 
 	configJWT := _middleware.ConfigJWT{

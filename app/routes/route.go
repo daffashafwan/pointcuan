@@ -64,7 +64,7 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 
 	//POINTS
 	e.GET("/:id/pcr", cl.PcrController.GetPCR, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsUserId)
-	e.GET("pcr", cl.PcrController.GetPCR)
+	e.GET("pcr", cl.PcrController.GetPCR, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
 	e.PUT("pcr", cl.PcrController.Update)
 	//PCR
 
