@@ -7,18 +7,18 @@
     "timeout": 2
   },
   "database": {
-    "host": "localhost",
-    "port": "3306",
-    "user": "pointcuan",
-    "pass": "pointcuan",
-    "name": "pointcuan_db"
+    "host": "",
+    "port": "",
+    "user": "",
+    "pass": "",
+    "name": ""
   },
   "database-aws": {
-    "host": "database-1.cyhujoxbjv4o.us-east-2.rds.amazonaws.com",
-    "port": "3306",
-    "user": "pointcuan",
-    "pass": "pointcuan123",
-    "name": "pointcuan_db"
+    "host": "",
+    "port": "",
+    "user": "",
+    "pass": "",
+    "name": ""
   },
   "jwt": {
     "secret": "",
