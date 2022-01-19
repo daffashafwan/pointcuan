@@ -29,8 +29,11 @@ type ControllerList struct {
 
 func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	//USERS
-	e.GET("users", cl.UserController.GetAll)
-	e.GET("users/:id", cl.UserController.GetById)
+	e.GET("users", cl.UserController.GetAll, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
+
+	e.GET("users/:id", cl.UserController.GetById, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsUserId)
+	e.GET("admin/users/:id", cl.UserController.GetById, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
+
 	e.POST("users/login", cl.UserController.Login)
 	e.POST("users/register", cl.UserController.Register)
 	e.PUT("users/:id", cl.UserController.Update, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin, middlewares.IsUserId)
@@ -40,7 +43,7 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	e.GET("users/forgotpassword/:token", cl.UserController.VerifyTokenPassword)
 	e.POST("users/resetpassword/:id", cl.UserController.ResetPassword)
 
-	//USERS WITH POINT
+	//USERS WITH POINT (NOT USED)
 	e.PUT("users/:id/point", cl.PointController.Update)
 	e.DELETE("users/:id/point", cl.PointController.Delete, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
 
@@ -56,7 +59,7 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	e.DELETE("users/:id/transaction/:tid", cl.TransactionController.Delete, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
 
 	//TRANSACTION
-	e.GET("transaction", cl.TransactionController.GetAll)
+	e.GET("transaction", cl.TransactionController.GetAll, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
 
 	//ADMIN 
 	e.GET("admin/:id", cl.AdminController.GetById, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
@@ -65,26 +68,26 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	//POINTS
 	e.GET("/:id/pcr", cl.PcrController.GetPCR, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsUserId)
 	e.GET("pcr", cl.PcrController.GetPCR, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
-	e.PUT("pcr", cl.PcrController.Update)
+	e.PUT("pcr", cl.PcrController.Update, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
 	//PCR
 
 	//Category
 	e.GET("/:id/categoryitems", cl.CategoryController.GetAll, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsUserId)
-	e.GET("categoryitems", cl.CategoryController.GetAll)
+	e.GET("categoryitems", cl.CategoryController.GetAll, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
 	
 	e.GET("/:id/categoryitems/:cid", cl.CategoryController.GetById, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsUserId)
-	e.GET("categoryitems/:cid", cl.CategoryController.GetById)
+	e.GET("categoryitems/:cid", cl.CategoryController.GetById, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
 	
-	e.POST("categoryitems", cl.CategoryController.Create)
+	e.POST("categoryitems", cl.CategoryController.Create, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
 	
-	e.PUT("categoryitems/:cid", cl.CategoryController.Update)
-	e.DELETE("categoryitems/:cid", cl.CategoryController.Delete)
+	e.PUT("categoryitems/:cid", cl.CategoryController.Update, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
+	e.DELETE("categoryitems/:cid", cl.CategoryController.Delete, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
 
 	//Items
-	e.POST("items", cl.ItemsController.Create)
+	e.POST("items", cl.ItemsController.Create, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
 	
 	e.GET("/:id/items", cl.ItemsController.GetAll, middleware.JWTWithConfig(cl.JwtConfig),middlewares.IsUserId)
-	e.GET("items", cl.ItemsController.GetAll)
+	e.GET("items", cl.ItemsController.GetAll, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
 
 	e.GET("/:id/items/:iid", cl.ItemsController.GetById, middleware.JWTWithConfig(cl.JwtConfig),middlewares.IsUserId)
 	e.GET("items/:iid", cl.ItemsController.GetById, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
@@ -92,13 +95,13 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	e.GET("/:id/items/category/:cid", cl.ItemsController.GetByCategoryId, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsUserId)
 	e.GET("items/category/:cid", cl.ItemsController.GetByCategoryId, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
 	
-	e.PUT("items/:iid", cl.ItemsController.Update)
+	e.PUT("items/:iid", cl.ItemsController.Update, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
 	e.PUT("items/:iid/stock", cl.ItemsController.UpdateStock, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
-	e.DELETE("items/:iid", cl.ItemsController.Delete)
+	e.DELETE("items/:iid", cl.ItemsController.Delete, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
 
 	//Redeem
 	e.GET("/:id/redeem", cl.RedeemController.GetAll, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsUserId)
-	e.GET("redeem", cl.RedeemController.GetAll)
+	e.GET("redeem", cl.RedeemController.GetAll, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
 
 	e.GET("/:id/redeem/:rid", cl.RedeemController.GetById, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsUserId)
 	e.GET("redeem/:rid", cl.RedeemController.GetById, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)

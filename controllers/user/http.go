@@ -1,6 +1,7 @@
 package users
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -85,6 +86,7 @@ func (userController UserController) GetById(c echo.Context) error {
 	ctxNative := c.Request().Context()
 	id := c.Param("id")
 	convInt, errConvInt := strconv.Atoi(id)
+	fmt.Println(convInt)
 	if errConvInt != nil {
 		return response.ErrorResponse(c, http.StatusBadRequest, errConvInt.Error())
 	}
