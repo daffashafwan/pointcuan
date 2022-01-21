@@ -13,6 +13,10 @@
     "pass": "",
     "name": ""
   },
+  "midtrans" :{
+    "server-key" : "",
+    "environment" : ""
+  },
   "database-aws": {
     "host": "",
     "port": "",

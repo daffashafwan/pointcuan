@@ -30,20 +30,12 @@ func (tc *TransactionUsecase) Create(ctx context.Context, domain Domain) (Domain
 	if domain.TransactionAttachment == "" {
 		return Domain{}, errors.New("attachment empty")
 	}
-
 	if domain.Transaction == 0 {
 		return Domain{}, errors.New("transaction empty")
 	}
-
 	if domain.TransactionDate.String() == "" {
 		return Domain{}, errors.New("date empty")
 	}
-	var err error
-
-	if err != nil {
-		return Domain{}, err
-	}
-
 	transaction, err := tc.Repo.Create(ctx, &domain)
 	if err != nil {
 		return Domain{}, err
@@ -87,6 +79,14 @@ func (tc *TransactionUsecase) GetByUserId(ctx context.Context, id int) ([]Domain
 	return transaction, nil
 }
 
+func (tc *TransactionUsecase) GetByUserIdAndStatus(ctx context.Context, id int, sid int) ([]Domain, error) {
+	transaction, err := tc.Repo.GetByUserIdAndStatus(ctx, id, sid)
+	if err != nil {
+		return []Domain{}, err
+	}
+	return transaction, nil
+}
+
 // func (tc *TransactionUsecase) GetByUserIdAndStatus(ctx context.Context, id int, status int) ([]Domain, error) {
 // 	transaction, err := tc.Repo.GetByUserIdAndStatus(ctx, id, status)
 // 	if err != nil {
@@ -106,7 +106,7 @@ func (tc *TransactionUsecase) Update(ctx context.Context, domain Domain, id int)
 		return Domain{}, err
 	}
 	if domain.Status == 2 {
-		points, _ := tc.PointRepo.GetByUserId(ctx, id)
+		points, _ := tc.PointRepo.GetByUserId(ctx, domain.UserId)
 		point.UserId = domain.UserId
 		point.Point = points.Point + domain.Point
 		pointU, _ := tc.PointRepo.Update(ctx, point)

@@ -2,7 +2,7 @@ package responses
 
 import (
 	"time"
-
+	"fmt"
 	"github.com/daffashafwan/pointcuan/business/transactions"
 )
 
@@ -10,7 +10,7 @@ type TransactionResponse struct {
 	Id                    int         `json:"id"`
 	UserId                int         `json:"userId"`
 	TransactionDate       time.Time   `json:"transactionDate"`
-	Transaction           float64     `json:"transaction"`
+	Transaction           string     `json:"transaction"`
 	TransactionAttachment string      `json:"transactionAttachment"`
 	Status                int8        `json:"status"`
 	Point                 float64     `json:"point"`
@@ -19,11 +19,12 @@ type TransactionResponse struct {
 }
 
 func FromDomain(domain transactions.Domain) TransactionResponse {
+	s := fmt.Sprintf("%f", domain.Transaction)
 	return TransactionResponse{
 		Id:                    domain.Id,
 		UserId:                domain.UserId,
 		TransactionDate:       domain.TransactionDate,
-		Transaction:           domain.Transaction,
+		Transaction:           s,
 		User:                  domain.User,
 		TransactionAttachment: domain.TransactionAttachment,
 		Status:                domain.Status,

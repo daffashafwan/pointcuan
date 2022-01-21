@@ -10,8 +10,11 @@ type Domain struct {
 	UserId     int
 	ItemId     int
 	DataRedeem string
+	Item       interface{}
 	Status     int
-	RefId string
+	Point      int
+	ResponseMidtrans interface{}
+	RefId      string
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
 }

@@ -106,10 +106,6 @@ func main() {
 	pointUseCase := _pointUsecase.NewPointUsecase(pointRepository, timeoutContext, configJWT)
 	pointController := _pointController.NewPointController(pointUseCase)
 
-	userRepository := _userRepository.CreateUserRepo(Conn)
-	userUseCase := _userUsecase.NewUserUsecase(userRepository, timeoutContext, configJWT)
-	userController := _userController.NewUserController(userUseCase, pointUseCase)
-
 	//admin
 	adminRepository := _admindb.CreateAdminRepo(Conn)
 	adminUseCase := _adminUsecase.NewUsecase(adminRepository, timeoutContext, configJWT)
@@ -133,8 +129,12 @@ func main() {
 	itemsController := _itemsController.NewItemsController(itemsUseCase)
 
 	redeemRepository := _redeemRepository.CreateRedeemRepo(Conn)
-	redeemUseCase := _redeemUsecase.NewRedeemUsecase(redeemRepository, timeoutContext, configJWT)
+	redeemUseCase := _redeemUsecase.NewRedeemUsecase(itemsRepository,redeemRepository, timeoutContext, configJWT)
 	redeemController := _redeemController.NewRedeemController(redeemUseCase, itemsUseCase)
+
+	userRepository := _userRepository.CreateUserRepo(Conn)
+	userUseCase := _userUsecase.NewUserUsecase(userRepository, timeoutContext, configJWT)
+	userController := _userController.NewUserController(userUseCase, pointUseCase, redeemUseCase, transactionUseCase)
 
 	routesInit := routes.ControllerList{
 		JwtConfig:      configJWT.Init(),

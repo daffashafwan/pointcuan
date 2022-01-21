@@ -52,6 +52,7 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	e.GET("/:id/transaction/:tid", cl.TransactionController.GetById, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
 
 	e.GET("users/:id/transaction", cl.TransactionController.GetByUserId, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsUserId)
+	e.POST("users/:id/transaction/status", cl.TransactionController.GetByUserIdAndStatus, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsUserId)
 	e.GET("/:id/transaction", cl.TransactionController.GetByUserId, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
 
 	e.POST("users/:id/transaction", cl.TransactionController.Create, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsUserId)
@@ -109,9 +110,10 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	e.GET("/:id/redeem/item/:iid", cl.RedeemController.GetByItemId, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsUserId)
 	e.GET("redeem/item/:iid", cl.RedeemController.GetByItemId, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
 
-	e.GET("users/:id/redeem", cl.RedeemController.GetByUserId, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin, middlewares.IsUserId)
+	e.GET("users/:id/redeem", cl.RedeemController.GetByUserId, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsUserId)
+	e.GET(":id/redeem", cl.RedeemController.GetByUserId, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
 	
-	e.POST("users/:id/redeem", cl.RedeemController.Create, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
+	e.POST("users/:id/redeem", cl.RedeemController.Create, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsUserId)
 	e.DELETE("redeem/:id", cl.RedeemController.Delete, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
 	// e.GET("users", cl.UserController.Login, middleware.JWTWithConfig(cl.JwtConfig))
 }

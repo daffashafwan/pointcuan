@@ -1,7 +1,6 @@
 package transactions
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/daffashafwan/pointcuan/business/transactions"
@@ -23,7 +22,6 @@ type Transaction struct {
 }
 
 func (tr *Transaction) ToDomain() transactions.Domain {
-	fmt.Println(tr.User)
 	return transactions.Domain{
 		Id:                    tr.Id,
 		UserId:                tr.UserId,

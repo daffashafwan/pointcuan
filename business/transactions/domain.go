@@ -19,12 +19,19 @@ type Domain struct {
 	UpdatedAt             time.Time
 }
 
+type StatisticDomain struct {
+	Percentage float64
+	PointIn    float64
+	PointOut   float64
+}
+
 type Usecase interface {
 	Create(ctx context.Context, domain Domain) (Domain, error)
 	Update(ctx context.Context, domain Domain, id int) (Domain, error)
 	GetAll(ctx context.Context) ([]Domain, error)
 	GetById(ctx context.Context, id int) (Domain, error)
 	GetByUserId(ctx context.Context, id int) ([]Domain, error)
+	GetByUserIdAndStatus(ctx context.Context, id int, sid int) ([]Domain, error)
 	//GetByUserIdAndStatus(ctx context.Context, id int, status int) ([]Domain, error)
 	Delete(ctx context.Context, id int) error
 }
@@ -35,6 +42,7 @@ type Repository interface {
 	GetAll(ctx context.Context) ([]Domain, error)
 	GetById(ctx context.Context, id int) (Domain, error)
 	GetByUserId(ctx context.Context, id int) ([]Domain, error)
+	GetByUserIdAndStatus(ctx context.Context, id int, sid int) ([]Domain, error)
 	//GetByUserIdAndStatus(ctx context.Context, id int, status int) ([]Domain, error)
 	Delete(ctx context.Context, id int) error
 }

@@ -74,7 +74,7 @@ func (repo *ItemsRepo) GetAll(ctx context.Context) ([]items.Domain, error) {
 
 func (repo *ItemsRepo) GetByItemId(ctx context.Context, id int) (items.Domain, error) {
 	var data Items
-	err := repo.DB.Table("items").Find(&data, "id=?", id)
+	err := repo.DB.Table("items").Preload("Category").Find(&data, "id=?", id)
 	if err.Error != nil {
 		return items.Domain{}, err.Error
 	}

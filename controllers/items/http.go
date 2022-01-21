@@ -1,7 +1,6 @@
 package users
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -103,7 +102,6 @@ func (itemsController ItemsController) UpdateStock(c echo.Context) error {
 func (itemsController ItemsController) Delete(c echo.Context) error {
 	id := c.Param("iid")
 	convInt, _ := strconv.Atoi(id)
-	fmt.Println(convInt)
 	ctx := c.Request().Context()
 	var err = itemsController.ItemsUsecase.Delete(ctx, convInt)
 	if err != nil {
