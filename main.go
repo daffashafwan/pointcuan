@@ -24,6 +24,11 @@ import (
 	_categoryRepository "github.com/daffashafwan/pointcuan/model/category"
 	_categorydb "github.com/daffashafwan/pointcuan/model/category"
 
+	_faqUsecase "github.com/daffashafwan/pointcuan/business/FAQ"
+	_faqController "github.com/daffashafwan/pointcuan/controllers/faq"
+	_faqRepository "github.com/daffashafwan/pointcuan/model/FAQ"
+	_faqdb "github.com/daffashafwan/pointcuan/model/FAQ"
+
 	_itemsUsecase "github.com/daffashafwan/pointcuan/business/items"
 	_itemsController "github.com/daffashafwan/pointcuan/controllers/items"
 	_itemsRepository "github.com/daffashafwan/pointcuan/model/items"
@@ -74,7 +79,8 @@ func DbMigrate(db *gorm.DB) {
 		&_transactiondb.Transaction{}, 
 		&_categorydb.Category{},
 		&_itemsdb.Items{},
-		&_redeemdb.Redeem{})
+		&_redeemdb.Redeem{},
+		&_faqdb.Faq{})
 }
 
 func main() {
@@ -124,6 +130,10 @@ func main() {
 	categoryUseCase := _categoryUsecase.NewCategoryUsecase(categoryRepository, timeoutContext, configJWT)
 	categoryController := _categoryController.NewCategoryController(categoryUseCase)
 
+	faqRepository := _faqRepository.CreateFAQRepo(Conn)
+	faqUseCase := _faqUsecase.NewFAQUsecase(faqRepository, timeoutContext, configJWT)
+	faqController := _faqController.NewFAQController(faqUseCase)
+
 	itemsRepository := _itemsRepository.CreateItemRepo(Conn)
 	itemsUseCase := _itemsUsecase.NewItemsUsecase(itemsRepository, timeoutContext)
 	itemsController := _itemsController.NewItemsController(itemsUseCase)
@@ -146,6 +156,7 @@ func main() {
 		CategoryController: *categoryController,
 		ItemsController: *itemsController,
 		RedeemController: *redeemController,
+		FaqController: *faqController,
 	}
 	
 	routesInit.RouteRegister(e)

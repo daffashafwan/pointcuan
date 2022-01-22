@@ -10,6 +10,7 @@ import (
 	transaction "github.com/daffashafwan/pointcuan/controllers/transaction"
 	users "github.com/daffashafwan/pointcuan/controllers/user"
 	redeem "github.com/daffashafwan/pointcuan/controllers/redeem"
+	faq "github.com/daffashafwan/pointcuan/controllers/faq"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -25,6 +26,7 @@ type ControllerList struct {
 	CategoryController category.CategoryItemController
 	ItemsController item.ItemsController
 	RedeemController redeem.RedeemController
+	FaqController faq.FaqController
 }
 
 func (cl *ControllerList) RouteRegister(e *echo.Echo) {
@@ -83,6 +85,18 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	
 	e.PUT("categoryitems/:cid", cl.CategoryController.Update, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
 	e.DELETE("categoryitems/:cid", cl.CategoryController.Delete, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
+
+	//FAQ
+	e.GET("/:id/faq", cl.FaqController.GetAll, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsUserId)
+	e.GET("faq", cl.FaqController.GetAll, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
+	
+	e.GET("/:id/faq/active", cl.FaqController.GetActive, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsUserId)
+	e.GET("faq/active", cl.FaqController.GetActive, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
+	
+	e.POST("faq", cl.FaqController.Create, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
+	
+	e.PUT("faq/:fid", cl.FaqController.Update, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
+	e.DELETE("faq/:fid", cl.FaqController.Delete, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
 
 	//Items
 	e.POST("items", cl.ItemsController.Create, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)

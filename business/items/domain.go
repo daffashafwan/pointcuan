@@ -6,7 +6,7 @@ import (
 )
 
 type Domain struct {
-	Id          int
+	Id          int 
 	CategoryId  int
 	Category    interface{}
 	Name        string

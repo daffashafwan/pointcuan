@@ -17,10 +17,10 @@ func CreateCategoryRepo(conn *gorm.DB) categoryItems.Repository {
 	}
 }
 
-
-func (rep *CategoryRepo) Create(ctx context.Context,catC *categoryItems.Domain) (categoryItems.Domain, error) {
+func (rep *CategoryRepo) Create(ctx context.Context, catC *categoryItems.Domain) (categoryItems.Domain, error) {
 	user := Category{
-		Name:     catC.Name,
+		Name: catC.Name,
+		Svg:  catC.Svg,
 	}
 	err := rep.DB.Create(&user)
 	if err.Error != nil {
@@ -36,7 +36,7 @@ func (rep *CategoryRepo) Update(ctx context.Context, userU categoryItems.Domain)
 		return categoryItems.Domain{}, err.Error
 	}
 	data.Name = userU.Name
-	
+	data.Svg = userU.Svg
 
 	if rep.DB.Save(&data).Error != nil {
 		return categoryItems.Domain{}, errors.New("bad requests")
@@ -61,7 +61,6 @@ func (rep *CategoryRepo) GetById(ctx context.Context, id int) (categoryItems.Dom
 	}
 	return data.ToDomain(), nil
 }
-
 
 func (rep *CategoryRepo) Delete(ctx context.Context, id int) error {
 	user := Category{}

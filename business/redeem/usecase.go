@@ -53,7 +53,7 @@ func (tc *RedeemUsecase) Create(ctx context.Context, domain Domain) (Domain, err
 		chargeReq := &coreapi.ChargeReq{
 			PaymentType: coreapi.PaymentTypeGopay,
 			TransactionDetails: midtrans.TransactionDetails{
-				OrderID:  "1145414",
+				OrderID:  "465164",
 				GrossAmt: amt,
 			},
 		}
