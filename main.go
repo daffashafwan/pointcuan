@@ -139,7 +139,7 @@ func main() {
 	itemsController := _itemsController.NewItemsController(itemsUseCase)
 
 	redeemRepository := _redeemRepository.CreateRedeemRepo(Conn)
-	redeemUseCase := _redeemUsecase.NewRedeemUsecase(itemsRepository,redeemRepository, timeoutContext, configJWT)
+	redeemUseCase := _redeemUsecase.NewRedeemUsecase(pointRepository,itemsRepository,redeemRepository, timeoutContext, configJWT)
 	redeemController := _redeemController.NewRedeemController(redeemUseCase, itemsUseCase)
 
 	userRepository := _userRepository.CreateUserRepo(Conn)

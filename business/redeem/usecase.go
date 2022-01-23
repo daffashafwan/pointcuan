@@ -3,26 +3,29 @@ package redeem
 import (
 	"context"
 	"errors"
+	"fmt"
 	"github.com/daffashafwan/pointcuan/app/middlewares"
 	"github.com/daffashafwan/pointcuan/business/items"
-	"time"
-	"fmt"
-	"strings"
-	"strconv"
+	"github.com/daffashafwan/pointcuan/business/point"
 	"github.com/midtrans/midtrans-go"
 	"github.com/midtrans/midtrans-go/coreapi"
+	"strconv"
+	"strings"
+	"time"
 )
 
 type RedeemUsecase struct {
+	PointRepo      point.Repository
 	ItemRepo       items.Repository
 	Repo           Repository
 	contextTimeout time.Duration
 	ConfigJWT      middlewares.ConfigJWT
 }
 
-func NewRedeemUsecase(itemRepo items.Repository, repo Repository, timeout time.Duration, configJWT middlewares.ConfigJWT) Usecase {
+func NewRedeemUsecase(pointRepo point.Repository, itemRepo items.Repository, repo Repository, timeout time.Duration, configJWT middlewares.ConfigJWT) Usecase {
 	return &RedeemUsecase{
 		ConfigJWT:      configJWT,
+		PointRepo:      pointRepo,
 		ItemRepo:       itemRepo,
 		Repo:           repo,
 		contextTimeout: timeout,
@@ -45,10 +48,10 @@ func (tc *RedeemUsecase) Create(ctx context.Context, domain Domain) (Domain, err
 		return Domain{}, err
 	}
 	splits := strings.Split(item.Name, " ")
-	if (splits[0] == "gopay") {
+	if splits[0] == "gopay" {
 		mc := coreapi.Client{}
 		mc.New("SB-Mid-server-u01zpyt2UKfqZ_hDTnr_Edgb", midtrans.Sandbox)
-		amt,_ := strconv.ParseInt(splits[1],0, 64)
+		amt, _ := strconv.ParseInt(splits[1], 0, 64)
 		// 2. Initiate charge request
 		chargeReq := &coreapi.ChargeReq{
 			PaymentType: coreapi.PaymentTypeGopay,
@@ -63,7 +66,13 @@ func (tc *RedeemUsecase) Create(ctx context.Context, domain Domain) (Domain, err
 		redeem.ResponseMidtrans = coreApiRes.Actions
 		fmt.Println("Response :", coreApiRes)
 	}
-
+	points,_ := tc.PointRepo.GetByUserId(ctx, domain.UserId)
+	points.Point = points.Point - float64(item.PointRedeem)
+	pointU, _ := tc.PointRepo.Update(ctx, points)
+	fmt.Println(pointU)
+	item.Stock = item.Stock - 1
+	items, _ := tc.ItemRepo.Update(ctx, item)
+	fmt.Println(items)
 	return redeem, nil
 }
 
