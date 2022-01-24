@@ -6,6 +6,8 @@ import (
 
 	"github.com/daffashafwan/pointcuan/business/point"
 	"github.com/daffashafwan/pointcuan/business/users"
+	"github.com/daffashafwan/pointcuan/business/redeem"
+	"github.com/daffashafwan/pointcuan/business/transactions"
 	pointRequest "github.com/daffashafwan/pointcuan/controllers/point/requests"
 	"github.com/daffashafwan/pointcuan/controllers/user/requests"
 	"github.com/daffashafwan/pointcuan/controllers/user/responses"
@@ -16,12 +18,16 @@ import (
 type UserController struct {
 	UserUseCase users.Usecase
 	PointUsecase point.Usecase
+	TransactionUsesace transactions.Usecase
+	RedeemUsecase redeem.Usecase
 }
 
-func NewUserController(userUseCase users.Usecase, pointUsecase point.Usecase) *UserController {
+func NewUserController(userUseCase users.Usecase, pointUsecase point.Usecase, redeemUsecase redeem.Usecase, transactionUsecase transactions.Usecase) *UserController {
 	return &UserController{
 		UserUseCase: userUseCase,
 		PointUsecase: pointUsecase,
+		TransactionUsesace:  transactionUsecase,
+		RedeemUsecase: redeemUsecase,
 	}
 }
 
@@ -100,6 +106,7 @@ func (userController UserController) GetById(c echo.Context) error {
 	}
 	return response.SuccessResponse(c,http.StatusOK, responses.FromDomain(data))
 }
+
 
 func (userController UserController) Verify(c echo.Context) error {
 	ctxNative := c.Request().Context()

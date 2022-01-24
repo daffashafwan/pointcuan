@@ -81,9 +81,6 @@ func (ic *ItemsUsecase) UpdateStock(ctx context.Context, domain Domain, id int) 
 		return Domain{}, errs
 	}
 	item.Id = id
-	if (domain.Stock == ""){
-		return Domain{}, errors.New("stock harus terisi")
-	}
 	item.Stock = domain.Stock
 	items, err := ic.Repo.UpdateStock(ctx, item)
 	if err != nil {

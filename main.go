@@ -24,6 +24,11 @@ import (
 	_categoryRepository "github.com/daffashafwan/pointcuan/model/category"
 	_categorydb "github.com/daffashafwan/pointcuan/model/category"
 
+	_faqUsecase "github.com/daffashafwan/pointcuan/business/FAQ"
+	_faqController "github.com/daffashafwan/pointcuan/controllers/faq"
+	_faqRepository "github.com/daffashafwan/pointcuan/model/FAQ"
+	_faqdb "github.com/daffashafwan/pointcuan/model/FAQ"
+
 	_itemsUsecase "github.com/daffashafwan/pointcuan/business/items"
 	_itemsController "github.com/daffashafwan/pointcuan/controllers/items"
 	_itemsRepository "github.com/daffashafwan/pointcuan/model/items"
@@ -74,17 +79,18 @@ func DbMigrate(db *gorm.DB) {
 		&_transactiondb.Transaction{}, 
 		&_categorydb.Category{},
 		&_itemsdb.Items{},
-		&_redeemdb.Redeem{})
+		&_redeemdb.Redeem{},
+		&_faqdb.Faq{})
 }
 
 func main() {
 	// init koneksi databse
 	configDB := _mysqlDriver.ConfigDB{
-		DB_Username: viper.GetString(`database.user`),
-		DB_Password: viper.GetString(`database.pass`),
-		DB_Host:     viper.GetString(`database.host`),
-		DB_Port:     viper.GetString(`database.port`),
-		DB_Database: viper.GetString(`database.name`),
+		DB_Username: viper.GetString(`database-aws.user`),
+		DB_Password: viper.GetString(`database-aws.pass`),
+		DB_Host:     viper.GetString(`database-aws.host`),
+		DB_Port:     viper.GetString(`database-aws.port`),
+		DB_Database: viper.GetString(`database-aws.name`),
 	}
 
 	configJWT := _middleware.ConfigJWT{
@@ -96,19 +102,16 @@ func main() {
 	DbMigrate(Conn)
 
 	e := echo.New()
+	//feAddress := viper.GetString(`frontend.address`)
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins: []string{"http://localhost:3000"},
-		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderAccessControlAllowMethods, echo.HeaderAccessControlAllowOrigin, echo.HeaderAccessControlAllowHeaders},
+		AllowOrigins: []string{"https://pointcuan-fe.vercel.app"},
+		AllowHeaders: []string{echo.HeaderAuthorization,echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderAccessControlAllowMethods, echo.HeaderAccessControlAllowOrigin, echo.HeaderAccessControlAllowHeaders, echo.HeaderAccessControlRequestHeaders, echo.HeaderAccessControlAllowCredentials},
 	  }))
 	timeoutContext := time.Duration(viper.GetInt("context.timeout")) * time.Second
 
 	pointRepository := _pointRepository.CreatePointRepo(Conn)
 	pointUseCase := _pointUsecase.NewPointUsecase(pointRepository, timeoutContext, configJWT)
 	pointController := _pointController.NewPointController(pointUseCase)
-
-	userRepository := _userRepository.CreateUserRepo(Conn)
-	userUseCase := _userUsecase.NewUserUsecase(userRepository, timeoutContext, configJWT)
-	userController := _userController.NewUserController(userUseCase, pointUseCase)
 
 	//admin
 	adminRepository := _admindb.CreateAdminRepo(Conn)
@@ -121,20 +124,28 @@ func main() {
 	pcrController := _pcrController.NewPcrController(pcrUseCase)
 
 	transactionRepository := _transactionRepository.CreateTransactionRepo(Conn)
-	transactionUseCase := _transactionUsecase.NewTransactionUsecase(transactionRepository, timeoutContext, configJWT)
+	transactionUseCase := _transactionUsecase.NewTransactionUsecase(transactionRepository,pointRepository, timeoutContext, configJWT)
 	transactionController := _transactionController.NewTransactionController(transactionUseCase, pcrUseCase)
 
 	categoryRepository := _categoryRepository.CreateCategoryRepo(Conn)
 	categoryUseCase := _categoryUsecase.NewCategoryUsecase(categoryRepository, timeoutContext, configJWT)
 	categoryController := _categoryController.NewCategoryController(categoryUseCase)
 
+	faqRepository := _faqRepository.CreateFAQRepo(Conn)
+	faqUseCase := _faqUsecase.NewFAQUsecase(faqRepository, timeoutContext, configJWT)
+	faqController := _faqController.NewFAQController(faqUseCase)
+
 	itemsRepository := _itemsRepository.CreateItemRepo(Conn)
 	itemsUseCase := _itemsUsecase.NewItemsUsecase(itemsRepository, timeoutContext)
 	itemsController := _itemsController.NewItemsController(itemsUseCase)
 
 	redeemRepository := _redeemRepository.CreateRedeemRepo(Conn)
-	redeemUseCase := _redeemUsecase.NewRedeemUsecase(redeemRepository, timeoutContext, configJWT)
+	redeemUseCase := _redeemUsecase.NewRedeemUsecase(pointRepository,itemsRepository,redeemRepository, timeoutContext, configJWT)
 	redeemController := _redeemController.NewRedeemController(redeemUseCase, itemsUseCase)
+
+	userRepository := _userRepository.CreateUserRepo(Conn)
+	userUseCase := _userUsecase.NewUserUsecase(userRepository, timeoutContext, configJWT)
+	userController := _userController.NewUserController(userUseCase, pointUseCase, redeemUseCase, transactionUseCase)
 
 	routesInit := routes.ControllerList{
 		JwtConfig:      configJWT.Init(),
@@ -146,6 +157,7 @@ func main() {
 		CategoryController: *categoryController,
 		ItemsController: *itemsController,
 		RedeemController: *redeemController,
+		FaqController: *faqController,
 	}
 	
 	routesInit.RouteRegister(e)

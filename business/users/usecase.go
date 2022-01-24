@@ -2,7 +2,6 @@ package users
 
 import (
 	"context"
-	"fmt"
 	"time" 
 	"github.com/daffashafwan/pointcuan/app/middlewares"
 	"github.com/daffashafwan/pointcuan/helpers/email"
@@ -78,7 +77,7 @@ func (uc *UserUsecase) Create(ctx context.Context, domain Domain) (Domain, error
 	if err != nil {
 		return Domain{}, err
 	}
-	email.SendEmail(ctx, domain.Email, "Verifikasi Email Pointcuan", "<a href=`http://localhost:1323/users/verify/"+domain.Token+"`>Link Verifikasi</a>")
+	email.SendEmail(ctx, domain.Email, "Verifikasi Email Pointcuan", "<a href=`http://pointcuan-fe.vercel.app/users/verify/"+domain.Token+"`>Link Verifikasi</a>")
 
 	return user, nil
 }
@@ -149,12 +148,11 @@ func (uc *UserUsecase) ForgotPassword(ctx context.Context, emails string) (Domai
 		return Domain{}, errs
 	}
 	users.Token = randomizer.Randomize(20)
-	fmt.Println(users)
 	user, err := uc.Repo.Update(ctx, users)
 	if err != nil {
 		return Domain{}, err
 	}
-	email.SendEmail(ctx, users.Email, "Verifikasi Email Pointcuan", "<a href=`http://localhost:1323/users/forgotpassword/"+user.Token+"`>Link Verifikasi</a>")
+	email.SendEmail(ctx, users.Email, "Verifikasi Email Pointcuan", "<a href=`http://pointcuan-fe.vercel.app/users/forgotpassword/"+user.Token+"`>Link Verifikasi</a>")
 
 	return user, nil
 }
@@ -169,12 +167,11 @@ func (uc *UserUsecase) ResetPassword(ctx context.Context, password string,retype
 	}
 	users.Token = randomizer.Randomize(20)
 	users.Password,_ = encrypt.Encrypt(password)
-	fmt.Println(users)
 	user, err := uc.Repo.Update(ctx, users)
 	if err != nil {
 		return Domain{}, err
 	}
-	email.SendEmail(ctx, users.Email, "Verifikasi Email Pointcuan", "<a href=`http://localhost:1323/users/forgotpassword/"+user.Token+"`>Link Verifikasi</a>")
+	email.SendEmail(ctx, users.Email, "Verifikasi Email Pointcuan", "<a href=`http://pointcuan-fe.vercel.app/users/forgotpassword/"+user.Token+"`>Link Verifikasi</a>")
 
 	return user, nil
 }

@@ -3,6 +3,7 @@ package transactions
 import (
 	"context"
 	"errors"
+
 	"github.com/daffashafwan/pointcuan/business/transactions"
 	"gorm.io/gorm"
 )
@@ -50,7 +51,7 @@ func (rep *TransactionRepo) Update(ctx context.Context, transU transactions.Doma
 
 func (rep *TransactionRepo) GetAll(ctx context.Context) ([]transactions.Domain, error) {
 	var data []Transaction
-	err := rep.DB.Table("transactions").Find(&data)
+	err := rep.DB.Table("transactions").Preload("User").Find(&data)
 	if err.Error != nil {
 		return []transactions.Domain{}, err.Error
 	}
@@ -70,6 +71,15 @@ func (rep *TransactionRepo) GetById(ctx context.Context, id int) (transactions.D
 func (rep *TransactionRepo) GetByUserId(ctx context.Context, id int) ([]transactions.Domain, error) {
 	var data []Transaction
 	err := rep.DB.Table("transactions").Find(&data, "user_id=?", id)
+	if err.Error != nil {
+		return []transactions.Domain{}, err.Error
+	}
+	return ToListDomain(data), nil
+}
+
+func (rep *TransactionRepo) GetByUserIdAndStatus(ctx context.Context, id int, sid int) ([]transactions.Domain, error) {
+	var data []Transaction
+	err := rep.DB.Table("transactions").Find(&data, "user_id=?", id).Find(&data, "status=?", sid)
 	if err.Error != nil {
 		return []transactions.Domain{}, err.Error
 	}

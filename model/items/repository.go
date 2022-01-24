@@ -41,6 +41,7 @@ func (repo *ItemsRepo) Update(ctx context.Context, itemUpdate items.Domain) (ite
 	data.CategoryId = itemUpdate.CategoryId
 	data.PointRedeem = itemUpdate.PointRedeem
 	data.Name = itemUpdate.Name
+	data.Stock = itemUpdate.Stock
 	if repo.DB.Save(&data).Error != nil {
 		return items.Domain{}, errors.New("bad requests")
 	}
@@ -64,7 +65,7 @@ func (repo *ItemsRepo) UpdateStock(ctx context.Context, itemUpdate items.Domain)
 
 func (repo *ItemsRepo) GetAll(ctx context.Context) ([]items.Domain, error) {
 	var data []Items
-	err := repo.DB.Table("items").Find(&data)
+	err := repo.DB.Table("items").Preload("Category").Find(&data)
 	if err.Error != nil {
 		return []items.Domain{}, err.Error
 	}
@@ -73,7 +74,7 @@ func (repo *ItemsRepo) GetAll(ctx context.Context) ([]items.Domain, error) {
 
 func (repo *ItemsRepo) GetByItemId(ctx context.Context, id int) (items.Domain, error) {
 	var data Items
-	err := repo.DB.Table("items").Find(&data, "id=?", id)
+	err := repo.DB.Table("items").Preload("Category").Find(&data, "id=?", id)
 	if err.Error != nil {
 		return items.Domain{}, err.Error
 	}

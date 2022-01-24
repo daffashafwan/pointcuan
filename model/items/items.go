@@ -1,17 +1,18 @@
 package items
 
 import (
-	"time"
-
 	"github.com/daffashafwan/pointcuan/business/items"
+	"github.com/daffashafwan/pointcuan/model/category"
+	"time"
 )
 
 type Items struct {
 	Id          int `gorm:"primaryKey"`
 	CategoryId  int
+	Category    category.Category `gorm:"foreignKey:CategoryId;association_foreignkey:Id"`
 	Name        string
 	PointRedeem int
-	Stock       string
+	Stock       int
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 }
@@ -20,6 +21,7 @@ func (item *Items) ToDomain() items.Domain {
 	return items.Domain{
 		Id:          item.Id,
 		CategoryId:  item.CategoryId,
+		Category:    item.Category,
 		Name:        item.Name,
 		PointRedeem: item.PointRedeem,
 		Stock:       item.Stock,

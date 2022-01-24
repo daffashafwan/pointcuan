@@ -6,11 +6,12 @@ import (
 )
 
 type Domain struct {
-	Id          int
+	Id          int 
 	CategoryId  int
+	Category    interface{}
 	Name        string
 	PointRedeem int
-	Stock       string
+	Stock       int
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 }

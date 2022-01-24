@@ -1,0 +1,34 @@
+{
+  "debug": true,
+  "server": {
+    "address": ":1223"
+  },
+  "frontend":{
+    ""
+  },
+  "context": {
+    "timeout": 2
+  },
+  "database": {
+    "host": "",
+    "port": "",
+    "user": "",
+    "pass": "",
+    "name": ""
+  },
+  "midtrans" :{
+    "server-key" : "",
+    "environment" : ""
+  },
+  "database-aws": {
+    "host": "",
+    "port": "",
+    "user": "",
+    "pass": "",
+    "name": ""
+  },
+  "jwt": {
+    "secret": "",
+    "expired": 72
+  }
+}

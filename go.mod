@@ -12,6 +12,7 @@ require (
 	github.com/labstack/echo v3.3.10+incompatible
 	github.com/labstack/echo-contrib v0.11.0 // indirect
 	github.com/labstack/echo/v4 v4.6.1
+	github.com/midtrans/midtrans-go v1.2.2 // indirect
 	github.com/spf13/viper v1.10.1 // indirect
 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect

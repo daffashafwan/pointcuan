@@ -9,6 +9,7 @@ import (
 type CategoryItemResponse struct {
 	Id        int       `json:"id"`
 	Name      string    `json:"name"`
+	Svg       string    `json:"svg"`
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
 }
@@ -17,6 +18,7 @@ func FromDomain(domain categoryItems.Domain) CategoryItemResponse {
 	return CategoryItemResponse{
 		Id:        domain.Id,
 		Name:      domain.Name,
+		Svg:       domain.Svg,
 		CreatedAt: domain.CreatedAt,
 		UpdatedAt: domain.UpdatedAt,
 	}
