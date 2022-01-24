@@ -77,7 +77,7 @@ func (uc *UserUsecase) Create(ctx context.Context, domain Domain) (Domain, error
 	if err != nil {
 		return Domain{}, err
 	}
-	email.SendEmail(ctx, domain.Email, "Verifikasi Email Pointcuan", "<a href=`http://localhost:1323/users/verify/"+domain.Token+"`>Link Verifikasi</a>")
+	email.SendEmail(ctx, domain.Email, "Verifikasi Email Pointcuan", "<a href=`http://pointcuan-fe.vercel.app/users/verify/"+domain.Token+"`>Link Verifikasi</a>")
 
 	return user, nil
 }
@@ -152,7 +152,7 @@ func (uc *UserUsecase) ForgotPassword(ctx context.Context, emails string) (Domai
 	if err != nil {
 		return Domain{}, err
 	}
-	email.SendEmail(ctx, users.Email, "Verifikasi Email Pointcuan", "<a href=`http://localhost:1323/users/forgotpassword/"+user.Token+"`>Link Verifikasi</a>")
+	email.SendEmail(ctx, users.Email, "Verifikasi Email Pointcuan", "<a href=`http://pointcuan-fe.vercel.app/users/forgotpassword/"+user.Token+"`>Link Verifikasi</a>")
 
 	return user, nil
 }
@@ -171,7 +171,7 @@ func (uc *UserUsecase) ResetPassword(ctx context.Context, password string,retype
 	if err != nil {
 		return Domain{}, err
 	}
-	email.SendEmail(ctx, users.Email, "Verifikasi Email Pointcuan", "<a href=`http://localhost:1323/users/forgotpassword/"+user.Token+"`>Link Verifikasi</a>")
+	email.SendEmail(ctx, users.Email, "Verifikasi Email Pointcuan", "<a href=`http://pointcuan-fe.vercel.app/users/forgotpassword/"+user.Token+"`>Link Verifikasi</a>")
 
 	return user, nil
 }

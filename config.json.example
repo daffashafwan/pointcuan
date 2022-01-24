@@ -3,6 +3,9 @@
   "server": {
     "address": ":1223"
   },
+  "frontend":{
+    ""
+  },
   "context": {
     "timeout": 2
   },

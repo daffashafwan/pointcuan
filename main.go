@@ -103,7 +103,7 @@ func main() {
 
 	e := echo.New()
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins: []string{"https://pointcuan-fe.vercel.app"},
+		AllowOrigins: []string{viper.GetString(`frontend.address`)},
 		AllowHeaders: []string{echo.HeaderAuthorization,echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderAccessControlAllowMethods, echo.HeaderAccessControlAllowOrigin, echo.HeaderAccessControlAllowHeaders, echo.HeaderAccessControlRequestHeaders, echo.HeaderAccessControlAllowCredentials},
 	  }))
 	timeoutContext := time.Duration(viper.GetInt("context.timeout")) * time.Second
