@@ -77,7 +77,7 @@ func (uc *UserUsecase) Create(ctx context.Context, domain Domain) (Domain, error
 	if err != nil {
 		return Domain{}, err
 	}
-	email.SendEmail(ctx, domain.Email, "Verifikasi Email Pointcuan", "<a href=`http://pointcuan-fe.vercel.app/users/verify/"+domain.Token+"`>Link Verifikasi</a>")
+	email.SendEmail(ctx, domain.Email, "Verifikasi Email Pointcuan", "<a href=`https://pointcuan-fe.vercel.app/users/verify/"+domain.Token+"`>Link Verifikasi</a>")
 
 	return user, nil
 }
