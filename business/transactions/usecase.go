@@ -107,6 +107,7 @@ func (tc *TransactionUsecase) Update(ctx context.Context, domain Domain, id int)
 	}
 	if domain.Status == 2 {
 		points, _ := tc.PointRepo.GetByUserId(ctx, domain.UserId)
+		point.Id = points.Id
 		point.UserId = domain.UserId
 		point.Point = points.Point + domain.Point
 		pointU, _ := tc.PointRepo.Update(ctx, point)
