@@ -14,7 +14,9 @@ require (
 	github.com/labstack/echo/v4 v4.6.1
 	github.com/midtrans/midtrans-go v1.2.2 // indirect
 	github.com/spf13/viper v1.10.1 // indirect
-	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5
+	github.com/stretchr/testify v1.7.0 // indirect
+	github.com/vektra/mockery/v2 v2.10.0 // indirect
+	golang.org/x/crypto v0.0.0-20220112180741-5e0467b6c7ce
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/mail.v2 v2.3.1 // indirect
 	gorm.io/driver/mysql v1.2.1 // indirect
