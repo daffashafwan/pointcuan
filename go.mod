@@ -15,6 +15,7 @@ require (
 	github.com/midtrans/midtrans-go v1.2.2 // indirect
 	github.com/spf13/viper v1.10.1 // indirect
 	github.com/stretchr/testify v1.7.0 // indirect
+	github.com/swaggo/swag v1.7.8 // indirect
 	github.com/vektra/mockery/v2 v2.10.0 // indirect
 	golang.org/x/crypto v0.0.0-20220112180741-5e0467b6c7ce
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect

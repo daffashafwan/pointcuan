@@ -78,6 +78,14 @@ func (userController UserController) Update(c echo.Context) error {
 	return response.SuccessResponse(c,http.StatusOK, responses.FromDomain(data))
 }
 
+// ShowAccount godoc
+// @Summary      Show an list user
+// @Description  get string by ID
+// @Tags         accounts
+// @Accept       json
+// @Produce      json
+// @Param        id   path      int  true  "Account ID"
+// @Router       /accounts/{id} [get]
 func (userController UserController) GetAll(c echo.Context) error {
 	ctxNative := c.Request().Context()
 	data, err := userController.UserUseCase.GetAll(ctxNative)
@@ -87,6 +95,14 @@ func (userController UserController) GetAll(c echo.Context) error {
 	return response.SuccessResponse(c, http.StatusOK, responses.FromListDomain(data))
 }
 
+// ShowAccount godoc
+// @Summary      Show an list user
+// @Description  get string by ID
+// @Tags         accounts
+// @Accept       json
+// @Produce      json
+// @Param        id   path      int  true  "Account ID"
+// @Router       /accounts/{id} [get]
 func (userController UserController) GetById(c echo.Context) error {
 	ctxNative := c.Request().Context()
 	id := c.Param("id")
